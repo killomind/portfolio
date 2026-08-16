@@ -1,0 +1,9 @@
+{
+    "name": "killomind/skype-export-viewer",
+    "description": "Memory-friendly viewer for large Skype export JSON (streaming with JsonMachine)",
+    "type": "project",
+    "require": {
+        "php": ">=7.4",
+        "halaxa/json-machine": "^1.1"
+    }
+}

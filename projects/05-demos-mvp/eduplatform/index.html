@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>EduPlatform | Interactive Testing System Demo</title>
+  <!-- TailwindCSS + Font Awesome -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    /* custom transitions and card styles */
+    .transition-smooth {
+      transition: all 0.2s ease;
+    }
+    .card-hover:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 20px 25px -12px rgba(0, 0, 0, 0.1);
+    }
+    .question-card {
+      background: #f9fafb;
+      border-left: 4px solid #3b82f6;
+    }
+    .radio-group label {
+      transition: background 0.1s ease;
+    }
+    .toast-notify {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 999;
+      animation: slideIn 0.2s ease-out;
+    }
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateX(40px);}
+      to { opacity: 1; transform: translateX(0);}
+    }
+  </style>
+</head>
+<body class="bg-gradient-to-br from-slate-50 to-indigo-50 font-sans antialiased">
+
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <!-- Header -->
+    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4">
+      <div>
+        <h1 class="text-3xl font-bold text-indigo-800 flex items-center gap-3">
+          <i class="fas fa-chalkboard-teacher text-indigo-600"></i>
+          EduTest Platform
+        </h1>
+        <p class="text-gray-600 mt-1">Course‑linked assessments • Teacher analytics • Instant results</p>
+      </div>
+      <div class="bg-white/60 backdrop-blur-sm rounded-full px-4 py-2 shadow-sm text-sm text-gray-600">
+        <i class="fas fa-database mr-1"></i> Demo mode · data saved locally
+      </div>
+    </div>
+
+    <!-- Two column layout: Teacher Console | Student Workspace -->
+    <div class="grid grid-cols-1 xl:grid-cols-2 gap-8">
+      
+      <!-- ================= TEACHER / ADMIN PANEL ================= -->
+      <div class="space-y-6">
+        <div class="bg-white rounded-2xl shadow-xl overflow-hidden border border-indigo-100">
+          <div class="bg-indigo-700 px-6 py-4 flex items-center gap-3">
+            <i class="fas fa-user-graduate text-white text-xl"></i>
+            <h2 class="text-xl font-bold text-white">👩‍🏫 Teacher & Admin Console</h2>
+          </div>
+          <div class="p-6 space-y-7">
+            
+            <!-- 1) CREATE TEST (linked to Course -> Lesson) -->
+            <div class="border-b border-gray-200 pb-5">
+              <h3 class="text-lg font-semibold text-gray-800 flex items-center gap-2 mb-4"><i class="fas fa-pen-alt text-indigo-500"></i> Create new test</h3>
+              <div class="grid md:grid-cols-2 gap-4 mb-4">
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">📘 Course</label>
+                  <select id="adminCourseSelect" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-indigo-500 focus:border-indigo-500">
+                    <option value="">-- Select course --</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">📖 Lesson</label>
+                  <select id="adminLessonSelect" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-indigo-500 focus:border-indigo-500" disabled>
+                    <option value="">First pick a course</option>
+                  </select>
+                </div>
+              </div>
+              
+              <!-- dynamic questions builder -->
+              <div class="mt-3">
+                <div class="flex justify-between items-center mb-2">
+                  <label class="text-sm font-medium text-gray-700">📝 Test questions (multiple choice)</label>
+                  <button type="button" id="addQuestionBtn" class="text-sm bg-indigo-100 hover:bg-indigo-200 text-indigo-800 px-3 py-1 rounded-full flex items-center gap-1 transition"><i class="fas fa-plus-circle"></i> Add question</button>
+                </div>
+                <div id="questionsContainer" class="space-y-3 max-h-96 overflow-y-auto pr-1"></div>
+                <button id="saveTestBtn" class="mt-5 w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2.5 rounded-xl shadow-md transition flex items-center justify-center gap-2"><i class="fas fa-save"></i> Save / Update Test (linked to lesson)</button>
+                <p id="testFeedback" class="text-xs mt-2 text-gray-500"></p>
+              </div>
+            </div>
+
+            <!-- 2) STUDENT RESULTS TABLE (list of all students & scores) -->
+            <div>
+              <h3 class="text-lg font-semibold text-gray-800 flex items-center gap-2 mb-3"><i class="fas fa-chart-line text-indigo-500"></i> Student performance records</h3>
+              <div class="overflow-x-auto border rounded-xl bg-gray-50">
+                <table class="min-w-full text-sm">
+                  <thead class="bg-gray-200 text-gray-700">
+                    <tr>
+                      <th class="px-4 py-2 text-left">Student</th>
+                      <th class="px-4 py-2 text-left">Course</th>
+                      <th class="px-4 py-2 text-left">Lesson</th>
+                      <th class="px-4 py-2 text-center">Score</th>
+                      <th class="px-4 py-2 text-left">Date</th>
+                    </tr>
+                  </thead>
+                  <tbody id="adminResultsTableBody">
+                    <tr><td colspan="5" class="text-center py-4 text-gray-400">No attempts yet</td></tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="flex justify-end mt-2">
+                <button id="clearDemoResultsBtn" class="text-xs text-red-500 hover:text-red-700 underline flex items-center gap-1"><i class="fas fa-trash-alt"></i> Clear all results (demo)</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ================= STUDENT WORKSPACE ================= -->
+      <div class="space-y-6">
+        <div class="bg-white rounded-2xl shadow-xl overflow-hidden border border-blue-100">
+          <div class="bg-blue-700 px-6 py-4 flex items-center gap-3">
+            <i class="fas fa-graduation-cap text-white text-xl"></i>
+            <h2 class="text-xl font-bold text-white">🧑‍🎓 Student Workspace</h2>
+          </div>
+          <div class="p-6 space-y-5">
+            <!-- student identity -->
+            <div class="flex flex-wrap items-center gap-3 bg-blue-50 p-3 rounded-xl">
+              <i class="fas fa-id-card text-blue-600"></i>
+              <span class="text-sm font-medium">Your name:</span>
+              <input type="text" id="studentNameInput" value="Alex Johnson" class="border border-gray-300 rounded-lg px-3 py-1.5 text-sm w-48 focus:ring-blue-400">
+              <span class="text-xs text-gray-500">(results will be saved under this name)</span>
+            </div>
+
+            <!-- select course & lesson to take test -->
+            <div class="grid md:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">🎓 Course</label>
+                <select id="studentCourseSelect" class="w-full border border-gray-300 rounded-lg px-3 py-2">
+                  <option value="">-- Select course --</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">📚 Lesson</label>
+                <select id="studentLessonSelect" class="w-full border border-gray-300 rounded-lg px-3 py-2" disabled>
+                  <option value="">First pick a course</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- active test display area -->
+            <div id="studentTestArea" class="mt-4 bg-gray-50 rounded-xl p-4 border border-gray-200">
+              <div class="flex items-center gap-2 text-gray-500 justify-center py-8">
+                <i class="fas fa-info-circle"></i> Select a lesson to load its test
+              </div>
+            </div>
+
+            <!-- result flash message -->
+            <div id="studentResultMessage" class="text-sm font-medium hidden"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ---------- STATIC DATABASE: COURSES & LESSONS (predefined) ----------
+    const COURSES = [
+      { id: 1, title: "Web Development Basics", lessons: [
+        { id: 101, title: "HTML Fundamentals" },
+        { id: 102, title: "CSS Styling" }
+      ]},
+      { id: 2, title: "JavaScript Essentials", lessons: [
+        { id: 201, title: "JS Variables & Data Types" },
+        { id: 202, title: "Functions & Scope" }
+      ]},
+      { id: 3, title: "React Fundamentals", lessons: [
+        { id: 301, title: "Components & Props" },
+        { id: 302, title: "State & Hooks" }
+      ]}
+    ];
+
+    // ---------- LOCALSTORAGE KEYS ----------
+    const STORAGE_TESTS = "edu_tests_v2";
+    const STORAGE_RESULTS = "edu_results_v2";
+
+    // ---------- Helper functions ----------
+    function loadTests() {
+      const stored = localStorage.getItem(STORAGE_TESTS);
+      if (stored) return JSON.parse(stored);
+      // seed demo test for HTML Fundamentals (lesson 101)
+      const demoTest = {
+        id: Date.now() + 100,
+        courseId: 1,
+        lessonId: 101,
+        questions: [
+          { text: "What does HTML stand for?", options: ["Hyper Text Markup Language", "High Tech Modern Language", "Hyper Transfer Markup Language", "Home Tool Markup Language"], correct: 0 },
+          { text: "Which tag is used to define an unordered list?", options: ["<ul>", "<ol>", "<li>", "<list>"], correct: 0 }
+        ],
+        createdAt: new Date().toISOString()
+      };
+      return [demoTest];
+    }
+
+    function saveTests(tests) {
+      localStorage.setItem(STORAGE_TESTS, JSON.stringify(tests));
+    }
+
+    function loadResults() {
+      const stored = localStorage.getItem(STORAGE_RESULTS);
+      if (stored) return JSON.parse(stored);
+      // seed demo results to show admin functionality
+      return [
+        { id: Date.now() + 1, studentName: "Emma Watson", testId: null, lessonId: 101, courseId: 1, score: 2, total: 2, date: new Date(Date.now() - 86400000).toISOString() },
+        { id: Date.now() + 2, studentName: "Liam Chen", testId: null, lessonId: 101, courseId: 1, score: 1, total: 2, date: new Date(Date.now() - 172800000).toISOString() }
+      ];
+    }
+
+    function saveResults(results) {
+      localStorage.setItem(STORAGE_RESULTS, JSON.stringify(results));
+    }
+
+    // global state
+    let testsArray = loadTests();
+    let resultsArray = loadResults();
+
+    // sync helpers
+    function persistTests() { saveTests(testsArray); }
+    function persistResults() { saveResults(resultsArray); }
+
+    // get test by lessonId (returns test object or null)
+    function getTestByLesson(lessonId) {
+      return testsArray.find(t => t.lessonId === lessonId) || null;
+    }
+
+    // add or update test for lesson
+    function saveTestForLesson(courseId, lessonId, questions) {
+      if (!questions.length) return false;
+      const existingIndex = testsArray.findIndex(t => t.lessonId === lessonId);
+      const newTest = {
+        id: Date.now(),
+        courseId: courseId,
+        lessonId: lessonId,
+        questions: questions,
+        createdAt: new Date().toISOString()
+      };
+      if (existingIndex !== -1) {
+        testsArray[existingIndex] = newTest;
+      } else {
+        testsArray.push(newTest);
+      }
+      persistTests();
+      return true;
+    }
+
+    // add student result
+    function addResult(studentName, testObj, score, totalQuestions) {
+      const newResult = {
+        id: Date.now(),
+        studentName: studentName.trim(),
+        testId: testObj.id,
+        lessonId: testObj.lessonId,
+        courseId: testObj.courseId,
+        score: score,
+        total: totalQuestions,
+        date: new Date().toISOString()
+      };
+      resultsArray.push(newResult);
+      persistResults();
+      return newResult;
+    }
+
+    // get course title by id
+    function getCourseTitle(courseId) {
+      const course = COURSES.find(c => c.id === courseId);
+      return course ? course.title : "Unknown Course";
+    }
+
+    function getLessonTitle(courseId, lessonId) {
+      const course = COURSES.find(c => c.id === courseId);
+      if (!course) return "Unknown Lesson";
+      const lesson = course.lessons.find(l => l.id === lessonId);
+      return lesson ? lesson.title : "Unknown Lesson";
+    }
+
+    // ---------- RENDER ADMIN RESULTS TABLE ----------
+    function renderAdminResultsTable() {
+      const tbody = document.getElementById("adminResultsTableBody");
+      if (!resultsArray.length) {
+        tbody.innerHTML = '<tr><td colspan="5" class="text-center py-4 text-gray-400">No attempts yet</td></tr>';
+        return;
+      }
+      // sort by date desc
+      const sorted = [...resultsArray].sort((a,b) => new Date(b.date) - new Date(a.date));
+      tbody.innerHTML = sorted.map(res => {
+        const courseTitle = getCourseTitle(res.courseId);
+        const lessonTitle = getLessonTitle(res.courseId, res.lessonId);
+        const scorePercent = `${res.score}/${res.total}`;
+        const dateFormatted = new Date(res.date).toLocaleString();
+        return `
+          <tr class="border-b border-gray-200 hover:bg-gray-100">
+            <td class="px-4 py-2 font-medium">${escapeHtml(res.studentName)}</td>
+            <td class="px-4 py-2">${escapeHtml(courseTitle)}</td>
+            <td class="px-4 py-2">${escapeHtml(lessonTitle)}</td>
+            <td class="px-4 py-2 text-center font-semibold ${res.score === res.total ? 'text-green-600' : 'text-amber-600'}">${scorePercent}</td>
+            <td class="px-4 py-2 text-xs">${dateFormatted}</td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    // helper: escape html
+    function escapeHtml(str) { return String(str).replace(/[&<>]/g, function(m) { if(m === '&') return '&amp;'; if(m === '<') return '&lt;'; if(m === '>') return '&gt;'; return m;}); }
+
+    // ---------- RENDER COURSE/LESSON DROPDOWNS (both admin and student) ----------
+    function populateCourseSelects() {
+      const adminCourse = document.getElementById("adminCourseSelect");
+      const studentCourse = document.getElementById("studentCourseSelect");
+      const courseOptions = '<option value="">-- Select course --</option>' + COURSES.map(c => `<option value="${c.id}">${escapeHtml(c.title)}</option>`).join('');
+      adminCourse.innerHTML = courseOptions;
+      studentCourse.innerHTML = courseOptions;
+    }
+
+    function updateLessonSelectByCourse(courseId, targetLessonSelect, defaultDisabledText = "First pick a course") {
+      const course = COURSES.find(c => c.id == courseId);
+      if (!course || !courseId) {
+        targetLessonSelect.innerHTML = `<option value="">${defaultDisabledText}</option>`;
+        targetLessonSelect.disabled = true;
+        return;
+      }
+      targetLessonSelect.disabled = false;
+      targetLessonSelect.innerHTML = '<option value="">-- Select lesson --</option>' + 
+        course.lessons.map(l => `<option value="${l.id}">${escapeHtml(l.title)}</option>`).join('');
+    }
+
+    // Admin lesson select dependent
+    function bindAdminCourseChange() {
+      const adminCourse = document.getElementById("adminCourseSelect");
+      const adminLesson = document.getElementById("adminLessonSelect");
+      adminCourse.addEventListener("change", function() {
+        const val = this.value;
+        if (val) {
+          updateLessonSelectByCourse(parseInt(val), adminLesson, "Pick a lesson");
+        } else {
+          adminLesson.innerHTML = '<option value="">First pick a course</option>';
+          adminLesson.disabled = true;
+        }
+      });
+    }
+
+    function bindStudentCourseChange() {
+      const studentCourse = document.getElementById("studentCourseSelect");
+      const studentLesson = document.getElementById("studentLessonSelect");
+      studentCourse.addEventListener("change", function() {
+        const val = this.value;
+        if (val) {
+          updateLessonSelectByCourse(parseInt(val), studentLesson, "Pick a lesson");
+          // clear test area
+          document.getElementById("studentTestArea").innerHTML = `<div class="flex items-center gap-2 text-gray-500 justify-center py-8"><i class="fas fa-info-circle"></i> Select a lesson to load its test</div>`;
+          document.getElementById("studentResultMessage").classList.add("hidden");
+        } else {
+          studentLesson.innerHTML = '<option value="">First pick a course</option>';
+          studentLesson.disabled = true;
+          document.getElementById("studentTestArea").innerHTML = `<div class="flex items-center gap-2 text-gray-500 justify-center py-8"><i class="fas fa-info-circle"></i> Select a course first</div>`;
+        }
+      });
+    }
+
+    // student loads test when lesson changes
+    function bindStudentLessonLoad() {
+      const studentLesson = document.getElementById("studentLessonSelect");
+      const studentCourse = document.getElementById("studentCourseSelect");
+      studentLesson.addEventListener("change", function() {
+        const lessonId = parseInt(this.value);
+        const courseId = parseInt(studentCourse.value);
+        if (!lessonId || !courseId) return;
+        const test = getTestByLesson(lessonId);
+        const area = document.getElementById("studentTestArea");
+        if (!test) {
+          area.innerHTML = `<div class="bg-yellow-50 text-yellow-800 p-4 rounded-lg flex items-center gap-2"><i class="fas fa-exclamation-triangle"></i> No test available for this lesson. Teacher can create one in the admin panel.</div>`;
+          return;
+        }
+        // render test form
+        renderTestTakingForm(test, area);
+      });
+    }
+
+    function renderTestTakingForm(test, container) {
+      const questionsHtml = test.questions.map((q, idx) => `
+        <div class="question-card p-4 rounded-lg mb-4 bg-white border border-gray-200">
+          <p class="font-semibold text-gray-800 mb-2">${idx+1}. ${escapeHtml(q.text)}</p>
+          <div class="radio-group space-y-1 ml-4">
+            ${q.options.map((opt, optIdx) => `
+              <label class="flex items-center gap-2 text-gray-700 text-sm cursor-pointer hover:bg-gray-50 p-1 rounded">
+                <input type="radio" name="q_${test.id}_${idx}" value="${optIdx}" class="focus:ring-indigo-500"> 
+                <span>${escapeHtml(opt)}</span>
+              </label>
+            `).join('')}
+          </div>
+        </div>
+      `).join('');
+      const formHtml = `
+        <div class="space-y-3">
+          <h4 class="font-bold text-gray-800 flex items-center gap-2"><i class="fas fa-puzzle-piece text-blue-500"></i> ${escapeHtml(getLessonTitle(test.courseId, test.lessonId))} - Quiz</h4>
+          <form id="studentQuizForm">${questionsHtml}</form>
+          <button id="submitQuizBtn" class="mt-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-xl transition shadow">Submit test & see result</button>
+          <div id="quizFeedbackMsg" class="text-sm text-gray-500"></div>
+        </div>
+      `;
+      container.innerHTML = formHtml;
+      const submitBtn = document.getElementById("submitQuizBtn");
+      submitBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+        const studentName = document.getElementById("studentNameInput").value.trim();
+        if (!studentName) {
+          alert("Please enter your name");
+          return;
+        }
+        // validate all questions answered
+        let allAnswered = true;
+        const answers = [];
+        for (let i = 0; i < test.questions.length; i++) {
+          const radioName = `q_${test.id}_${i}`;
+          const selected = document.querySelector(`input[name="${radioName}"]:checked`);
+          if (!selected) {
+            allAnswered = false;
+            break;
+          }
+          answers.push(parseInt(selected.value));
+        }
+        if (!allAnswered) {
+          const feedback = document.getElementById("quizFeedbackMsg");
+          feedback.innerHTML = '<span class="text-red-500"><i class="fas fa-times-circle"></i> Please answer all questions before submitting.</span>';
+          return;
+        }
+        // calculate score
+        let correctCount = 0;
+        test.questions.forEach((q, idx) => {
+          if (answers[idx] === q.correct) correctCount++;
+        });
+        const total = test.questions.length;
+        const percentage = Math.round((correctCount/total)*100);
+        // store result
+        addResult(studentName, test, correctCount, total);
+        // show result & disable submit button
+        const quizFeedback = document.getElementById("quizFeedbackMsg");
+        quizFeedback.innerHTML = `<div class="mt-3 p-3 bg-green-100 text-green-800 rounded-lg"><i class="fas fa-check-circle"></i> ✅ You scored ${correctCount}/${total} (${percentage}%). Result saved! Teacher can see your score.</div>`;
+        submitBtn.disabled = true;
+        submitBtn.classList.add("opacity-50", "cursor-not-allowed");
+        // refresh admin results table
+        renderAdminResultsTable();
+        // display global student message
+        const resultMsgDiv = document.getElementById("studentResultMessage");
+        resultMsgDiv.innerHTML = `<div class="bg-green-100 text-green-700 p-2 rounded-lg text-center">🎉 Score recorded: ${correctCount}/${total}. Well done!</div>`;
+        resultMsgDiv.classList.remove("hidden");
+        setTimeout(() => resultMsgDiv.classList.add("hidden"), 4000);
+      });
+    }
+
+    // ---------- QUESTION BUILDER (admin) ----------
+    let currentQuestionCounter = 0;
+    function addQuestionToBuilder(questionData = null) {
+      const container = document.getElementById("questionsContainer");
+      const qId = Date.now() + Math.random() + currentQuestionCounter++;
+      const div = document.createElement("div");
+      div.className = "border border-gray-200 rounded-lg p-3 bg-white relative question-item";
+      div.setAttribute("data-qid", qId);
+      div.innerHTML = `
+        <div class="flex justify-between items-start mb-2">
+          <span class="text-sm font-medium text-gray-600">Question <span class="q-num"></span></span>
+          <button type="button" class="removeQuestionBtn text-red-400 hover:text-red-600 text-sm"><i class="fas fa-trash-alt"></i></button>
+        </div>
+        <input type="text" placeholder="Question text" class="q-text w-full border border-gray-300 rounded-md px-3 py-1.5 text-sm mb-2" value="${questionData ? escapeHtml(questionData.text) : ''}">
+        <div class="options-grid space-y-2">
+          ${[0,1,2,3].map(optIdx => `
+            <div class="flex items-center gap-2">
+              <input type="text" placeholder="Option ${optIdx+1}" class="opt-input flex-1 border border-gray-300 rounded-md px-2 py-1 text-sm" data-optidx="${optIdx}" value="${questionData && questionData.options[optIdx] ? escapeHtml(questionData.options[optIdx]) : ''}">
+              <input type="radio" name="correct_temp_${qId}" value="${optIdx}" class="correct-radio" ${questionData && questionData.correct === optIdx ? 'checked' : ''}>
+              <span class="text-xs text-gray-500">Correct</span>
+            </div>
+          `).join('')}
+        </div>
+      `;
+      container.appendChild(div);
+      const removeBtn = div.querySelector(".removeQuestionBtn");
+      removeBtn.addEventListener("click", () => div.remove());
+      updateQuestionNumbers();
+    }
+
+    function updateQuestionNumbers() {
+      const items = document.querySelectorAll("#questionsContainer .question-item");
+      items.forEach((item, idx) => {
+        const numSpan = item.querySelector(".q-num");
+        if (numSpan) numSpan.innerText = idx+1;
+      });
+    }
+
+    function collectQuestionsFromBuilder() {
+      const items = document.querySelectorAll("#questionsContainer .question-item");
+      const questions = [];
+      for (let item of items) {
+        const textInput = item.querySelector(".q-text");
+        const questionText = textInput ? textInput.value.trim() : "";
+        if (!questionText) continue;
+        const optionInputs = item.querySelectorAll(".opt-input");
+        const options = Array.from(optionInputs).map(inp => inp.value.trim()).filter(opt => opt !== "");
+        if (options.length !== 4) continue; // require exactly 4 options
+        let correctIdx = -1;
+        const radios = item.querySelectorAll(".correct-radio");
+        for (let i=0; i<radios.length; i++) {
+          if (radios[i].checked) { correctIdx = i; break; }
+        }
+        if (correctIdx === -1 || correctIdx >= options.length) continue;
+        questions.push({ text: questionText, options: options, correct: correctIdx });
+      }
+      return questions;
+    }
+
+    // save test from admin panel
+    function handleSaveTest() {
+      const courseId = parseInt(document.getElementById("adminCourseSelect").value);
+      const lessonId = parseInt(document.getElementById("adminLessonSelect").value);
+      if (!courseId || !lessonId) {
+        document.getElementById("testFeedback").innerHTML = '<span class="text-red-500">❌ Please select both course and lesson.</span>';
+        return;
+      }
+      const questions = collectQuestionsFromBuilder();
+      if (questions.length === 0) {
+        document.getElementById("testFeedback").innerHTML = '<span class="text-red-500">❌ Add at least one valid question (4 options & correct answer).</span>';
+        return;
+      }
+      const success = saveTestForLesson(courseId, lessonId, questions);
+      if (success) {
+        document.getElementById("testFeedback").innerHTML = '<span class="text-green-600">✅ Test successfully saved/updated for this lesson!</span>';
+        // reset builder to empty after save? keep but notify, optional clear?
+        setTimeout(() => document.getElementById("testFeedback").innerHTML = '', 3000);
+      } else {
+        document.getElementById("testFeedback").innerHTML = '<span class="text-red-500">⚠️ Error saving test.</span>';
+      }
+    }
+
+    // initial default load: show one empty question block
+    function initQuestionBuilder() {
+      const container = document.getElementById("questionsContainer");
+      container.innerHTML = "";
+      addQuestionToBuilder(); // start with one empty question
+    }
+
+    // clear demo results
+    document.getElementById("clearDemoResultsBtn")?.addEventListener("click", () => {
+      if (confirm("Delete all student results? (demo only)")) {
+        resultsArray = [];
+        persistResults();
+        renderAdminResultsTable();
+        showToast("All student results cleared", "info");
+      }
+    });
+
+    function showToast(msg, type="success") {
+      let toast = document.createElement("div");
+      toast.className = `toast-notify bg-${type === "success" ? "green" : "gray"}-800 text-white px-4 py-2 rounded-lg shadow-lg text-sm flex items-center gap-2`;
+      toast.innerHTML = `<i class="fas fa-${type === "success" ? "check-circle" : "info-circle"}"></i> ${msg}`;
+      document.body.appendChild(toast);
+      setTimeout(() => toast.remove(), 3000);
+    }
+
+    // global refresh after any results change
+    function refreshAll() {
+      renderAdminResultsTable();
+    }
+
+    // ---------- EVENT LISTENERS & INIT ----------
+    window.addEventListener("DOMContentLoaded", () => {
+      populateCourseSelects();
+      bindAdminCourseChange();
+      bindStudentCourseChange();
+      bindStudentLessonLoad();
+      initQuestionBuilder();
+      renderAdminResultsTable();
+      document.getElementById("saveTestBtn").addEventListener("click", handleSaveTest);
+      document.getElementById("addQuestionBtn").addEventListener("click", () => addQuestionToBuilder());
+      // manual refresh after test creation trigger
+      const observer = setInterval(() => {}, 0);
+      window.refreshResults = renderAdminResultsTable;
+      // sync results table after any result added via student side already
+      // initial load student selects
+      const studentLesson = document.getElementById("studentLessonSelect");
+      studentLesson.disabled = true;
+    });
+  </script>
+</body>
+</html>

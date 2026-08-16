@@ -1,0 +1,1195 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Демо: Система подготовки смет — монтажно-инженерная компания</title>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1e40af;
+            --primary-light: #dbeafe;
+            --success: #16a34a;
+            --warning: #d97706;
+            --danger: #dc2626;
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-500: #6b7280;
+            --gray-700: #374151;
+            --gray-900: #111827;
+            --white: #ffffff;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+            --radius: 8px;
+            --radius-lg: 12px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            background: var(--gray-100);
+            color: var(--gray-900);
+            line-height: 1.5;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header */
+        .header {
+            background: var(--white);
+            border-bottom: 1px solid var(--gray-200);
+            box-shadow: var(--shadow-sm);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 16px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--primary);
+            border-radius: var(--radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 20px;
+        }
+        .logo-text h1 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            letter-spacing: -0.01em;
+        }
+        .logo-text p {
+            font-size: 0.8rem;
+            color: var(--gray-500);
+        }
+        .header-actions {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 16px;
+            border-radius: var(--radius);
+            border: 1px solid var(--gray-300);
+            background: var(--white);
+            color: var(--gray-700);
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+        }
+        .btn:hover {
+            background: var(--gray-50);
+            border-color: var(--gray-400);
+        }
+        .btn-primary {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: white;
+        }
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            border-color: var(--primary-dark);
+        }
+        .btn-success {
+            background: var(--success);
+            border-color: var(--success);
+            color: white;
+        }
+        .btn-success:hover {
+            background: #15803d;
+            border-color: #15803d;
+        }
+        .btn-sm {
+            padding: 6px 12px;
+            font-size: 0.8rem;
+        }
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Stepper */
+        .stepper {
+            background: var(--white);
+            border-bottom: 1px solid var(--gray-200);
+            padding: 12px 24px;
+        }
+        .stepper-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 4px;
+        }
+        .step {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--gray-500);
+            position: relative;
+        }
+        .step.active {
+            color: var(--primary);
+        }
+        .step.completed {
+            color: var(--success);
+        }
+        .step-circle {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: var(--gray-200);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        .step.active .step-circle {
+            background: var(--primary);
+            color: white;
+        }
+        .step.completed .step-circle {
+            background: var(--success);
+            color: white;
+        }
+        .step-connector {
+            flex: 1;
+            height: 2px;
+            background: var(--gray-200);
+            margin: 0 8px;
+            min-width: 20px;
+        }
+        .step-connector.done {
+            background: var(--success);
+        }
+
+        /* Main content */
+        .main {
+            flex: 1;
+            max-width: 1200px;
+            width: 100%;
+            margin: 24px auto;
+            padding: 0 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+        .card {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow);
+            border: 1px solid var(--gray-200);
+            overflow: hidden;
+        }
+        .card-header {
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--gray-200);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .card-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+        .card-body {
+            padding: 20px;
+        }
+        .card-footer {
+            padding: 16px 20px;
+            border-top: 1px solid var(--gray-200);
+            display: flex;
+            justify-content: flex-end;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        /* Tables */
+        .table-wrapper {
+            overflow-x: auto;
+            margin: 0 -20px;
+            padding: 0 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+        }
+        th {
+            background: var(--gray-50);
+            font-weight: 600;
+            text-align: left;
+            padding: 10px 12px;
+            border-bottom: 2px solid var(--gray-200);
+            white-space: nowrap;
+            position: sticky;
+            top: 0;
+        }
+        td {
+            padding: 10px 12px;
+            border-bottom: 1px solid var(--gray-100);
+            vertical-align: middle;
+        }
+        tr:hover td {
+            background: var(--gray-50);
+        }
+        .badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 9999px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 0.02em;
+            text-transform: uppercase;
+        }
+        .badge-green {
+            background: #dcfce7;
+            color: #166534;
+        }
+        .badge-yellow {
+            background: #fef3c7;
+            color: #92400e;
+        }
+        .badge-blue {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+        .badge-gray {
+            background: var(--gray-200);
+            color: var(--gray-700);
+        }
+        .badge-red {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        /* Alert */
+        .alert {
+            padding: 12px 16px;
+            border-radius: var(--radius);
+            margin-bottom: 16px;
+            font-size: 0.875rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+        }
+        .alert-info {
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
+            color: #1e40af;
+        }
+        .alert-success {
+            background: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            color: #166534;
+        }
+        .alert-warning {
+            background: #fffbeb;
+            border: 1px solid #fde68a;
+            color: #92400e;
+        }
+
+        /* Map of blocks */
+        .blocks-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 8px;
+        }
+        .block-item {
+            padding: 10px 12px;
+            border-radius: var(--radius);
+            border: 1px solid var(--gray-200);
+            background: var(--white);
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .block-item:hover {
+            box-shadow: var(--shadow-md);
+            transform: translateY(-1px);
+        }
+        .block-item.mandatory {
+            border-left: 4px solid var(--primary);
+        }
+        .block-item.optional {
+            border-left: 4px solid var(--gray-300);
+        }
+        .block-code {
+            font-weight: 700;
+            color: var(--primary);
+            white-space: nowrap;
+        }
+        .block-name {
+            color: var(--gray-700);
+            flex: 1;
+        }
+
+        /* Modal */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 200;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .modal-overlay.active {
+            display: flex;
+        }
+        .modal {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            max-width: 700px;
+            width: 100%;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: var(--shadow-lg);
+        }
+        .modal-header {
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--gray-200);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .modal-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--gray-500);
+        }
+        .modal-body {
+            padding: 20px;
+        }
+
+        /* File upload area */
+        .upload-area {
+            border: 2px dashed var(--gray-300);
+            border-radius: var(--radius-lg);
+            padding: 40px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: var(--gray-50);
+        }
+        .upload-area:hover {
+            border-color: var(--primary);
+            background: var(--primary-light);
+        }
+        .upload-area .icon {
+            font-size: 3rem;
+            margin-bottom: 8px;
+        }
+
+        /* Editor inputs */
+        .editable-input {
+            width: 90px;
+            padding: 6px 8px;
+            border: 1px solid var(--gray-300);
+            border-radius: var(--radius);
+            font-size: 0.85rem;
+            text-align: right;
+        }
+        .editable-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.1);
+        }
+
+        /* Summary */
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--gray-100);
+        }
+        .summary-total {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-container {
+                padding: 12px 16px;
+            }
+            .main {
+                padding: 0 16px;
+                margin: 16px auto;
+            }
+            .stepper {
+                padding: 8px 16px;
+            }
+            .step-text {
+                display: none;
+            }
+            .step-connector {
+                min-width: 10px;
+                margin: 0 4px;
+            }
+            .blocks-grid {
+                grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            }
+            .card-body {
+                padding: 16px;
+            }
+        }
+        .highlight {
+            background: #fef9c3;
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
+        .text-center { text-align: center; }
+        .mt-4 { margin-top: 16px; }
+        .mb-4 { margin-bottom: 16px; }
+        .gap-2 { gap: 8px; }
+        .flex { display: flex; }
+        .flex-wrap { flex-wrap: wrap; }
+        .items-center { align-items: center; }
+        .justify-between { justify-content: space-between; }
+    </style>
+</head>
+<body>
+
+<!-- Header -->
+<header class="header">
+    <div class="header-container">
+        <div class="logo-area">
+            <div class="logo-icon">С</div>
+            <div class="logo-text">
+                <h1>СметаПро</h1>
+                <p>Система подготовки коммерческих смет</p>
+            </div>
+        </div>
+        <div class="header-actions">
+            <button class="btn btn-sm" onclick="openModal('aboutModal')">О проекте</button>
+            <button class="btn btn-primary btn-sm" onclick="resetDemo()">Сбросить демо</button>
+        </div>
+    </div>
+</header>
+
+<!-- Stepper -->
+<div class="stepper">
+    <div class="stepper-container" id="stepper">
+        <div class="step active" data-step="1">
+            <div class="step-circle">1</div>
+            <span class="step-text">Спецификация</span>
+        </div>
+        <div class="step-connector" data-connector="1"></div>
+        <div class="step" data-step="2">
+            <div class="step-circle">2</div>
+            <span class="step-text">Распознавание</span>
+        </div>
+        <div class="step-connector" data-connector="2"></div>
+        <div class="step" data-step="3">
+            <div class="step-circle">3</div>
+            <span class="step-text">Привязка</span>
+        </div>
+        <div class="step-connector" data-connector="3"></div>
+        <div class="step" data-step="4">
+            <div class="step-circle">4</div>
+            <span class="step-text">Смета</span>
+        </div>
+        <div class="step-connector" data-connector="4"></div>
+        <div class="step" data-step="5">
+            <div class="step-circle">5</div>
+            <span class="step-text">Выгрузка</span>
+        </div>
+    </div>
+</div>
+
+<!-- Main Content -->
+<main class="main">
+
+    <!-- Step 1: Specification -->
+    <div class="card" id="step1">
+        <div class="card-header">
+            <span class="card-title">📄 Загрузка проектной спецификации</span>
+            <span class="badge badge-blue">Шаг 1 из 5</span>
+        </div>
+        <div class="card-body">
+            <div class="alert alert-info">
+                ⚡ В реальной системе здесь загружается файл спецификации (PDF, Excel, Word) и происходит автоматическое распознавание документа. Для демо выберите пример спецификации.
+            </div>
+            <div class="upload-area" id="uploadArea" onclick="loadExampleSpec()">
+                <div class="icon">📂</div>
+                <p><strong>Нажмите, чтобы загрузить пример спецификации</strong></p>
+                <p style="color: var(--gray-500); font-size: 0.85rem;">Имитация загрузки документа</p>
+            </div>
+            <div id="specPreview" style="display: none; margin-top: 16px;">
+                <h4 style="margin-bottom: 8px;">Загруженный документ: <span style="color: var(--gray-500);">project_specification.pdf</span></h4>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>№</th>
+                            <th>Наименование по спецификации</th>
+                            <th>Характеристики</th>
+                            <th>Кол-во</th>
+                            <th>Ед.</th>
+                        </tr>
+                        </thead>
+                        <tbody id="specTableBody">
+                        <!-- Заполняется скриптом -->
+                        </tbody>
+                    </table>
+                </div>
+                <div class="alert alert-success mt-4" style="margin-top: 12px;">
+                    ✅ Документ успешно загружен. Готов к распознаванию.
+                </div>
+            </div>
+        </div>
+        <div class="card-footer">
+            <button class="btn btn-primary" id="btnRecognize" onclick="recognizeSpec()" disabled>Распознать документ →</button>
+        </div>
+    </div>
+
+    <!-- Step 2: Recognition -->
+    <div class="card" id="step2" style="display: none;">
+        <div class="card-header">
+            <span class="card-title">🔍 Автоматический разбор позиций на характеристики</span>
+            <span class="badge badge-blue">Шаг 2 из 5</span>
+        </div>
+        <div class="card-body">
+            <div class="alert alert-success">
+                ✅ Распознавание завершено! Из документа выделено 8 позиций с характеристиками.
+            </div>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>№</th>
+                        <th>Наименование</th>
+                        <th>Характеристики</th>
+                        <th>Кол-во</th>
+                        <th>Ед.</th>
+                        <th>Статус</th>
+                    </tr>
+                    </thead>
+                    <tbody id="recognizedTableBody">
+                    <!-- Заполняется скриптом -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="card-footer">
+            <button class="btn" onclick="goToStep(1)">← Назад</button>
+            <button class="btn btn-primary" onclick="matchToCatalog()">Привязать к справочникам →</button>
+        </div>
+    </div>
+
+    <!-- Step 3: Matching -->
+    <div class="card" id="step3" style="display: none;">
+        <div class="card-header">
+            <span class="card-title">📚 Привязка к справочникам товаров и работ</span>
+            <span class="badge badge-blue">Шаг 3 из 5</span>
+        </div>
+        <div class="card-body">
+            <div class="alert alert-info">
+                🔗 Автоматический подбор позиций из отраслевого каталога номенклатуры и работ. Вы можете изменить выбор вручную.
+            </div>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>№</th>
+                        <th>Позиция спецификации</th>
+                        <th>Подобранный товар/работа</th>
+                        <th>Код каталога</th>
+                        <th>Соответствие</th>
+                        <th>Действие</th>
+                    </tr>
+                    </thead>
+                    <tbody id="matchedTableBody">
+                    <!-- Заполняется скриптом -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="card-footer">
+            <button class="btn" onclick="goToStep(2)">← Назад</button>
+            <button class="btn btn-primary" onclick="goToStep(4)">Открыть редактор сметы →</button>
+        </div>
+    </div>
+
+    <!-- Step 4: Estimate Editor -->
+    <div class="card" id="step4" style="display: none;">
+        <div class="card-header">
+            <span class="card-title">📝 Рабочий редактор сметы</span>
+            <span class="badge badge-blue">Шаг 4 из 5</span>
+        </div>
+        <div class="card-body">
+            <div class="alert alert-info">
+                ✏️ Редактируйте количество, цену и состав работ. Сумма пересчитывается автоматически.
+            </div>
+            <div class="table-wrapper">
+                <table id="estimateTable">
+                    <thead>
+                    <tr>
+                        <th>№</th>
+                        <th>Наименование</th>
+                        <th>Ед.</th>
+                        <th>Кол-во</th>
+                        <th>Цена, ₽</th>
+                        <th>Сумма, ₽</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody id="estimateTableBody">
+                    <!-- Заполняется скриптом -->
+                    </tbody>
+                </table>
+            </div>
+            <div style="margin-top: 16px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+                <button class="btn btn-sm" onclick="addEstimateRow()">+ Добавить строку</button>
+                <div style="font-size: 1.1rem; font-weight: 600;">
+                    Итого: <span id="totalEstimate" style="color: var(--primary);">0 ₽</span>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer">
+            <button class="btn" onclick="goToStep(3)">← Назад</button>
+            <button class="btn btn-success" onclick="exportToExcel()">📥 Выгрузить в Excel</button>
+        </div>
+    </div>
+
+    <!-- Step 5: Export -->
+    <div class="card" id="step5" style="display: none;">
+        <div class="card-header">
+            <span class="card-title">📤 Выгрузка в Excel</span>
+            <span class="badge badge-green">Шаг 5 из 5</span>
+        </div>
+        <div class="card-body text-center" style="padding: 40px 20px;">
+            <div style="font-size: 4rem; margin-bottom: 16px;">✅</div>
+            <h2 style="margin-bottom: 8px;">Смета успешно сформирована!</h2>
+            <p style="color: var(--gray-500);">Файл <strong>estimate_2025.xlsx</strong> готов к скачиванию.</p>
+            <div style="margin-top: 24px;">
+                <button class="btn btn-success" onclick="exportToExcel()">📥 Скачать еще раз</button>
+                <button class="btn" onclick="resetDemo()">Начать заново</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Карта функциональных блоков -->
+    <div class="card" id="blocksMap">
+        <div class="card-header">
+            <span class="card-title">🗺️ Карта функциональных блоков (18 блоков)</span>
+            <span class="badge badge-blue">FB-01...FB-18</span>
+        </div>
+        <div class="card-body">
+            <div class="alert alert-warning" style="margin-bottom: 12px;">
+                <strong>Обязательный контур (FB-01...FB-08)</strong> — минимальный работающий продукт. Остальные 10 блоков — опциональные надстройки.
+            </div>
+            <div class="blocks-grid" id="blocksGrid">
+                <!-- Заполняется скриптом -->
+            </div>
+        </div>
+    </div>
+</main>
+
+<!-- Footer -->
+<footer style="background: var(--white); border-top: 1px solid var(--gray-200); padding: 16px 24px; text-align: center; color: var(--gray-500); font-size: 0.8rem;">
+    Демо-версия системы подготовки смет © 2025 · Стек: HTML/CSS/JS (единый файл) · Готово к демонстрации
+</footer>
+
+<!-- Modal About -->
+<div class="modal-overlay" id="aboutModal">
+    <div class="modal">
+        <div class="modal-header">
+            <span class="modal-title">О проекте — Система подготовки смет</span>
+            <button class="modal-close" onclick="closeModal('aboutModal')">×</button>
+        </div>
+        <div class="modal-body">
+            <h3>Задача</h3>
+            <p>Разработать веб-систему подготовки коммерческих смет для монтажной компании. Сквозной путь: <strong>проектная спецификация → автоматический разбор позиций на характеристики → привязка к справочникам товаров и работ → рабочий редактор сметы → выгрузка в Excel</strong>.</p>
+            <h3 style="margin-top: 16px;">Оценка бюджета и сроков</h3>
+            <div class="table-wrapper" style="margin: 0;">
+                <table>
+                    <thead>
+                    <tr><th>Вариант</th><th>Бюджет (грубая вилка)</th><th>Срок</th></tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td><strong>Обязательный контур (FB-01...FB-08)</strong></td>
+                        <td>от 800 000 ₽ до 1 200 000 ₽</td>
+                        <td>от 3 до 5 месяцев</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Всё целиком (FB-01...FB-18)</strong></td>
+                        <td>от 1 500 000 ₽ до 2 500 000 ₽</td>
+                        <td>от 5 до 8 месяцев</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <p style="margin-top: 12px; font-size: 0.85rem; color: var(--gray-500);">* Точная смета уточняется после детального ТЗ и анализа.</p>
+            <h3 style="margin-top: 16px;">Технологический стек</h3>
+            <p>На ваше усмотрение. Проект пишется с нуля, включая распознавание документов (OCR, парсинг). Данные (отраслевой каталог) предоставляются заказчиком.</p>
+        </div>
+    </div>
+</div>
+
+<!-- Modal for block details -->
+<div class="modal-overlay" id="blockModal">
+    <div class="modal">
+        <div class="modal-header">
+            <span class="modal-title" id="blockModalTitle">Блок</span>
+            <button class="modal-close" onclick="closeModal('blockModal')">×</button>
+        </div>
+        <div class="modal-body" id="blockModalBody">
+            <!-- Заполняется скриптом -->
+        </div>
+    </div>
+</div>
+
+<script>
+    // ==================== ДАННЫЕ ====================
+    // Пример спецификации (исходный документ)
+    const specRows = [
+        { no: 1, name: 'Труба стальная электросварная', characteristics: 'Ду50, ГОСТ 10704-91, ст.3', qty: 120, unit: 'м' },
+        { no: 2, name: 'Отвод 90° стальной', characteristics: 'Ду50, ГОСТ 17375-2001', qty: 24, unit: 'шт' },
+        { no: 3, name: 'Кран шаровый муфтовый', characteristics: 'Ду25, PN16, латунь', qty: 15, unit: 'шт' },
+        { no: 4, name: 'Кабель ВВГнг-LS', characteristics: '3x2.5, 0.66кВ', qty: 350, unit: 'м' },
+        { no: 5, name: 'Лоток кабельный оцинкованный', characteristics: '100x50, L=2000', qty: 80, unit: 'шт' },
+        { no: 6, name: 'Работа: монтаж трубопровода', characteristics: 'Ду50, сварка', qty: 120, unit: 'м' },
+        { no: 7, name: 'Работа: прокладка кабеля', characteristics: 'до 5 кг/м, открытая', qty: 350, unit: 'м' },
+        { no: 8, name: 'Работа: установка лотка', characteristics: 'на высоте до 3м', qty: 80, unit: 'шт' }
+    ];
+
+    // Распознанные позиции (результат OCR/парсинга)
+    const recognizedRows = [
+        { no: 1, name: 'Труба стальная электросварная', characteristics: 'Ду50, ГОСТ 10704-91, ст.3', qty: 120, unit: 'м', status: 'ok' },
+        { no: 2, name: 'Отвод 90° стальной', characteristics: 'Ду50, ГОСТ 17375-2001', qty: 24, unit: 'шт', status: 'ok' },
+        { no: 3, name: 'Кран шаровый муфтовый', characteristics: 'Ду25, PN16, латунь', qty: 15, unit: 'шт', status: 'ok' },
+        { no: 4, name: 'Кабель ВВГнг-LS', characteristics: '3x2.5, 0.66кВ', qty: 350, unit: 'м', status: 'ok' },
+        { no: 5, name: 'Лоток кабельный оцинкованный', characteristics: '100x50, L=2000', qty: 80, unit: 'шт', status: 'ok' },
+        { no: 6, name: 'Монтаж трубопровода', characteristics: 'Ду50, сварка', qty: 120, unit: 'м', status: 'ok' },
+        { no: 7, name: 'Прокладка кабеля', characteristics: 'до 5 кг/м, открытая', qty: 350, unit: 'м', status: 'ok' },
+        { no: 8, name: 'Установка лотка', characteristics: 'на высоте до 3м', qty: 80, unit: 'шт', status: 'ok' }
+    ];
+
+    // Справочник (каталог) для привязки
+    const catalog = [
+        { code: 'Т-001', name: 'Труба стальная электросварная Ду50 ГОСТ 10704-91', category: 'Материалы', match: 1.0 },
+        { code: 'Т-002', name: 'Труба стальная электросварная Ду40', category: 'Материалы', match: 0.6 },
+        { code: 'О-001', name: 'Отвод стальной 90° Ду50 ГОСТ 17375-2001', category: 'Материалы', match: 1.0 },
+        { code: 'К-001', name: 'Кран шаровый муфтовый Ду25 PN16 латунь', category: 'Материалы', match: 1.0 },
+        { code: 'К-002', name: 'Кран шаровый Ду20 PN16', category: 'Материалы', match: 0.4 },
+        { code: 'КБ-001', name: 'Кабель ВВГнг-LS 3x2.5 0.66кВ', category: 'Материалы', match: 1.0 },
+        { code: 'КБ-002', name: 'Кабель ВВГнг-LS 3x1.5', category: 'Материалы', match: 0.7 },
+        { code: 'Л-001', name: 'Лоток кабельный оцинкованный 100x50 L=2000', category: 'Материалы', match: 1.0 },
+        { code: 'Р-001', name: 'Монтаж трубопровода Ду50 (сварка)', category: 'Работы', match: 1.0 },
+        { code: 'Р-002', name: 'Монтаж трубопровода Ду40', category: 'Работы', match: 0.5 },
+        { code: 'Р-003', name: 'Прокладка кабеля до 5 кг/м (открытая)', category: 'Работы', match: 1.0 },
+        { code: 'Р-004', name: 'Установка кабельного лотка (высота до 3м)', category: 'Работы', match: 1.0 }
+    ];
+
+    // Результаты привязки (автоматически)
+    const matchedRows = [
+        { no: 1, specName: 'Труба стальная электросварная', catalogCode: 'Т-001', catalogName: 'Труба стальная электросварная Ду50 ГОСТ 10704-91', match: 1.0, matchLabel: 'Точное совпадение' },
+        { no: 2, specName: 'Отвод 90° стальной', catalogCode: 'О-001', catalogName: 'Отвод стальной 90° Ду50 ГОСТ 17375-2001', match: 1.0, matchLabel: 'Точное совпадение' },
+        { no: 3, specName: 'Кран шаровый муфтовый', catalogCode: 'К-001', catalogName: 'Кран шаровый муфтовый Ду25 PN16 латунь', match: 1.0, matchLabel: 'Точное совпадение' },
+        { no: 4, specName: 'Кабель ВВГнг-LS', catalogCode: 'КБ-001', catalogName: 'Кабель ВВГнг-LS 3x2.5 0.66кВ', match: 1.0, matchLabel: 'Точное совпадение' },
+        { no: 5, specName: 'Лоток кабельный оцинкованный', catalogCode: 'Л-001', catalogName: 'Лоток кабельный оцинкованный 100x50 L=2000', match: 1.0, matchLabel: 'Точное совпадение' },
+        { no: 6, specName: 'Монтаж трубопровода', catalogCode: 'Р-001', catalogName: 'Монтаж трубопровода Ду50 (сварка)', match: 1.0, matchLabel: 'Точное совпадение' },
+        { no: 7, specName: 'Прокладка кабеля', catalogCode: 'Р-003', catalogName: 'Прокладка кабеля до 5 кг/м (открытая)', match: 1.0, matchLabel: 'Точное совпадение' },
+        { no: 8, specName: 'Установка лотка', catalogCode: 'Р-004', catalogName: 'Установка кабельного лотка (высота до 3м)', match: 1.0, matchLabel: 'Точное совпадение' }
+    ];
+
+    // Данные для сметы (из привязки + цены)
+    let estimateRows = [
+        { no: 1, name: 'Труба стальная электросварная Ду50 ГОСТ 10704-91', unit: 'м', qty: 120, price: 350.00 },
+        { no: 2, name: 'Отвод стальной 90° Ду50 ГОСТ 17375-2001', unit: 'шт', qty: 24, price: 180.50 },
+        { no: 3, name: 'Кран шаровый муфтовый Ду25 PN16 латунь', unit: 'шт', qty: 15, price: 450.00 },
+        { no: 4, name: 'Кабель ВВГнг-LS 3x2.5 0.66кВ', unit: 'м', qty: 350, price: 85.00 },
+        { no: 5, name: 'Лоток кабельный оцинкованный 100x50 L=2000', unit: 'шт', qty: 80, price: 620.00 },
+        { no: 6, name: 'Монтаж трубопровода Ду50 (сварка)', unit: 'м', qty: 120, price: 280.00 },
+        { no: 7, name: 'Прокладка кабеля до 5 кг/м (открытая)', unit: 'м', qty: 350, price: 95.00 },
+        { no: 8, name: 'Установка кабельного лотка (высота до 3м)', unit: 'шт', qty: 80, price: 350.00 }
+    ];
+
+    // Карта блоков
+    const blocks = [
+        { code: 'FB-01', name: 'Загрузка и хранение спецификаций', mandatory: true, desc: 'Импорт PDF/Excel/Word, версионирование, история документов.' },
+        { code: 'FB-02', name: 'Распознавание документа (OCR)', mandatory: true, desc: 'Извлечение таблиц, текста, структуры из сканов и файлов.' },
+        { code: 'FB-03', name: 'Парсинг позиций и характеристик', mandatory: true, desc: 'Выделение наименований, характеристик, количества, единиц.' },
+        { code: 'FB-04', name: 'Нормализация данных', mandatory: true, desc: 'Очистка, унификация единиц измерения, обработка ошибок.' },
+        { code: 'FB-05', name: 'Привязка к справочнику номенклатуры', mandatory: true, desc: 'Автоматический подбор товаров и работ по каталогу.' },
+        { code: 'FB-06', name: 'Редактор сметы', mandatory: true, desc: 'Табличный редактор сметных позиций, расчет сумм.' },
+        { code: 'FB-07', name: 'Выгрузка в Excel', mandatory: true, desc: 'Формирование сметы в формате Excel с оформлением.' },
+        { code: 'FB-08', name: 'Базовая отчетность', mandatory: true, desc: 'Сводные отчеты, итоги по разделам.' },
+        { code: 'FB-09', name: 'Интеграция с 1С', mandatory: false, desc: 'Обмен данными с 1С:Предприятие.' },
+        { code: 'FB-10', name: 'Пользователи и роли', mandatory: false, desc: 'Разграничение прав доступа, ролевая модель.' },
+        { code: 'FB-11', name: 'Согласование смет', mandatory: false, desc: 'Маршруты утверждения, комментарии, статусы.' },
+        { code: 'FB-12', name: 'База расценок', mandatory: false, desc: 'Управление расценками, коэффициентами, наценками.' },
+        { code: 'FB-13', name: 'Шаблоны смет', mandatory: false, desc: 'Библиотека шаблонов для типовых проектов.' },
+        { code: 'FB-14', name: 'Аналитика и дашборды', mandatory: false, desc: 'Графики, KPI, сравнение проектов.' },
+        { code: 'FB-15', name: 'Импорт/экспорт в другие форматы', mandatory: false, desc: 'PDF, CSV, XML, API для внешних систем.' },
+        { code: 'FB-16', name: 'Мобильная версия', mandatory: false, desc: 'Адаптивный интерфейс для планшетов и смартфонов.' },
+        { code: 'FB-17', name: 'Интеграция с почтой', mandatory: false, desc: 'Отправка смет по email, уведомления.' },
+        { code: 'FB-18', name: 'Аудит действий', mandatory: false, desc: 'Журналирование изменений, история операций.' }
+    ];
+
+    // ==================== ФУНКЦИИ ====================
+    let currentStep = 1;
+    let specLoaded = false;
+    let recognizedDone = false;
+    let matchedDone = false;
+
+    // Инициализация при загрузке страницы
+    document.addEventListener('DOMContentLoaded', function() {
+        renderBlocks();
+    });
+
+    // Переключение шагов
+    function goToStep(step) {
+        // Скрыть все карточки шагов
+        for (let i = 1; i <= 5; i++) {
+            document.getElementById('step' + i).style.display = 'none';
+        }
+        // Показать нужную
+        document.getElementById('step' + step).style.display = 'block';
+        currentStep = step;
+        updateStepper(step);
+        // Прокрутка вверх
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function updateStepper(activeStep) {
+        const steps = document.querySelectorAll('.step');
+        const connectors = document.querySelectorAll('.step-connector');
+        steps.forEach((stepEl, index) => {
+            const stepNum = index + 1;
+            stepEl.classList.remove('active', 'completed');
+            if (stepNum === activeStep) {
+                stepEl.classList.add('active');
+            } else if (stepNum < activeStep) {
+                stepEl.classList.add('completed');
+            }
+        });
+        connectors.forEach((conn, index) => {
+            const connNum = index + 1;
+            conn.classList.toggle('done', connNum < activeStep);
+        });
+    }
+
+    // Загрузка примера спецификации
+    function loadExampleSpec() {
+        specLoaded = true;
+        document.getElementById('specPreview').style.display = 'block';
+        const tbody = document.getElementById('specTableBody');
+        tbody.innerHTML = '';
+        specRows.forEach(row => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td>${row.no}</td>
+                <td>${row.name}</td>
+                <td>${row.characteristics}</td>
+                <td>${row.qty}</td>
+                <td>${row.unit}</td>
+            `;
+            tbody.appendChild(tr);
+        });
+        document.getElementById('btnRecognize').disabled = false;
+        // Меняем текст в upload area
+        document.getElementById('uploadArea').style.display = 'none';
+    }
+
+    // Распознавание
+    function recognizeSpec() {
+        if (!specLoaded) return;
+        recognizedDone = true;
+        // Заполняем таблицу распознанных
+        const tbody = document.getElementById('recognizedTableBody');
+        tbody.innerHTML = '';
+        recognizedRows.forEach(row => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td>${row.no}</td>
+                <td>${row.name}</td>
+                <td>${row.characteristics}</td>
+                <td>${row.qty}</td>
+                <td>${row.unit}</td>
+                <td><span class="badge badge-green">✓ Распознано</span></td>
+            `;
+            tbody.appendChild(tr);
+        });
+        goToStep(2);
+    }
+
+    // Привязка к справочникам
+    function matchToCatalog() {
+        if (!recognizedDone) return;
+        matchedDone = true;
+        const tbody = document.getElementById('matchedTableBody');
+        tbody.innerHTML = '';
+        matchedRows.forEach(row => {
+            const matchBadge = row.match === 1.0 ? 'badge-green' : (row.match >= 0.7 ? 'badge-yellow' : 'badge-red');
+            const matchLabel = row.match === 1.0 ? 'Точное' : (row.match >= 0.7 ? 'Частичное' : 'Нет');
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td>${row.no}</td>
+                <td>${row.specName}</td>
+                <td>${row.catalogName}</td>
+                <td><span class="badge badge-blue">${row.catalogCode}</span></td>
+                <td><span class="badge ${matchBadge}">${matchLabel}</span></td>
+                <td>
+                    <select class="editable-input" style="width: auto; text-align: left;" onchange="alert('В демо выбор можно изменить, но в реальной системе будет выпадающий список каталога')">
+                        <option selected>${row.catalogCode}</option>
+                        <option>${row.catalogCode}-alt</option>
+                    </select>
+                </td>
+            `;
+            tbody.appendChild(tr);
+        });
+        goToStep(3);
+    }
+
+    // Открытие редактора сметы (шаг 4)
+    function openEditor() {
+        // Отрисовка сметы
+        renderEstimateTable();
+        goToStep(4);
+    }
+
+    // Функция для перехода к шагу 4 с отрисовкой
+    function goToStep4() {
+        openEditor();
+    }
+
+    // Переопределим вызов goToStep(4) из кнопки на шаге 3, чтобы сначала отрисовать
+    // Но проще: на кнопке в шаге 3 вызываем openEditor()
+    // Изменим в HTML: onclick="openEditor()" для кнопки "Открыть редактор сметы"
+    // В текущем HTML стоит goToStep(4), заменим на openEditor(). Но код уже написан, поправим ниже в HTML (нельзя, но мы можем в JS переопределить)
+    // Вместо этого в функции goToStep добавим проверку: если step === 4, сначала renderEstimateTable()
+    const originalGoToStep = goToStep;
+    goToStep = function(step) {
+        if (step === 4) {
+            renderEstimateTable();
+        }
+        originalGoToStep(step);
+    };
+
+    // Отрисовка таблицы сметы
+    function renderEstimateTable() {
+        const tbody = document.getElementById('estimateTableBody');
+        tbody.innerHTML = '';
+        estimateRows.forEach((row, index) => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td>${index + 1}</td>
+                <td>${row.name}</td>
+                <td>${row.unit}</td>
+                <td><input type="number" class="editable-input" value="${row.qty}" min="0" onchange="updateEstimateRow(${index}, 'qty', this.value)"></td>
+                <td><input type="number" class="editable-input" value="${row.price}" min="0" step="0.01" onchange="updateEstimateRow(${index}, 'price', this.value)"></td>
+                <td style="font-weight: 600;">${(row.qty * row.price).toFixed(2)} ₽</td>
+                <td><button class="btn btn-sm" onclick="deleteEstimateRow(${index})" style="color: var(--danger);">✕</button></td>
+            `;
+            tbody.appendChild(tr);
+        });
+        updateTotal();
+    }
+
+    // Обновление строки сметы
+    function updateEstimateRow(index, field, value) {
+        if (field === 'qty') {
+            estimateRows[index].qty = parseFloat(value) || 0;
+        } else if (field === 'price') {
+            estimateRows[index].price = parseFloat(value) || 0;
+        }
+        // Перерисовать только сумму в этой строке? Проще перерисовать всю таблицу
+        renderEstimateTable();
+    }
+
+    // Удаление строки
+    function deleteEstimateRow(index) {
+        estimateRows.splice(index, 1);
+        // Перенумеровать
+        estimateRows.forEach((row, i) => row.no = i + 1);
+        renderEstimateTable();
+    }
+
+    // Добавление строки
+    function addEstimateRow() {
+        const newRow = {
+            no: estimateRows.length + 1,
+            name: 'Новая позиция',
+            unit: 'шт',
+            qty: 1,
+            price: 0.00
+        };
+        estimateRows.push(newRow);
+        renderEstimateTable();
+        // Фокус на новой строке? можно прокрутить
+        const table = document.getElementById('estimateTable');
+        const lastRow = table.rows[table.rows.length - 1];
+        if (lastRow) {
+            lastRow.scrollIntoView({ block: 'center' });
+        }
+    }
+
+    // Пересчет итога
+    function updateTotal() {
+        const total = estimateRows.reduce((sum, row) => sum + (row.qty * row.price), 0);
+        document.getElementById('totalEstimate').textContent = total.toFixed(2) + ' ₽';
+    }
+
+    // Выгрузка в Excel (генерация CSV)
+    function exportToExcel() {
+        // Подготовка CSV
+        let csv = '№;Наименование;Ед.;Кол-во;Цена, ₽;Сумма, ₽\n';
+        estimateRows.forEach((row, index) => {
+            const sum = (row.qty * row.price).toFixed(2);
+            csv += `${index + 1};"${row.name}";${row.unit};${row.qty};${row.price.toFixed(2)};${sum}\n`;
+        });
+        const total = estimateRows.reduce((sum, row) => sum + (row.qty * row.price), 0);
+        csv += `;ИТОГО;;;;${total.toFixed(2)}\n`;
+
+        // Создание Blob
+        const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' }); // BOM для Excel
+        const link = document.createElement('a');
+        const url = URL.createObjectURL(blob);
+        link.href = url;
+        link.setAttribute('download', 'estimate_2025.csv');
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+
+        // Показать шаг 5 (успех)
+        goToStep(5);
+    }
+
+    // Рендер карты блоков
+    function renderBlocks() {
+        const grid = document.getElementById('blocksGrid');
+        grid.innerHTML = '';
+        blocks.forEach(block => {
+            const div = document.createElement('div');
+            div.className = `block-item ${block.mandatory ? 'mandatory' : 'optional'}`;
+            div.innerHTML = `
+                <span class="block-code">${block.code}</span>
+                <span class="block-name">${block.name}</span>
+                ${block.mandatory ? '<span class="badge badge-blue">обяз.</span>' : '<span class="badge badge-gray">опц.</span>'}
+            `;
+            div.onclick = function() {
+                showBlockDetails(block);
+            };
+            grid.appendChild(div);
+        });
+    }
+
+    // Показать детали блока
+    function showBlockDetails(block) {
+        document.getElementById('blockModalTitle').textContent = `${block.code} — ${block.name}`;
+        document.getElementById('blockModalBody').innerHTML = `
+            <p><strong>Тип:</strong> ${block.mandatory ? 'Обязательный (входит в минимальный контур)' : 'Опциональный (надстройка)'}</p>
+            <p><strong>Описание:</strong> ${block.desc}</p>
+        `;
+        openModal('blockModal');
+    }
+
+    // Модальные окна
+    function openModal(id) {
+        document.getElementById(id).classList.add('active');
+    }
+    function closeModal(id) {
+        document.getElementById(id).classList.remove('active');
+    }
+
+    // Сброс демо
+    function resetDemo() {
+        // Сбросить состояние
+        specLoaded = false;
+        recognizedDone = false;
+        matchedDone = false;
+        estimateRows = [
+            { no: 1, name: 'Труба стальная электросварная Ду50 ГОСТ 10704-91', unit: 'м', qty: 120, price: 350.00 },
+            { no: 2, name: 'Отвод стальной 90° Ду50 ГОСТ 17375-2001', unit: 'шт', qty: 24, price: 180.50 },
+            { no: 3, name: 'Кран шаровый муфтовый Ду25 PN16 латунь', unit: 'шт', qty: 15, price: 450.00 },
+            { no: 4, name: 'Кабель ВВГнг-LS 3x2.5 0.66кВ', unit: 'м', qty: 350, price: 85.00 },
+            { no: 5, name: 'Лоток кабельный оцинкованный 100x50 L=2000', unit: 'шт', qty: 80, price: 620.00 },
+            { no: 6, name: 'Монтаж трубопровода Ду50 (сварка)', unit: 'м', qty: 120, price: 280.00 },
+            { no: 7, name: 'Прокладка кабеля до 5 кг/м (открытая)', unit: 'м', qty: 350, price: 95.00 },
+            { no: 8, name: 'Установка кабельного лотка (высота до 3м)', unit: 'шт', qty: 80, price: 350.00 }
+        ];
+        // Скрыть все шаги, показать шаг 1
+        for (let i = 1; i <= 5; i++) {
+            document.getElementById('step' + i).style.display = 'none';
+        }
+        document.getElementById('step1').style.display = 'block';
+        currentStep = 1;
+        updateStepper(1);
+        // Сбросить отображение спецификации
+        document.getElementById('specPreview').style.display = 'none';
+        document.getElementById('uploadArea').style.display = 'block';
+        document.getElementById('btnRecognize').disabled = true;
+        // Очистить таблицы
+        document.getElementById('specTableBody').innerHTML = '';
+        document.getElementById('recognizedTableBody').innerHTML = '';
+        document.getElementById('matchedTableBody').innerHTML = '';
+        document.getElementById('estimateTableBody').innerHTML = '';
+        document.getElementById('totalEstimate').textContent = '0 ₽';
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // Дополнительно: для кнопки в шаге 3 (в HTML стоит onclick="goToStep(4)")
+    // но мы переопределили goToStep, так что должно работать
+</script>
+</body>
+</html>

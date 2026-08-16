@@ -1,0 +1,8 @@
+[
+  {"id": 1, "name": "Сергей Каторгин", "phone": "+7 (900) 777-88-99", "email": "katorgin@mail.ru", "created_at": "2026-01-14"},
+  {"id": 2, "name": "Ирина Лебедева", "phone": "+7 (913) 820-15-47", "email": "i.lebedeva@mail.ru", "created_at": "2026-01-22"},
+  {"id": 3, "name": "Владимир Савельев", "phone": "+7 (952) 415-30-88", "email": "vsaveliev@yandex.ru", "created_at": "2026-02-05"},
+  {"id": 4, "name": "Анна Крылова", "phone": "+7 (900) 312-74-16", "email": "a.krylova@inbox.ru", "created_at": "2026-02-19"},
+  {"id": 5, "name": "Максим Дорохов", "phone": "+7 (921) 609-43-25", "email": "m.dorokhov@gmail.com", "created_at": "2026-03-03"},
+  {"id": 6, "name": "Елена Соколова", "phone": "+7 (983) 550-12-90", "email": "e.sokolova@mail.ru", "created_at": "2026-03-28"}
+]

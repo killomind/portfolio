@@ -1,0 +1,10 @@
+# banki-ru-bitrix24 — public/
+Options -Indexes
+DirectoryIndex index.php
+
+RewriteEngine On
+
+# Существующие файлы/каталоги не трогаем
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^ index.php [QSA,L]

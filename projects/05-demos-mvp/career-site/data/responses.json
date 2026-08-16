@@ -1,0 +1,93 @@
+[
+    {
+        "id": 1,
+        "vacancy_id": 2,
+        "user_id": 5,
+        "candidate_name": "Дмитрий Орлов",
+        "candidate_email": "d.orlov@mail.ru",
+        "candidate_phone": "+7 912 555-77-88",
+        "resume": "Горный техник, опыт работы на руднике 2 года",
+        "cover": "Опыт работы диспетчером на производстве, знаю регламенты безопасности.",
+        "source": "Поток",
+        "status": "new",
+        "created": "2026-08-01"
+    },
+    {
+        "id": 2,
+        "vacancy_id": 6,
+        "user_id": 5,
+        "candidate_name": "Дмитрий Орлов",
+        "candidate_email": "d.orlov@mail.ru",
+        "candidate_phone": "+7 912 555-77-88",
+        "resume": "PHP-разработчик, 3 года коммерческого опыта, Laravel",
+        "cover": "Делал корпоративные порталы и интеграции с CRM, интересна вакансия.",
+        "source": "На сайте",
+        "status": "interview",
+        "created": "2026-07-20"
+    },
+    {
+        "id": 3,
+        "vacancy_id": 4,
+        "user_id": 0,
+        "candidate_name": "Иван Плотников",
+        "candidate_email": "i.plotnikov@yandex.ru",
+        "candidate_phone": "+7 921 300-11-22",
+        "resume": "Опыт управления самосвалами БелАЗ, 4 года",
+        "cover": "Готов к вахте 15\/15, есть опыт работы в карьере.",
+        "source": "HeadHunter",
+        "status": "new",
+        "created": "2026-08-09"
+    },
+    {
+        "id": 4,
+        "vacancy_id": 4,
+        "user_id": 0,
+        "candidate_name": "Сергей Мишин",
+        "candidate_email": "s.mishin@mail.ru",
+        "candidate_phone": "+7 931 222-33-44",
+        "resume": "Машинист экскаватора, 5 лет",
+        "cover": "Рассматриваю переезд в Ковдор, интересует вахта.",
+        "source": "Поток",
+        "status": "new",
+        "created": "2026-08-10"
+    },
+    {
+        "id": 5,
+        "vacancy_id": 6,
+        "user_id": 0,
+        "candidate_name": "Ольга Крылова",
+        "candidate_email": "o.krylova@gmail.com",
+        "candidate_phone": "+7 999 444-55-66",
+        "resume": "Backend-разработчик, PHP\/Laravel, 5 лет",
+        "cover": "Есть опыт построения HR-порталов и интеграции с внешними API.",
+        "source": "HeadHunter",
+        "status": "interview",
+        "created": "2026-08-05"
+    },
+    {
+        "id": 6,
+        "vacancy_id": 14,
+        "user_id": 0,
+        "candidate_name": "Алексей Гусев",
+        "candidate_email": "a.gusev@bk.ru",
+        "candidate_phone": "+7 905 666-77-88",
+        "resume": "Начальник смены обогатительной фабрики, 6 лет",
+        "cover": "Опыт запуска новых производств, готов к переезду в Балаково.",
+        "source": "Поток",
+        "status": "new",
+        "created": "2026-08-11"
+    },
+    {
+        "id": 7,
+        "vacancy_id": 15,
+        "user_id": 0,
+        "candidate_name": "Максим Титков",
+        "candidate_email": "m.titkov@mail.ru",
+        "candidate_phone": "+7 927 888-99-00",
+        "resume": "Водитель БелАЗ, категории CE",
+        "cover": "Работал на карьерах в Сибири, готов к вахте.",
+        "source": "HeadHunter",
+        "status": "rejected",
+        "created": "2026-08-12"
+    }
+]

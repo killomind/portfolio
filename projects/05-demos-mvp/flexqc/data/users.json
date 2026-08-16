@@ -1,0 +1,47 @@
+[
+  {
+    "id": 1,
+    "login": "operator",
+    "pass": "operator",
+    "name": "Дмитрий Козлов",
+    "role": "operator",
+    "phone": "+7 912 300 40 51",
+    "shift": "День"
+  },
+  {
+    "id": 2,
+    "login": "engineer",
+    "pass": "engineer",
+    "name": "Анна Лебедева",
+    "role": "engineer",
+    "phone": "+7 912 300 40 52",
+    "shift": "День"
+  },
+  {
+    "id": 3,
+    "login": "manager",
+    "pass": "manager",
+    "name": "Павел Никитин",
+    "role": "manager",
+    "phone": "+7 912 300 40 53",
+    "shift": "День"
+  },
+  {
+    "id": 4,
+    "login": "director",
+    "pass": "director",
+    "name": "Сергей Богданов",
+    "role": "director",
+    "phone": "+7 912 300 40 54",
+    "shift": "День"
+  },
+  {
+    "id": 5,
+    "login": "admin",
+    "pass": "admin",
+    "name": "Ксения Фомина",
+    "role": "admin",
+    "phone": "+7 912 300 40 55",
+    "shift": "День"
+  }
+]

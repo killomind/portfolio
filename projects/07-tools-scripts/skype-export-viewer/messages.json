@@ -1,0 +1,120 @@
+{
+    "userId": "8:demo_user",
+    "exportDate": "2026-07-01T10:00:00",
+    "conversations": [
+        {
+            "id": "19:demo-thread-1@thread.skype",
+            "displayName": "Команда проекта",
+            "threadProperties": {
+                "membercount": 4,
+                "members": "[\"8:demo_user\",\"8:alex.smir\",\"8:maria_k\",\"8:ivan.dev\"]"
+            },
+            "MessageList": [
+                {
+                    "from": "8:demo_user",
+                    "originalarrivaltime": "2026-06-28T08:00:00.000Z",
+                    "messagetype": "RichText",
+                    "content": "Коллеги, спринт начинаем завтра в 10:00.",
+                    "displayName": "demo_user"
+                },
+                {
+                    "from": "8:alex.smir",
+                    "originalarrivaltime": "2026-06-28T08:05:00.000Z",
+                    "messagetype": "RichText",
+                    "content": "Принято, задачи в Jira уже заведены.",
+                    "displayName": "Алексей Смирнов"
+                },
+                {
+                    "from": "8:maria_k",
+                    "originalarrivaltime": "2026-06-28T08:10:00.000Z",
+                    "messagetype": "RichText",
+                    "content": "Подключусь из офиса.",
+                    "displayName": "Мария Кузнецова"
+                },
+                {
+                    "from": "8:ivan.dev",
+                    "originalarrivaltime": "2026-06-28T09:00:00.000Z",
+                    "messagetype": "RichText",
+                    "content": "Апдейт по интеграции: API готово к тестам.",
+                    "displayName": "Иван Дев"
+                },
+                {
+                    "from": "8:demo_user",
+                    "originalarrivaltime": "2026-06-28T09:05:00.000Z",
+                    "messagetype": "RichText",
+                    "content": "Отлично, завтра прогоним smoke-тесты.",
+                    "displayName": "demo_user"
+                }
+            ]
+        },
+        {
+            "id": "19:demo-thread-2@thread.skype",
+            "displayName": "Поддержка клиентов",
+            "threadProperties": {
+                "membercount": 2,
+                "members": "[\"8:demo_user\",\"8:helpdesk_bot\"]"
+            },
+            "MessageList": [
+                {
+                    "from": "8:helpdesk_bot",
+                    "originalarrivaltime": "2026-06-27T12:00:00.000Z",
+                    "messagetype": "Text",
+                    "content": "Новый тикет #1423: не работает экспорт в CSV.",
+                    "displayName": "Поддержка"
+                },
+                {
+                    "from": "8:demo_user",
+                    "originalarrivaltime": "2026-06-27T12:15:00.000Z",
+                    "messagetype": "RichText",
+                    "content": "Взял в работу, проверю сегодня.",
+                    "displayName": "demo_user"
+                },
+                {
+                    "from": "8:helpdesk_bot",
+                    "originalarrivaltime": "2026-06-27T12:30:00.000Z",
+                    "messagetype": "RichText",
+                    "content": "Статус обновлён: назначено на разработчика.",
+                    "displayName": "Поддержка"
+                }
+            ]
+        },
+        {
+            "id": "19:demo-thread-3@thread.skype",
+            "displayName": "Организационные",
+            "threadProperties": {
+                "membercount": 3,
+                "members": "[\"8:demo_user\",\"8:alex.smir\",\"8:anna_hr\"]"
+            },
+            "MessageList": [
+                {
+                    "from": "8:anna_hr",
+                    "originalarrivaltime": "2026-06-26T10:00:00.000Z",
+                    "messagetype": "ThreadActivity/AddMember",
+                    "content": "<initiator>8:anna_hr</initiator><target>8:demo_user</target>",
+                    "displayName": ""
+                },
+                {
+                    "from": "8:anna_hr",
+                    "originalarrivaltime": "2026-06-26T10:05:00.000Z",
+                    "messagetype": "ThreadActivity/TopicUpdate",
+                    "content": "<value>Организационные вопросы</value>",
+                    "displayName": ""
+                },
+                {
+                    "from": "8:alex.smir",
+                    "originalarrivaltime": "2026-06-26T10:10:00.000Z",
+                    "messagetype": "RichText",
+                    "content": "Напоминаю про встречу по планерке в пятницу.",
+                    "displayName": "Алексей Смирнов"
+                },
+                {
+                    "from": "8:demo_user",
+                    "originalarrivaltime": "2026-06-26T10:20:00.000Z",
+                    "messagetype": "RichText",
+                    "content": "Буду, подготовлю статус по задачам.",
+                    "displayName": "demo_user"
+                }
+            ]
+        }
+    ]
+}

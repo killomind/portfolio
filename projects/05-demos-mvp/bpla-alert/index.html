@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=yes">
+    <title>Оповещения о БПЛА — прототип мобильного приложения</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+            background: #0e1b2b;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 28px 16px 40px;
+            color: #1A2C3E;
+        }
+
+        .demo-badge {
+            color: #8fa3bc;
+            font-size: 0.8rem;
+            font-weight: 500;
+            letter-spacing: 0.02em;
+            margin-bottom: 14px;
+            text-align: center;
+        }
+        .demo-badge strong { color: #c9d6e6; }
+
+        /* панель управления демо */
+        .demo-bar {
+            background: #16283e;
+            border: 1px solid #233a55;
+            border-radius: 16px;
+            padding: 12px 16px;
+            margin-bottom: 18px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-items: center;
+            max-width: 420px;
+            width: 100%;
+        }
+        .demo-bar .lbl {
+            font-size: 0.75rem;
+            color: #8fa3bc;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            font-weight: 600;
+            margin-right: 2px;
+        }
+        .demo-bar .btn {
+            border: none;
+            border-radius: 10px;
+            padding: 9px 14px;
+            font-family: inherit;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.15s, filter 0.15s;
+        }
+        .demo-bar .btn:hover { transform: translateY(-1px); filter: brightness(1.1); }
+        .btn-alert { background: #ff5a3c; color: #fff; }
+        .btn-clear { background: #f3a01c; color: #fff; }
+        .btn-zone  { background: #2b4a6e; color: #dce7f3; }
+
+        .frame {
+            width: 420px;
+            max-width: 100%;
+            background: #f5f7fa;
+            border-radius: 36px;
+            overflow: hidden;
+            box-shadow: 0 30px 60px -20px rgba(0,0,0,0.55);
+            border: 1px solid #2a3f5a;
+            position: relative;
+        }
+
+        /* верхняя панель телефона */
+        .phone-top {
+            background: #0f2137;
+            color: #fff;
+            padding: 14px 20px 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        .phone-top .status {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .dot { width: 8px; height: 8px; border-radius: 50%; background: #37d67a; }
+        .phone-top .time { letter-spacing: 0.03em; }
+
+        .app { min-height: 640px; }
+
+        .screen { display: none; padding: 16px 18px 20px; }
+        .screen.active { display: block; }
+
+        /* шапка экрана */
+        .shead {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 14px;
+        }
+        .shead h2 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #0B2A41;
+            letter-spacing: -0.01em;
+        }
+        .shead .ic {
+            background: #fff;
+            border: 1px solid #e2eaf2;
+            width: 40px; height: 40px;
+            border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            color: #0F5B8C;
+        }
+
+        /* статус-баннер */
+        .status-banner {
+            border-radius: 16px;
+            padding: 14px 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 14px;
+            background: #fff;
+            border: 1px solid #e2eaf2;
+        }
+        .status-banner.good .st-ic { background: #e7f6ec; color: #1d9e5c; }
+        .status-banner.warn .st-ic { background: #fff0e6; color: #ff5a3c; }
+        .st-ic {
+            width: 42px; height: 42px;
+            border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0;
+        }
+        .st-ic .material-icons { font-size: 24px; }
+        .status-banner .st-t {
+            font-size: 0.78rem;
+            color: #6C86A3;
+            font-weight: 500;
+        }
+        .status-banner .st-v {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #0B2A41;
+            margin-top: 2px;
+        }
+        .status-banner.warn .st-v { color: #e0441f; }
+
+        /* карта */
+        .map {
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid #e2eaf2;
+            position: relative;
+            background: #dfe9f2;
+            height: 240px;
+            margin-bottom: 14px;
+        }
+        .map svg { display: block; width: 100%; height: 100%; }
+        .map .map-label {
+            position: absolute;
+            top: 10px; left: 10px;
+            background: rgba(255,255,255,0.92);
+            border-radius: 10px;
+            padding: 6px 10px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: #0B2A41;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+        }
+        .map .map-btn {
+            position: absolute;
+            bottom: 10px; right: 10px;
+            background: #0F5B8C; color: #fff;
+            border: none; border-radius: 10px;
+            padding: 7px 11px;
+            font-size: 0.72rem;
+            font-weight: 600;
+            font-family: inherit;
+            cursor: pointer;
+        }
+
+        .card {
+            background: #fff;
+            border: 1px solid #e2eaf2;
+            border-radius: 16px;
+            padding: 14px;
+            margin-bottom: 12px;
+        }
+        .card .c-title {
+            font-size: 0.82rem;
+            font-weight: 700;
+            color: #0B2A41;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .card .c-title .mat { color: #0F5B8C; font-size: 20px; }
+
+        .zone-list .zone {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #eef2f7;
+        }
+        .zone-list .zone:last-child { border-bottom: none; }
+        .zone .z-name { font-size: 0.9rem; font-weight: 600; color: #1A2C3E; }
+        .zone .z-sub { font-size: 0.75rem; color: #6C86A3; margin-top: 2px; }
+        .zone .z-state {
+            font-size: 0.72rem;
+            font-weight: 700;
+            border-radius: 40px;
+            padding: 4px 10px;
+        }
+        .z-state.ok { background: #e7f6ec; color: #1d9e5c; }
+        .z-state.warn { background: #ffe8e2; color: #e0441f; }
+        .z-state.check { background: #fff3da; color: #c07d08; }
+
+        /* тумблер */
+        .switch { position: relative; display: inline-block; width: 44px; height: 26px; }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider {
+            position: absolute; cursor: pointer; inset: 0;
+            background: #ccd7e2; border-radius: 40px;
+            transition: 0.2s;
+        }
+        .slider:before {
+            content: ""; position: absolute;
+            height: 20px; width: 20px; left: 3px; top: 3px;
+            background: #fff; border-radius: 50%; transition: 0.2s;
+        }
+        .switch input:checked + .slider { background: #0F5B8C; }
+        .switch input:checked + .slider:before { transform: translateX(18px); }
+
+        .set-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 11px 0;
+            border-bottom: 1px solid #eef2f7;
+        }
+        .set-row:last-child { border-bottom: none; }
+        .set-row .s-name { font-size: 0.88rem; font-weight: 600; color: #1A2C3E; }
+        .set-row .s-desc { font-size: 0.74rem; color: #6C86A3; margin-top: 2px; }
+
+        .events .ev {
+            display: flex;
+            gap: 12px;
+            padding: 12px 0;
+            border-bottom: 1px solid #eef2f7;
+        }
+        .events .ev:last-child { border-bottom: none; }
+        .ev .ev-ic {
+            width: 36px; height: 36px;
+            border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0;
+            font-size: 20px;
+        }
+        .ev-ic.red { background: #ffe8e2; color: #e0441f; }
+        .ev-ic.green { background: #e7f6ec; color: #1d9e5c; }
+        .ev-ic.blue { background: #e6f0ff; color: #0F5B8C; }
+        .ev .ev-t {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #0B2A41;
+            display: flex;
+            justify-content: space-between;
+            gap: 8px;
+        }
+        .ev .ev-time { font-size: 0.72rem; color: #8aa1b8; font-weight: 500; flex-shrink: 0; }
+        .ev .ev-d { font-size: 0.8rem; color: #4A6A85; margin-top: 3px; line-height: 1.45; }
+
+        .metric-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 14px;
+        }
+        .metric {
+            background: #fff;
+            border: 1px solid #e2eaf2;
+            border-radius: 16px;
+            padding: 14px;
+        }
+        .metric .m-v { font-size: 1.5rem; font-weight: 800; color: #0B2A41; }
+        .metric .m-l { font-size: 0.72rem; color: #6C86A3; margin-top: 3px; font-weight: 500; }
+        .metric .m-ic { float: right; color: #0F5B8C; font-size: 24px; }
+
+        /* нижняя навигация */
+        .tabbar {
+            display: flex;
+            border-top: 1px solid #e2eaf2;
+            background: #fff;
+        }
+        .tabbar .tab {
+            flex: 1;
+            padding: 10px 0 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 3px;
+            cursor: pointer;
+            color: #8aa1b8;
+            font-size: 0.66rem;
+            font-weight: 600;
+            transition: color 0.2s;
+            background: none;
+            border: none;
+            font-family: inherit;
+        }
+        .tabbar .tab .material-icons { font-size: 22px; }
+        .tabbar .tab.active { color: #0F5B8C; }
+        .tabbar .tab.pulse .material-icons { animation: pulse 1s infinite; }
+        @keyframes pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.25); } }
+
+        /* полноэкранный экран тревоги */
+        .alert-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(160deg, #8f1d10 0%, #b3200b 55%, #6f1206 100%);
+            display: none;
+            flex-direction: column;
+            z-index: 50;
+            color: #fff;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 24px;
+        }
+        .alert-overlay.show { display: flex; }
+        .alert-overlay .a-ic {
+            width: 88px; height: 88px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.16);
+            display: flex; align-items: center; justify-content: center;
+            margin-bottom: 22px;
+            animation: siren 0.8s ease-in-out infinite;
+        }
+        .alert-overlay .a-ic .material-icons { font-size: 52px; }
+        @keyframes siren { 0%,100% { box-shadow: 0 0 0 0 rgba(255,255,255,0.35); } 50% { box-shadow: 0 0 0 18px rgba(255,255,255,0); } }
+        .alert-overlay .a-tag {
+            font-size: 0.78rem;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            font-weight: 700;
+            opacity: 0.9;
+            margin-bottom: 8px;
+        }
+        .alert-overlay h1 { font-size: 2rem; font-weight: 800; margin-bottom: 6px; }
+        .alert-overlay .a-zone { font-size: 1rem; opacity: 0.95; margin-bottom: 18px; }
+        .alert-overlay .a-timer {
+            font-size: 3rem;
+            font-weight: 800;
+            font-variant-numeric: tabular-nums;
+            margin-bottom: 6px;
+        }
+        .alert-overlay .a-timer-lbl { font-size: 0.8rem; opacity: 0.85; margin-bottom: 22px; }
+        .alert-overlay .a-actions { display: flex; flex-direction: column; gap: 10px; width: 100%; max-width: 300px; }
+        .alert-overlay .a-btn {
+            border: none;
+            border-radius: 14px;
+            padding: 14px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            font-family: inherit;
+            cursor: pointer;
+            transition: transform 0.15s, filter 0.15s;
+        }
+        .alert-overlay .a-btn:hover { transform: translateY(-1px); filter: brightness(1.06); }
+        .a-btn-primary { background: #fff; color: #b3200b; }
+        .a-btn-ghost { background: rgba(255,255,255,0.14); color: #fff; }
+        .alert-overlay .a-note { font-size: 0.75rem; opacity: 0.75; margin-top: 14px; line-height: 1.5; }
+
+        .footer-note {
+            margin-top: 14px;
+            font-size: 0.72rem;
+            color: #6d839c;
+            text-align: center;
+            max-width: 420px;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="demo-badge">Интерактивный прототип — <strong>система оповещений о БПЛА</strong></div>
+
+    <div class="demo-bar">
+        <span class="lbl">Демо:</span>
+        <button class="btn btn-alert" onclick="simulateAlert()">Симуляция тревоги</button>
+        <button class="btn btn-clear" onclick="clearAlert()">Отбой тревоги</button>
+        <button class="btn btn-zone" onclick="randomZone()">Смена зоны</button>
+    </div>
+
+    <div class="frame">
+        <div class="phone-top">
+            <div class="status">
+                <span class="dot"></span>
+                <span id="srvState">Сервер: онлайн</span>
+            </div>
+            <span class="time" id="clock">21:47</span>
+        </div>
+
+        <div class="app" id="app">
+
+            <!-- Экран: Карта -->
+            <div class="screen active" id="screen-map">
+                <div class="shead">
+                    <h2>Карта оповещений</h2>
+                    <div class="ic"><span class="material-icons">location_on</span></div>
+                </div>
+
+                <div class="status-banner good" id="statusBanner">
+                    <div class="st-ic"><span class="material-icons" id="stIcon">shield</span></div>
+                    <div>
+                        <div class="st-t">Текущий статус</div>
+                        <div class="st-v" id="stValue">Угроз нет, наблюдение активно</div>
+                    </div>
+                </div>
+
+                <div class="map">
+                    <span class="map-label" id="mapLabel">Город · 4 зоны</span>
+                    <svg viewBox="0 0 380 240" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="4" y="4" width="372" height="232" rx="16" fill="#dfe9f2"/>
+                        <!-- улицы -->
+                        <g stroke="#c3d3e1" stroke-width="2">
+                            <line x1="0" y1="80" x2="380" y2="70"/>
+                            <line x1="0" y1="170" x2="380" y2="175"/>
+                            <line x1="90" y1="0" x2="100" y2="240"/>
+                            <line x1="250" y1="0" x2="240" y2="240"/>
+                        </g>
+                        <!-- река -->
+                        <path d="M0 130 C 80 110, 120 150, 200 140 C 280 130, 330 150, 380 135" fill="none" stroke="#9fbcd8" stroke-width="6" opacity="0.7"/>
+                        <!-- зоны -->
+                        <g class="zones">
+                            <rect x="110" y="25" width="120" height="60" rx="12" fill="#d7f0e1" stroke="#37a564" stroke-width="2" opacity="0.9"/>
+                            <rect x="255" y="25" width="110" height="60" rx="12" fill="#d7f0e1" stroke="#37a564" stroke-width="2" opacity="0.9"/>
+                            <rect x="30" y="120" width="130" height="60" rx="12" fill="#d7f0e1" stroke="#37a564" stroke-width="2" opacity="0.9"/>
+                            <rect x="250" y="120" width="115" height="80" rx="12" fill="#d7f0e1" stroke="#37a564" stroke-width="2" opacity="0.9"/>
+                        </g>
+                        <!-- метки зон -->
+                        <g class="zone-labels" fill="#0B2A41" font-size="12" font-weight="600" text-anchor="middle">
+                            <text x="170" y="62">Северная</text>
+                            <text x="310" y="62">Западная</text>
+                            <text x="95" y="158">Южная</text>
+                            <text x="307" y="168">Центр</text>
+                        </g>
+                        <circle id="alertMarker" cx="170" cy="62" r="0" fill="#e0441f" stroke="#fff" stroke-width="2"/>
+                        <text id="alertMarkerTxt" x="170" y="40" font-size="11" font-weight="700" fill="#e0441f" text-anchor="middle" opacity="0">ТРЕВОГА</text>
+                    </svg>
+                    <button class="map-btn" onclick="simulateAlert()">Симулировать тревогу</button>
+                </div>
+
+                <div class="metric-grid">
+                    <div class="metric">
+                        <span class="material-icons m-ic">sensors</span>
+                        <div class="m-v" id="mDevices">12</div>
+                        <div class="m-l">Датчиков на связи</div>
+                    </div>
+                    <div class="metric">
+                        <span class="material-icons m-ic">people</span>
+                        <div class="m-v" id="mInShelter">0</div>
+                        <div class="m-l">Подтвердили укрытие</div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="c-title">Зоны контроля <span class="material-icons mat">radar</span></div>
+                    <div class="zone-list" id="zoneList">
+                        <div class="zone">
+                            <div><div class="z-name">Северная</div><div class="z-sub">3 датчика · радиус 4 км</div></div>
+                            <span class="z-state ok">Спокойно</span>
+                        </div>
+                        <div class="zone">
+                            <div><div class="z-name">Западная</div><div class="z-sub">2 датчика · радиус 3 км</div></div>
+                            <span class="z-state ok">Спокойно</span>
+                        </div>
+                        <div class="zone">
+                            <div><div class="z-name">Южная</div><div class="z-sub">4 датчика · радиус 5 км</div></div>
+                            <span class="z-state ok">Спокойно</span>
+                        </div>
+                        <div class="zone">
+                            <div><div class="z-name">Центр</div><div class="z-sub">3 датчика · радиус 2 км</div></div>
+                            <span class="z-state ok">Спокойно</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Экран: Оповещения -->
+            <div class="screen" id="screen-events">
+                <div class="shead">
+                    <h2>Оповещения</h2>
+                    <div class="ic"><span class="material-icons">notifications</span></div>
+                </div>
+
+                <div class="metric-grid">
+                    <div class="metric">
+                        <span class="material-icons m-ic" style="color:#e0441f;">warning</span>
+                        <div class="m-v" id="mAlertCount">3</div>
+                        <div class="m-l">Тревог за неделю</div>
+                    </div>
+                    <div class="metric">
+                        <span class="material-icons m-ic" style="color:#1d9e5c;">schedule</span>
+                        <div class="m-v">00:41</div>
+                        <div class="m-l">Среднее время до отбоя</div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="events" id="eventList">
+                        <div class="ev">
+                            <div class="ev-ic red"><span class="material-icons">warning</span></div>
+                            <div>
+                                <div class="ev-t"><span>Тревога — Северная</span><span class="ev-time">14 авг, 22:18</span></div>
+                                <div class="ev-d">Обнаружение БПЛА на высоте 220 м, направление северо-восток. Подтверждено двумя датчиками.</div>
+                            </div>
+                        </div>
+                        <div class="ev">
+                            <div class="ev-ic green"><span class="material-icons">check_circle</span></div>
+                            <div>
+                                <div class="ev-t"><span>Отбой тревоги</span><span class="ev-time">14 авг, 22:59</span></div>
+                                <div class="ev-d">Цель вышла за пределы зоны. Объект вернулся в штатный режим.</div>
+                            </div>
+                        </div>
+                        <div class="ev">
+                            <div class="ev-ic blue"><span class="material-icons">fact_check</span></div>
+                            <div>
+                                <div class="ev-t"><span>Плановая проверка</span><span class="ev-time">14 авг, 16:00</span></div>
+                                <div class="ev-d">Еженедельная проверка каналов оповещения. Все 4 канала доставлены.</div>
+                            </div>
+                        </div>
+                        <div class="ev">
+                            <div class="ev-ic red"><span class="material-icons">warning</span></div>
+                            <div>
+                                <div class="ev-t"><span>Тревога — Южная</span><span class="ev-time">13 авг, 23:05</span></div>
+                                <div class="ev-d">Низколетящий объект, подтверждён датчиком Р-3. Время до подлёта — около 4 минут.</div>
+                            </div>
+                        </div>
+                        <div class="ev">
+                            <div class="ev-ic green"><span class="material-icons">check_circle</span></div>
+                            <div>
+                                <div class="ev-t"><span>Отбой тревоги</span><span class="ev-time">13 авг, 23:17</span></div>
+                                <div class="ev-d">Сигнал потерян, цель не подтвердилась по второму каналу.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Экран: Настройки -->
+            <div class="screen" id="screen-settings">
+                <div class="shead">
+                    <h2>Настройки</h2>
+                    <div class="ic"><span class="material-icons">tune</span></div>
+                </div>
+
+                <div class="card">
+                    <div class="c-title">Каналы оповещения</div>
+                    <div class="set-row">
+                        <div><div class="s-name">Push-уведомления</div><div class="s-desc">Мгновенно, даже при закрытом приложении</div></div>
+                        <label class="switch"><input type="checkbox" checked><span class="slider"></span></label>
+                    </div>
+                    <div class="set-row">
+                        <div><div class="s-name">SMS-рассылка</div><div class="s-desc">Резервный канал, доставка по всем номерам</div></div>
+                        <label class="switch"><input type="checkbox" checked><span class="slider"></span></label>
+                    </div>
+                    <div class="set-row">
+                        <div><div class="s-name">Звук сирены</div><div class="s-desc">Громкий сигнал на устройстве</div></div>
+                        <label class="switch"><input type="checkbox" checked><span class="slider"></span></label>
+                    </div>
+                    <div class="set-row">
+                        <div><div class="s-name">Telegram-бот</div><div class="s-desc">Оповещение в чат группы</div></div>
+                        <label class="switch"><input type="checkbox"><span class="slider"></span></label>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="c-title">Параметры</div>
+                    <div class="set-row">
+                        <div><div class="s-name">Радиус зоны контроля</div><div class="s-desc">Текущее значение: 3–5 км</div></div>
+                        <span class="material-icons" style="color:#0F5B8C;">edit</span>
+                    </div>
+                    <div class="set-row">
+                        <div><div class="s-name">Уровень громкости</div><div class="s-desc">Максимальный при тревоге</div></div>
+                        <span class="material-icons" style="color:#0F5B8C;">volume_up</span>
+                    </div>
+                    <div class="set-row">
+                        <div><div class="s-name">Автоподтверждение</div><div class="s-desc">«Я в укрытии» после входа в радиус</div></div>
+                        <label class="switch"><input type="checkbox"><span class="slider"></span></label>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="c-title">Интеграция с оборудованием</div>
+                    <div class="set-row">
+                        <div><div class="s-name">Шлюз датчиков</div><div class="s-desc">Подключён · сигнал -42 dBm</div></div>
+                        <span class="z-state ok">Онлайн</span>
+                    </div>
+                    <div class="set-row">
+                        <div><div class="s-name">API оповещений</div><div class="s-desc">HTTPS · статус 200</div></div>
+                        <span class="z-state ok">Ок</span>
+                    </div>
+                    <div class="set-row">
+                        <div><div class="s-name">Видеоканал</div><div class="s-desc">Резервная передача сигнала</div></div>
+                        <span class="z-state check">Проверка</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Экран тревоги -->
+            <div class="alert-overlay" id="alertOverlay">
+                <div class="a-ic"><span class="material-icons">campaign</span></div>
+                <div class="a-tag">Обнаружен воздушный объект</div>
+                <h1 id="aTitle">ВНИМАНИЕ!</h1>
+                <div class="a-zone" id="aZone">Зона: Северная</div>
+                <div class="a-timer" id="aTimer">04:00</div>
+                <div class="a-timer-lbl">расчётное время до подлёта</div>
+                <div class="a-actions">
+                    <button class="a-btn a-btn-primary" onclick="confirmShelter()">Я в укрытии</button>
+                    <button class="a-btn a-btn-ghost" onclick="clearAlert()">Это проверка / отбой</button>
+                </div>
+                <div class="a-note">Сирена активирована · каналы: push + SMS. После нажатия «Я в укрытии» администратор увидит статус группы.</div>
+            </div>
+
+        </div>
+
+        <div class="tabbar">
+            <button class="tab active" data-screen="map"><span class="material-icons">map</span>Карта</button>
+            <button class="tab" data-screen="events"><span class="material-icons">notifications</span>Оповещения</button>
+            <button class="tab" data-screen="settings"><span class="material-icons">tune</span>Настройки</button>
+        </div>
+    </div>
+
+    <div class="footer-note">
+        Прототип интерфейса мобильного приложения оповещений о БПЛА. Демонстрирует сценарий
+        «тревога → оповещение по каналам → подтверждение укрытия → отбой». Данные и показатели — демонстрационные.
+    </div>
+
+<script>
+    // ======== Навигация ========
+    const tabs = document.querySelectorAll('.tabbar .tab');
+    const screens = document.querySelectorAll('.screen');
+
+    tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            tabs.forEach(t => t.classList.remove('active'));
+            screens.forEach(s => s.classList.remove('active'));
+            tab.classList.add('active');
+            document.getElementById('screen-' + tab.dataset.screen).classList.add('active');
+        });
+    });
+
+    // ======== Часы ========
+    function tick() {
+        const d = new Date();
+        document.getElementById('clock').textContent =
+            String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0');
+    }
+    setInterval(tick, 1000); tick();
+
+    // ======== Зоны и состояние ========
+    const zones = [
+        { name: 'Северная', rect: 'x="110" y="25" width="120" height="60"', cx: 170, cy: 55, sensors: 3 },
+        { name: 'Западная', rect: 'x="255" y="25" width="110" height="60"', cx: 310, cy: 55, sensors: 2 },
+        { name: 'Южная', rect: 'x="30" y="120" width="130" height="60"', cx: 95, cy: 150, sensors: 4 },
+        { name: 'Центр', rect: 'x="250" y="120" width="115" height="80"', cx: 307, cy: 160, sensors: 3 }
+    ];
+    let currentZoneIdx = 0;
+    let alertActive = false;
+    let timerInterval = null;
+
+    const ZONE_COLORS = { ok: ['#d7f0e1', '#37a564'], warn: ['#ffd9cf', '#e0441f'] };
+
+    function paintZone(idx, state) {
+        const zone = zones[idx];
+        const rects = document.querySelectorAll('.zones rect');
+        const labels = document.querySelectorAll('.zone-labels text');
+        const [fill, stroke] = ZONE_COLORS[state];
+        rects[idx].setAttribute('fill', fill);
+        rects[idx].setAttribute('stroke', stroke);
+        labels[idx].setAttribute('fill', state === 'ok' ? '#0B2A41' : '#e0441f');
+    }
+
+    function renderZoneList() {
+        const states = document.querySelectorAll('#zoneList .z-state');
+        zones.forEach((z, i) => {
+            states[i].textContent = i === currentZoneIdx && alertActive ? 'Тревога' : 'Спокойно';
+            states[i].className = 'z-state ' + (i === currentZoneIdx && alertActive ? 'warn' : 'ok');
+        });
+    }
+
+    // ======== Симуляция тревоги ========
+    function simulateAlert() {
+        if (alertActive) return;
+        alertActive = true;
+        document.getElementById('alertOverlay').classList.add('show');
+        const banner = document.getElementById('statusBanner');
+        banner.classList.remove('good'); banner.classList.add('warn');
+        document.getElementById('stIcon').textContent = 'warning';
+        document.getElementById('stValue').textContent = 'Тревога в зоне — действуйте по инструкции';
+        paintZone(currentZoneIdx, 'warn');
+
+        const marker = document.getElementById('alertMarker');
+        const markerTxt = document.getElementById('alertMarkerTxt');
+        marker.setAttribute('r', '7');
+        marker.setAttribute('cx', zones[currentZoneIdx].cx);
+        marker.setAttribute('cy', zones[currentZoneIdx].cy);
+        markerTxt.setAttribute('x', zones[currentZoneIdx].cx);
+        markerTxt.setAttribute('y', zones[currentZoneIdx].cy - 12);
+        markerTxt.setAttribute('opacity', '1');
+
+        document.getElementById('aZone').textContent = 'Зона: ' + zones[currentZoneIdx].name;
+        document.getElementById('mapLabel').textContent = zones[currentZoneIdx].name + ' · ТРЕВОГА';
+
+        // таймер от 4:00
+        let total = 240;
+        const timerEl = document.getElementById('aTimer');
+        const fmt = () => {
+            const m = Math.floor(total / 60);
+            const s = total % 60;
+            timerEl.textContent = String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0');
+        };
+        fmt();
+        clearInterval(timerInterval);
+        timerInterval = setInterval(() => {
+            total = Math.max(0, total - 1);
+            fmt();
+        }, 1000);
+
+        renderZoneList();
+    }
+
+    function confirmShelter() {
+        const count = parseInt(document.getElementById('mInShelter').textContent) + 1;
+        document.getElementById('mInShelter').textContent = count;
+    }
+
+    function clearAlert() {
+        if (!alertActive) return;
+        alertActive = false;
+        document.getElementById('alertOverlay').classList.remove('show');
+        clearInterval(timerInterval);
+        const banner = document.getElementById('statusBanner');
+        banner.classList.remove('warn'); banner.classList.add('good');
+        document.getElementById('stIcon').textContent = 'shield';
+        document.getElementById('stValue').textContent = 'Угроз нет, наблюдение активно';
+        paintZone(currentZoneIdx, 'ok');
+        document.getElementById('alertMarker').setAttribute('r', '0');
+        document.getElementById('alertMarkerTxt').setAttribute('opacity', '0');
+        document.getElementById('mapLabel').textContent = 'Город · 4 зоны';
+        renderZoneList();
+    }
+
+    function randomZone() {
+        currentZoneIdx = (currentZoneIdx + 1) % zones.length;
+        if (alertActive) {
+            document.getElementById('aZone').textContent = 'Зона: ' + zones[currentZoneIdx].name;
+            document.getElementById('alertMarker').setAttribute('cx', zones[currentZoneIdx].cx);
+            document.getElementById('alertMarker').setAttribute('cy', zones[currentZoneIdx].cy);
+            document.getElementById('alertMarkerTxt').setAttribute('x', zones[currentZoneIdx].cx);
+            document.getElementById('alertMarkerTxt').setAttribute('y', zones[currentZoneIdx].cy - 12);
+            document.getElementById('mapLabel').textContent = zones[currentZoneIdx].name + ' · ТРЕВОГА';
+        }
+        renderZoneList();
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,32 @@
+[
+  {
+    "id": 1,
+    "event": "payment.succeeded",
+    "payment_key": "2e16a7c0-8b3f-4f2d-9c1a-000000000001",
+    "idempotency_key": "evt_2e16a7c0_000001_01",
+    "status": "processed",
+    "attempts": 1,
+    "note": "Обработан: платёж проведён, сформированы проводки и чек",
+    "at": "2026-08-10 11:42:00"
+  },
+  {
+    "id": 2,
+    "event": "payment.succeeded",
+    "payment_key": "2e16a7c0-8b3f-4f2d-9c1a-000000000001",
+    "idempotency_key": "evt_2e16a7c0_000001_01",
+    "status": "duplicate",
+    "attempts": 2,
+    "note": "Повторная доставка — обработка пропущена, проводки не дублируются",
+    "at": "2026-08-10 11:43:00"
+  },
+  {
+    "id": 3,
+    "event": "payment.succeeded",
+    "payment_key": "2e16a7c0-8b3f-4f2d-9c1a-000000000002",
+    "idempotency_key": "evt_2e16a7c0_000002_01",
+    "status": "processed",
+    "attempts": 1,
+    "note": "Обработан: платёж проведён, сформированы проводки и чек",
+    "at": "2026-08-12 15:03:00"
+  }
+]

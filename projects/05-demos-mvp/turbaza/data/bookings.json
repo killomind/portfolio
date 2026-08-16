@@ -1,0 +1,631 @@
+[
+    {
+        "id": 1,
+        "number": "БГ-2026-001",
+        "cottage_id": 3,
+        "guest_id": 2,
+        "guest_name": "Марина Лебедева",
+        "guest_phone": "+7 912 555-01-17",
+        "guest_email": "m.lebedeva@yandex.ru",
+        "check_in": "2026-08-04",
+        "check_out": "2026-08-09",
+        "nights": 5,
+        "guests": 4,
+        "services": [
+            {
+                "id": 2,
+                "name": "Завтрак «Домашний»",
+                "price": 350,
+                "per": "person_night",
+                "amount": 7000
+            },
+            {
+                "id": 3,
+                "name": "Прокат лодки",
+                "price": 800,
+                "per": "night",
+                "amount": 4000
+            }
+        ],
+        "night_total": 29250,
+        "extras_total": 11000,
+        "total": 40250,
+        "status": "checked_out",
+        "payment": {
+            "method": "Онлайн-оплата картой",
+            "at": "2026-07-25 10:12",
+            "amount": 40250
+        },
+        "source": "staff",
+        "comment": "Заезд после 15:00",
+        "created_at": "2026-07-25 10:00",
+        "updated_at": "2026-08-09 12:00",
+        "history": [
+            {
+                "at": "2026-07-25 10:00",
+                "user": "Елена Соколова",
+                "from": "",
+                "to": "new",
+                "note": "Бронь создана по телефону"
+            },
+            {
+                "at": "2026-07-25 10:10",
+                "user": "Елена Соколова",
+                "from": "new",
+                "to": "confirmed",
+                "note": "Подтверждена"
+            },
+            {
+                "at": "2026-07-25 10:12",
+                "user": "Марина Лебедева",
+                "from": "confirmed",
+                "to": "paid",
+                "note": "Оплата картой онлайн"
+            },
+            {
+                "at": "2026-08-04 15:20",
+                "user": "Дмитрий Романов",
+                "from": "paid",
+                "to": "checked_in",
+                "note": "Заселение"
+            },
+            {
+                "at": "2026-08-09 12:00",
+                "user": "Дмитрий Романов",
+                "from": "checked_in",
+                "to": "checked_out",
+                "note": "Выезд"
+            }
+        ]
+    },
+    {
+        "id": 2,
+        "number": "БГ-2026-002",
+        "cottage_id": 1,
+        "guest_id": 1,
+        "guest_name": "Сергей Каторгин",
+        "guest_phone": "+7 953 913 13 16",
+        "guest_email": "katorgin@mail.ru",
+        "check_in": "2026-08-12",
+        "check_out": "2026-08-15",
+        "nights": 3,
+        "guests": 2,
+        "services": [],
+        "night_total": 9750,
+        "extras_total": 0,
+        "total": 9750,
+        "status": "new",
+        "payment": null,
+        "source": "site",
+        "comment": "",
+        "created_at": "2026-08-11 14:20",
+        "updated_at": "2026-08-11 14:20",
+        "history": [
+            {
+                "at": "2026-08-11 14:20",
+                "user": "Сергей Каторгин",
+                "from": "",
+                "to": "new",
+                "note": "Онлайн-бронирование с сайта, ждёт оплаты"
+            }
+        ]
+    },
+    {
+        "id": 3,
+        "number": "БГ-2026-003",
+        "cottage_id": 2,
+        "guest_id": 3,
+        "guest_name": "Игорь Тарасов",
+        "guest_phone": "+7 913 444-02-28",
+        "guest_email": "tarasov.i@mail.ru",
+        "check_in": "2026-08-14",
+        "check_out": "2026-08-17",
+        "nights": 3,
+        "guests": 2,
+        "services": [
+            {
+                "id": 1,
+                "name": "Баня на дровах",
+                "price": 1500,
+                "per": "once",
+                "amount": 1500
+            }
+        ],
+        "night_total": 12480,
+        "extras_total": 1500,
+        "total": 13980,
+        "status": "confirmed",
+        "payment": null,
+        "source": "staff",
+        "comment": "Гость из прошлых сезонов, оплата на месте",
+        "created_at": "2026-08-05 11:40",
+        "updated_at": "2026-08-05 12:00",
+        "history": [
+            {
+                "at": "2026-08-05 11:40",
+                "user": "Елена Соколова",
+                "from": "",
+                "to": "new",
+                "note": "Бронь по телефону"
+            },
+            {
+                "at": "2026-08-05 12:00",
+                "user": "Елена Соколова",
+                "from": "new",
+                "to": "confirmed",
+                "note": "Подтверждена"
+            }
+        ]
+    },
+    {
+        "id": 4,
+        "number": "БГ-2026-004",
+        "cottage_id": 4,
+        "guest_id": 4,
+        "guest_name": "Ольга Виноградова",
+        "guest_phone": "+7 923 777-03-39",
+        "guest_email": "o.vin@bk.ru",
+        "check_in": "2026-08-18",
+        "check_out": "2026-08-22",
+        "nights": 4,
+        "guests": 4,
+        "services": [
+            {
+                "id": 2,
+                "name": "Завтрак «Домашний»",
+                "price": 350,
+                "per": "person_night",
+                "amount": 5600
+            }
+        ],
+        "night_total": 27040,
+        "extras_total": 5600,
+        "total": 32640,
+        "status": "paid",
+        "payment": {
+            "method": "Онлайн-оплата картой",
+            "at": "2026-08-07 09:05",
+            "amount": 32640
+        },
+        "source": "site",
+        "comment": "Семья с двумя детьми",
+        "created_at": "2026-08-07 09:00",
+        "updated_at": "2026-08-07 09:05",
+        "history": [
+            {
+                "at": "2026-08-07 09:00",
+                "user": "Ольга Виноградова",
+                "from": "",
+                "to": "new",
+                "note": "Онлайн-бронирование с сайта"
+            },
+            {
+                "at": "2026-08-07 09:02",
+                "user": "Елена Соколова",
+                "from": "new",
+                "to": "confirmed",
+                "note": "Подтверждена"
+            },
+            {
+                "at": "2026-08-07 09:05",
+                "user": "Ольга Виноградова",
+                "from": "confirmed",
+                "to": "paid",
+                "note": "Оплата картой онлайн"
+            }
+        ]
+    },
+    {
+        "id": 5,
+        "number": "БГ-2026-005",
+        "cottage_id": 5,
+        "guest_id": 5,
+        "guest_name": "Павел Дорохов",
+        "guest_phone": "+7 900 222-04-40",
+        "guest_email": "dorokhov.p@mail.ru",
+        "check_in": "2026-08-20",
+        "check_out": "2026-08-25",
+        "nights": 5,
+        "guests": 6,
+        "services": [
+            {
+                "id": 3,
+                "name": "Прокат лодки",
+                "price": 800,
+                "per": "night",
+                "amount": 4000
+            },
+            {
+                "id": 4,
+                "name": "Прокат велосипедов",
+                "price": 400,
+                "per": "person_night",
+                "amount": 12000
+            },
+            {
+                "id": 2,
+                "name": "Завтрак «Домашний»",
+                "price": 350,
+                "per": "person_night",
+                "amount": 10500
+            }
+        ],
+        "night_total": 55250,
+        "extras_total": 26500,
+        "total": 81750,
+        "status": "new",
+        "payment": null,
+        "source": "staff",
+        "comment": "Корпоративный выезд, уточнить счёт на организацию",
+        "created_at": "2026-08-10 16:20",
+        "updated_at": "2026-08-10 16:20",
+        "history": [
+            {
+                "at": "2026-08-10 16:20",
+                "user": "Елена Соколова",
+                "from": "",
+                "to": "new",
+                "note": "Бронь создана"
+            }
+        ]
+    },
+    {
+        "id": 6,
+        "number": "БГ-2026-006",
+        "cottage_id": 6,
+        "guest_id": 6,
+        "guest_name": "Анна Кузнецова",
+        "guest_phone": "+7 911 333-05-51",
+        "guest_email": "kuznetsova.a@mail.ru",
+        "check_in": "2026-09-02",
+        "check_out": "2026-09-06",
+        "nights": 4,
+        "guests": 6,
+        "services": [
+            {
+                "id": 2,
+                "name": "Завтрак «Домашний»",
+                "price": 350,
+                "per": "person_night",
+                "amount": 8400
+            },
+            {
+                "id": 5,
+                "name": "Мангальная зона с углём",
+                "price": 500,
+                "per": "once",
+                "amount": 500
+            }
+        ],
+        "night_total": 44000,
+        "extras_total": 8900,
+        "total": 52900,
+        "status": "confirmed",
+        "payment": null,
+        "source": "staff",
+        "comment": "Предоплата 30% ожидается",
+        "created_at": "2026-08-08 12:15",
+        "updated_at": "2026-08-08 12:30",
+        "history": [
+            {
+                "at": "2026-08-08 12:15",
+                "user": "Елена Соколова",
+                "from": "",
+                "to": "new",
+                "note": "Бронь по телефону"
+            },
+            {
+                "at": "2026-08-08 12:30",
+                "user": "Елена Соколова",
+                "from": "new",
+                "to": "confirmed",
+                "note": "Подтверждена"
+            }
+        ]
+    },
+    {
+        "id": 7,
+        "number": "БГ-2026-007",
+        "cottage_id": 4,
+        "guest_id": 7,
+        "guest_name": "Виктор Савельев",
+        "guest_phone": "+7 999 888-07-72",
+        "guest_email": "saveliev@mail.ru",
+        "check_in": "2026-08-11",
+        "check_out": "2026-08-13",
+        "nights": 2,
+        "guests": 4,
+        "services": [
+            {
+                "id": 1,
+                "name": "Баня на дровах",
+                "price": 1500,
+                "per": "once",
+                "amount": 1500
+            }
+        ],
+        "night_total": 13520,
+        "extras_total": 1500,
+        "total": 15020,
+        "status": "checked_in",
+        "payment": {
+            "method": "Онлайн-оплата картой",
+            "at": "2026-08-02 18:00",
+            "amount": 15020
+        },
+        "source": "staff",
+        "comment": "",
+        "created_at": "2026-08-02 17:40",
+        "updated_at": "2026-08-11 15:10",
+        "history": [
+            {
+                "at": "2026-08-02 17:40",
+                "user": "Дмитрий Романов",
+                "from": "",
+                "to": "new",
+                "note": "Бронь создана"
+            },
+            {
+                "at": "2026-08-02 17:45",
+                "user": "Дмитрий Романов",
+                "from": "new",
+                "to": "confirmed",
+                "note": "Подтверждена"
+            },
+            {
+                "at": "2026-08-02 18:00",
+                "user": "Виктор Савельев",
+                "from": "confirmed",
+                "to": "paid",
+                "note": "Оплата картой онлайн"
+            },
+            {
+                "at": "2026-08-11 15:10",
+                "user": "Дмитрий Романов",
+                "from": "paid",
+                "to": "checked_in",
+                "note": "Заселение"
+            }
+        ]
+    },
+    {
+        "id": 8,
+        "number": "БГ-2026-008",
+        "cottage_id": 2,
+        "guest_id": 4,
+        "guest_name": "Ольга Виноградова",
+        "guest_phone": "+7 923 777-03-39",
+        "guest_email": "o.vin@bk.ru",
+        "check_in": "2026-08-02",
+        "check_out": "2026-08-06",
+        "nights": 4,
+        "guests": 2,
+        "services": [
+            {
+                "id": 3,
+                "name": "Прокат лодки",
+                "price": 800,
+                "per": "night",
+                "amount": 3200
+            }
+        ],
+        "night_total": 16640,
+        "extras_total": 3200,
+        "total": 19840,
+        "status": "checked_out",
+        "payment": {
+            "method": "Онлайн-оплата картой",
+            "at": "2026-07-20 13:00",
+            "amount": 19840
+        },
+        "source": "staff",
+        "comment": "",
+        "created_at": "2026-07-20 12:50",
+        "updated_at": "2026-08-06 11:00",
+        "history": [
+            {
+                "at": "2026-07-20 12:50",
+                "user": "Елена Соколова",
+                "from": "",
+                "to": "new",
+                "note": "Бронь по телефону"
+            },
+            {
+                "at": "2026-07-20 12:55",
+                "user": "Елена Соколова",
+                "from": "new",
+                "to": "confirmed",
+                "note": "Подтверждена"
+            },
+            {
+                "at": "2026-07-20 13:00",
+                "user": "Ольга Виноградова",
+                "from": "confirmed",
+                "to": "paid",
+                "note": "Оплата картой онлайн"
+            },
+            {
+                "at": "2026-08-02 15:00",
+                "user": "Дмитрий Романов",
+                "from": "paid",
+                "to": "checked_in",
+                "note": "Заселение"
+            },
+            {
+                "at": "2026-08-06 11:00",
+                "user": "Дмитрий Романов",
+                "from": "checked_in",
+                "to": "checked_out",
+                "note": "Выезд"
+            }
+        ]
+    },
+    {
+        "id": 9,
+        "number": "БГ-2026-009",
+        "cottage_id": 3,
+        "guest_id": 3,
+        "guest_name": "Игорь Тарасов",
+        "guest_phone": "+7 913 444-02-28",
+        "guest_email": "tarasov.i@mail.ru",
+        "check_in": "2026-08-11",
+        "check_out": "2026-08-14",
+        "nights": 3,
+        "guests": 4,
+        "services": [
+            {
+                "id": 5,
+                "name": "Мангальная зона с углём",
+                "price": 500,
+                "per": "once",
+                "amount": 500
+            }
+        ],
+        "night_total": 17550,
+        "extras_total": 500,
+        "total": 18050,
+        "status": "checked_in",
+        "payment": {
+            "method": "Онлайн-оплата картой",
+            "at": "2026-08-03 09:30",
+            "amount": 18050
+        },
+        "source": "staff",
+        "comment": "",
+        "created_at": "2026-08-03 09:20",
+        "updated_at": "2026-08-11 14:45",
+        "history": [
+            {
+                "at": "2026-08-03 09:20",
+                "user": "Елена Соколова",
+                "from": "",
+                "to": "new",
+                "note": "Бронь создана"
+            },
+            {
+                "at": "2026-08-03 09:25",
+                "user": "Елена Соколова",
+                "from": "new",
+                "to": "confirmed",
+                "note": "Подтверждена"
+            },
+            {
+                "at": "2026-08-03 09:30",
+                "user": "Игорь Тарасов",
+                "from": "confirmed",
+                "to": "paid",
+                "note": "Оплата картой онлайн"
+            },
+            {
+                "at": "2026-08-11 14:45",
+                "user": "Дмитрий Романов",
+                "from": "paid",
+                "to": "checked_in",
+                "note": "Заселение"
+            }
+        ]
+    },
+    {
+        "id": 10,
+        "number": "БГ-2026-010",
+        "cottage_id": 1,
+        "guest_id": 5,
+        "guest_name": "Павел Дорохов",
+        "guest_phone": "+7 900 222-04-40",
+        "guest_email": "dorokhov.p@mail.ru",
+        "check_in": "2026-08-28",
+        "check_out": "2026-08-31",
+        "nights": 3,
+        "guests": 2,
+        "services": [],
+        "night_total": 9750,
+        "extras_total": 0,
+        "total": 9750,
+        "status": "checked_out",
+        "payment": {
+            "method": "Наличными при заезде",
+            "at": "2026-08-28 16:00",
+            "amount": 9750
+        },
+        "source": "staff",
+        "comment": "",
+        "created_at": "2026-08-01 15:00",
+        "updated_at": "2026-08-31 10:00",
+        "history": [
+            {
+                "at": "2026-08-01 15:00",
+                "user": "Дмитрий Романов",
+                "from": "",
+                "to": "new",
+                "note": "Бронь по телефону"
+            },
+            {
+                "at": "2026-08-01 15:05",
+                "user": "Дмитрий Романов",
+                "from": "new",
+                "to": "confirmed",
+                "note": "Подтверждена"
+            },
+            {
+                "at": "2026-08-28 16:00",
+                "user": "Дмитрий Романов",
+                "from": "confirmed",
+                "to": "paid",
+                "note": "Оплата наличными"
+            },
+            {
+                "at": "2026-08-28 16:05",
+                "user": "Дмитрий Романов",
+                "from": "paid",
+                "to": "checked_in",
+                "note": "Заселение"
+            },
+            {
+                "at": "2026-08-31 10:00",
+                "user": "Дмитрий Романов",
+                "from": "checked_in",
+                "to": "checked_out",
+                "note": "Выезд"
+            }
+        ]
+    },
+    {
+        "id": 11,
+        "number": "БГ-2026-011",
+        "cottage_id": 6,
+        "guest_id": 6,
+        "guest_name": "Анна Кузнецова",
+        "guest_phone": "+7 911 333-05-51",
+        "guest_email": "kuznetsova.a@mail.ru",
+        "check_in": "2026-08-10",
+        "check_out": "2026-08-12",
+        "nights": 2,
+        "guests": 4,
+        "services": [],
+        "night_total": 28600,
+        "extras_total": 0,
+        "total": 28600,
+        "status": "cancelled",
+        "payment": null,
+        "source": "site",
+        "comment": "Гость передумал, бронь снята до оплаты",
+        "created_at": "2026-08-06 19:00",
+        "updated_at": "2026-08-09 11:00",
+        "history": [
+            {
+                "at": "2026-08-06 19:00",
+                "user": "Анна Кузнецова",
+                "from": "",
+                "to": "new",
+                "note": "Онлайн-бронирование с сайта"
+            },
+            {
+                "at": "2026-08-09 11:00",
+                "user": "Елена Соколова",
+                "from": "new",
+                "to": "cancelled",
+                "note": "Отменена по просьбе гостя"
+            }
+        ]
+    }
+]

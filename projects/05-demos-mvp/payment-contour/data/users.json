@@ -1,0 +1,6 @@
+[
+  { "id": 1, "login": "admin", "pass": "admin", "name": "Сергей Каторгин", "role": "admin" },
+  { "id": 2, "login": "accountant", "pass": "accountant", "name": "Анна Бухгалтерова", "role": "accountant" },
+  { "id": 3, "login": "operator", "pass": "operator", "name": "Мария Операторова", "role": "operator" },
+  { "id": 4, "login": "support", "pass": "support", "name": "Иван Поддержкин", "role": "support" }
+]

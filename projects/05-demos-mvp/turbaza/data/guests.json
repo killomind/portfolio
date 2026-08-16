@@ -1,0 +1,9 @@
+[
+  {"id": 1, "user_id": 5, "name": "Сергей Каторгин", "phone": "+7 953 913 13 16", "email": "katorgin@mail.ru", "created_at": "2026-07-28", "notes": "Приезжает с семьёй, предпочитает тихие домики у берега"},
+  {"id": 2, "user_id": 0, "name": "Марина Лебедева", "phone": "+7 912 555-01-17", "email": "m.lebedeva@yandex.ru", "created_at": "2026-07-30", "notes": ""},
+  {"id": 3, "user_id": 0, "name": "Игорь Тарасов", "phone": "+7 913 444-02-28", "email": "tarasov.i@mail.ru", "created_at": "2026-08-01", "notes": "Частый гость, любит рыбалку"},
+  {"id": 4, "user_id": 0, "name": "Ольга Виноградова", "phone": "+7 923 777-03-39", "email": "o.vin@bk.ru", "created_at": "2026-08-05", "notes": ""},
+  {"id": 5, "user_id": 0, "name": "Павел Дорохов", "phone": "+7 900 222-04-40", "email": "dorokhov.p@mail.ru", "created_at": "2026-08-10", "notes": "Корпоративные выезды"},
+  {"id": 6, "user_id": 0, "name": "Анна Кузнецова", "phone": "+7 911 333-05-51", "email": "kuznetsova.a@mail.ru", "created_at": "2026-08-08", "notes": ""},
+  {"id": 7, "user_id": 0, "name": "Виктор Савельев", "phone": "+7 999 888-07-72", "email": "saveliev@mail.ru", "created_at": "2026-08-02", "notes": ""}
+]

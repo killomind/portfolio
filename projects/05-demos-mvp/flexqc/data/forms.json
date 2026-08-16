@@ -1,0 +1,398 @@
+[
+    {
+        "id": 1,
+        "custom_no": "ФФ-2607-118",
+        "client": "Агрохолдинг «Заречье»",
+        "product": "Этикетка молочная «Заречье-Лайт», 1 сорт",
+        "shape": "этикетка",
+        "size_w": 420,
+        "size_h": 560,
+        "raster": "175 lpi, FMT 45",
+        "polymer": "Asahi AFP-Top TAM",
+        "thickness": "1,14 мм",
+        "status": "queue",
+        "print_zones": [
+            {
+                "x": 60,
+                "y": 80,
+                "w": 300,
+                "h": 240,
+                "shape": "этикетка"
+            },
+            {
+                "x": 60,
+                "y": 340,
+                "w": 300,
+                "h": 160,
+                "shape": "текст\/растр 5–60%"
+            }
+        ],
+        "latent": [
+            {
+                "type": "fatdot",
+                "x": 120,
+                "y": 160,
+                "size": 2.4,
+                "note": "зона 45% растра"
+            },
+            {
+                "type": "pinhole",
+                "x": 300,
+                "y": 420,
+                "size": 0.8
+            },
+            {
+                "type": "lostdot",
+                "x": 260,
+                "y": 250,
+                "size": 1.2,
+                "miss": 1
+            },
+            {
+                "type": "bubble",
+                "x": 210,
+                "y": 380,
+                "size": 3.6
+            }
+        ]
+    },
+    {
+        "id": 2,
+        "custom_no": "ФФ-2607-119",
+        "client": "ГК «ПолиПак»",
+        "product": "Гибкая упаковка ламинат, кофе 250 г",
+        "shape": "гибкая упаковка",
+        "size_w": 620,
+        "size_h": 480,
+        "raster": "142 lpi, FMT 30",
+        "polymer": "nyloflex ACE Digital",
+        "thickness": "1,14 мм",
+        "status": "queue",
+        "print_zones": [
+            {
+                "x": 90,
+                "y": 60,
+                "w": 440,
+                "h": 200,
+                "shape": "Упаковка"
+            },
+            {
+                "x": 90,
+                "y": 280,
+                "w": 440,
+                "h": 150,
+                "shape": "растр 1–10%"
+            }
+        ],
+        "latent": [
+            {
+                "type": "inclusion",
+                "x": 340,
+                "y": 120,
+                "size": 1.9,
+                "note": "у печатающего рельефа"
+            },
+            {
+                "type": "crater",
+                "x": 220,
+                "y": 320,
+                "size": 2.2
+            },
+            {
+                "type": "lostdot",
+                "x": 500,
+                "y": 340,
+                "size": 1.1,
+                "miss": 1
+            },
+            {
+                "type": "contam",
+                "x": 460,
+                "y": 90,
+                "size": 4.5
+            }
+        ]
+    },
+    {
+        "id": 3,
+        "custom_no": "ФФ-2607-121",
+        "client": "Пищекомбинат «Родник»",
+        "product": "Этикетка сок «Родник-Яблоко», 0,9 л",
+        "shape": "этикетка",
+        "size_w": 380,
+        "size_h": 640,
+        "raster": "175 lpi, FMT 45",
+        "polymer": "DuPont Cyrel DPR",
+        "thickness": "1,14 мм",
+        "status": "queue",
+        "print_zones": [
+            {
+                "x": 50,
+                "y": 70,
+                "w": 280,
+                "h": 300,
+                "shape": "Этикетка"
+            },
+            {
+                "x": 50,
+                "y": 400,
+                "w": 280,
+                "h": 180,
+                "shape": "штрих-код"
+            }
+        ],
+        "latent": [
+            {
+                "type": "scratch",
+                "x": 180,
+                "y": 150,
+                "size": 5.5,
+                "note": "горизонтальная царапина"
+            },
+            {
+                "type": "pinhole",
+                "x": 300,
+                "y": 520,
+                "size": 0.9
+            },
+            {
+                "type": "fatdot",
+                "x": 120,
+                "y": 480,
+                "size": 2
+            }
+        ]
+    },
+    {
+        "id": 4,
+        "custom_no": "ФФ-2607-124",
+        "client": "ТД «СтройМастер»",
+        "product": "Упаковка строительная, мешки 25 кг",
+        "shape": "гибкая упаковка",
+        "size_w": 700,
+        "size_h": 700,
+        "raster": "85 lpi, FMT 15",
+        "polymer": "Strong SF-DGL",
+        "thickness": "2,84 мм",
+        "status": "queue",
+        "print_zones": [
+            {
+                "x": 100,
+                "y": 100,
+                "w": 500,
+                "h": 300,
+                "shape": "Упаковка"
+            },
+            {
+                "x": 100,
+                "y": 430,
+                "w": 500,
+                "h": 200,
+                "shape": "плашка"
+            }
+        ],
+        "latent": [
+            {
+                "type": "bubble",
+                "x": 300,
+                "y": 250,
+                "size": 4
+            },
+            {
+                "type": "inclusion",
+                "x": 520,
+                "y": 500,
+                "size": 2.5
+            },
+            {
+                "type": "scratch",
+                "x": 250,
+                "y": 470,
+                "size": 3
+            }
+        ]
+    },
+    {
+        "id": 5,
+        "custom_no": "ФФ-2607-128",
+        "client": "МК «ТагилПак»",
+        "product": "Плёнка пищевая, фольга подложка",
+        "shape": "плёнка",
+        "size_w": 560,
+        "size_h": 520,
+        "raster": "160 lpi, FMT 35",
+        "polymer": "Kodak Flexcel NXH",
+        "thickness": "1,14 мм",
+        "status": "queue",
+        "print_zones": [
+            {
+                "x": 80,
+                "y": 80,
+                "w": 400,
+                "h": 200,
+                "shape": "Плёнка"
+            },
+            {
+                "x": 80,
+                "y": 300,
+                "w": 400,
+                "h": 160,
+                "shape": "растр 2–15%"
+            }
+        ],
+        "latent": [
+            {
+                "type": "lostdot",
+                "x": 180,
+                "y": 350,
+                "size": 1,
+                "miss": 1
+            },
+            {
+                "type": "crater",
+                "x": 400,
+                "y": 130,
+                "size": 2.6
+            },
+            {
+                "type": "contam",
+                "x": 250,
+                "y": 420,
+                "size": 3.2
+            },
+            {
+                "type": "fatdot",
+                "x": 120,
+                "y": 200,
+                "size": 2.1
+            }
+        ]
+    },
+    {
+        "id": 6,
+        "custom_no": "ФФ-2607-129",
+        "client": "БК «Сибирь»",
+        "product": "Гофротара, монтаж 3 цвета",
+        "shape": "гибкая упаковка",
+        "size_w": 800,
+        "size_h": 600,
+        "raster": "76 lpi, FMT 12",
+        "polymer": "Asahi AFP-Top",
+        "thickness": "3,94 мм",
+        "status": "queue",
+        "print_zones": [
+            {
+                "x": 120,
+                "y": 90,
+                "w": 560,
+                "h": 240,
+                "shape": "Упаковка"
+            },
+            {
+                "x": 120,
+                "y": 360,
+                "w": 560,
+                "h": 180,
+                "shape": "плашка"
+            }
+        ],
+        "latent": [
+            {
+                "type": "bubble",
+                "x": 450,
+                "y": 200,
+                "size": 3.2
+            },
+            {
+                "type": "scratch",
+                "x": 600,
+                "y": 450,
+                "size": 6
+            },
+            {
+                "type": "pinhole",
+                "x": 180,
+                "y": 400,
+                "size": 0.7
+            }
+        ]
+    },
+    {
+        "id": 7,
+        "custom_no": "ФФ-2607-130",
+        "client": "ТД «Премиум Пак»",
+        "product": "Этикетка «балтика-класс» 0,5 л",
+        "shape": "этикетка",
+        "size_w": 400,
+        "size_h": 460,
+        "raster": "175 lpi, FMT 40",
+        "polymer": "nyloflex SPRINT",
+        "thickness": "1,14 мм",
+        "status": "ok",
+        "last_check_id": 3,
+        "print_zones": [
+            {
+                "x": 60,
+                "y": 60,
+                "w": 280,
+                "h": 340,
+                "shape": "Этикетка"
+            }
+        ],
+        "latent": [
+            {
+                "type": "pinhole",
+                "x": 200,
+                "y": 150,
+                "size": 0.8,
+                "miss": 1
+            },
+            {
+                "type": "lostdot",
+                "x": 250,
+                "y": 300,
+                "size": 1,
+                "miss": 1
+            }
+        ]
+    },
+    {
+        "id": 8,
+        "custom_no": "ФФ-2607-131",
+        "client": "АПК «Бурёнка»",
+        "product": "Упаковка молочная, пюр-пак 1 л",
+        "shape": "блок-пакет",
+        "size_w": 520,
+        "size_h": 620,
+        "raster": "175 lpi, FMT 45",
+        "polymer": "Asahi AFP-SF",
+        "thickness": "1,14 мм",
+        "status": "ok",
+        "last_check_id": 4,
+        "print_zones": [
+            {
+                "x": 70,
+                "y": 70,
+                "w": 380,
+                "h": 260,
+                "shape": "Блок-пакет"
+            },
+            {
+                "x": 70,
+                "y": 350,
+                "w": 380,
+                "h": 200,
+                "shape": "текст"
+            }
+        ],
+        "latent": [
+            {
+                "type": "pinhole",
+                "x": 150,
+                "y": 400,
+                "size": 0.6,
+                "miss": 1
+            }
+        ]
+    }
+]

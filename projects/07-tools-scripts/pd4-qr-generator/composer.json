@@ -1,0 +1,9 @@
+{
+    "name": "leader-it/pd4-qr-generator",
+    "description": "Генератор квитанции ПД-4 для ИП с QR-кодом (ГОСТ), PHP + TCPDF",
+    "type": "project",
+    "require": {
+        "php": ">=7.3",
+        "tecnickcom/tcpdf": "^6.7"
+    }
+}

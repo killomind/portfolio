@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Кинозал | Бронирование мест с выбором сеанса</title>
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            background: #0f172a;
+            color: #f1f5f9;
+            line-height: 1.4;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px 24px 40px;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+            margin-bottom: 32px;
+            padding-bottom: 16px;
+            border-bottom: 2px solid #2d3a4e;
+        }
+        .logo h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #fbbf24, #eab308);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .logo p {
+            font-size: 0.85rem;
+            color: #94a3b8;
+        }
+        .info-badge {
+            background: #1e293b;
+            padding: 8px 16px;
+            border-radius: 40px;
+            font-size: 0.9rem;
+        }
+        .info-badge i {
+            margin-right: 8px;
+            color: #facc15;
+        }
+        .section-title {
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin: 24px 0 20px 0;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .movies-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 28px;
+            margin-bottom: 40px;
+        }
+        .movie-card {
+            background: #1e293b;
+            border-radius: 24px;
+            overflow: hidden;
+            transition: transform 0.2s, box-shadow 0.2s;
+            cursor: pointer;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+            border: 1px solid #334155;
+        }
+        .movie-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 20px 30px -12px rgba(0,0,0,0.5);
+            border-color: #facc15;
+        }
+        .movie-poster {
+            height: 340px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            text-align: center;
+            background: linear-gradient(135deg, #2d3e5a, #0f172a);
+        }
+        .movie-poster i {
+            font-size: 4rem;
+            color: #facc15;
+            margin-bottom: 16px;
+        }
+        .movie-poster h3 {
+            font-size: 1.4rem;
+            font-weight: bold;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+        }
+        .movie-rating {
+            position: absolute;
+            bottom: 12px;
+            left: 12px;
+            background: rgba(0,0,0,0.7);
+            backdrop-filter: blur(4px);
+            padding: 4px 12px;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        .movie-info {
+            padding: 18px;
+        }
+        .movie-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+        .movie-desc {
+            font-size: 0.85rem;
+            color: #cbd5e1;
+            margin-bottom: 12px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        .movie-meta {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            color: #94a3b8;
+        }
+        .btn-select {
+            margin-top: 14px;
+            background: #facc15;
+            color: #0f172a;
+            border: none;
+            padding: 8px 0;
+            width: 100%;
+            border-radius: 40px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .btn-select:hover {
+            background: #eab308;
+        }
+        .session-section, .hall-section {
+            background: #0f172a;
+            border-radius: 32px;
+            padding: 24px;
+            margin-top: 20px;
+            border: 1px solid #334155;
+            display: none;
+        }
+        .session-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid #334155;
+        }
+        .back-btn {
+            background: #334155;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 40px;
+            color: white;
+            cursor: pointer;
+            font-weight: 500;
+        }
+        .selected-movie-info {
+            background: #1e293b;
+            padding: 8px 18px;
+            border-radius: 40px;
+            font-size: 1rem;
+        }
+        .datetime-picker {
+            background: #1e293b;
+            padding: 20px;
+            border-radius: 28px;
+            margin: 16px 0;
+        }
+        .date-selector, .time-selector {
+            margin: 12px 0;
+        }
+        .date-selector label, .time-selector label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        .date-selector input, .time-selector select {
+            background: #0f172a;
+            border: 1px solid #475569;
+            padding: 12px;
+            border-radius: 40px;
+            color: white;
+            width: 100%;
+            max-width: 280px;
+        }
+        .confirm-datetime {
+            background: #facc15;
+            color: #0f172a;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 40px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 16px;
+        }
+        .screen {
+            background: #2d3748;
+            height: 60px;
+            width: 80%;
+            margin: 20px auto 30px;
+            border-radius: 20px 20px 0 0;
+            text-align: center;
+            line-height: 60px;
+            color: #cbd5e6;
+            letter-spacing: 4px;
+            font-size: 1.2rem;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+        }
+        .seats-grid {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 30px;
+            overflow-x: auto;
+            padding: 10px 0;
+        }
+        .row {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .seat {
+            background: #334155;
+            width: 70px;
+            padding: 10px 0;
+            border-radius: 16px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.1s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.8rem;
+            border: 1px solid #4b5563;
+        }
+        .seat i {
+            font-size: 1.8rem;
+            color: #cbd5e1;
+        }
+        .seat span {
+            font-weight: 500;
+        }
+        .seat.available:hover {
+            background: #facc15;
+            transform: scale(1.03);
+        }
+        .seat.available:hover i {
+            color: #0f172a;
+        }
+        .seat.selected {
+            background: #facc15;
+            border-color: #facc15;
+        }
+        .seat.selected i {
+            color: #0f172a;
+        }
+        .seat.booked {
+            background: #4a5b7a;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+        .seat.booked i {
+            color: #6c7a91;
+        }
+        .seat.vip {
+            background: #854d0e;
+            border-color: #facc15;
+        }
+        .seat.vip i {
+            color: #ffd966;
+        }
+        .legend {
+            display: flex;
+            justify-content: center;
+            gap: 28px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.8rem;
+        }
+        .booking-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #1e293b;
+            padding: 16px 24px;
+            border-radius: 60px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+        .booking-info {
+            font-size: 1.1rem;
+        }
+        .btn-book {
+            background: #facc15;
+            border: none;
+            padding: 12px 32px;
+            border-radius: 40px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .btn-book:disabled {
+            background: #475569;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+        }
+        .modal-content {
+            background: #1e293b;
+            border-radius: 32px;
+            padding: 32px;
+            max-width: 500px;
+            width: 90%;
+            border: 1px solid #facc15;
+        }
+        .modal-content h3 {
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+        }
+        .modal-content input {
+            width: 100%;
+            padding: 12px;
+            margin: 12px 0;
+            border-radius: 40px;
+            border: 1px solid #475569;
+            background: #0f172a;
+            color: white;
+        }
+        .modal-content button {
+            background: #facc15;
+            border: none;
+            padding: 12px;
+            border-radius: 40px;
+            font-weight: bold;
+            width: 100%;
+            cursor: pointer;
+            margin-top: 12px;
+        }
+        .close-modal {
+            background: #334155;
+            margin-top: 8px;
+        }
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #1e293b;
+            color: #facc15;
+            padding: 12px 28px;
+            border-radius: 60px;
+            font-weight: 600;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+            z-index: 1000;
+            display: none;
+            backdrop-filter: blur(8px);
+            border-left: 4px solid #facc15;
+        }
+        footer {
+            margin-top: 40px;
+            text-align: center;
+            font-size: 0.75rem;
+            color: #5b6e8c;
+        }
+        @media (max-width: 700px) {
+            .seat { width: 55px; padding: 6px 0; }
+            .seat i { font-size: 1.4rem; }
+            .screen { width: 95%; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <div class="logo">
+            <h1><i class="fas fa-film"></i> CINEMA<span style="color:#facc15;">HALL</span></h1>
+            <p>онлайн-бронирование мест | диванчики, выбор сеанса</p>
+        </div>
+        <div class="info-badge">
+            <i class="fas fa-ticket-alt"></i> Без комиссии
+        </div>
+    </div>
+
+    <!-- Список фильмов -->
+    <div id="moviesSection">
+        <div class="section-title">
+            <i class="fas fa-clapperboard"></i> Сейчас в прокате
+        </div>
+        <div class="movies-grid" id="moviesGrid"></div>
+    </div>
+
+    <!-- Блок выбора даты/времени -->
+    <div id="sessionSection" class="session-section">
+        <div class="session-header">
+            <button class="back-btn" id="backToMoviesFromSessionBtn"><i class="fas fa-arrow-left"></i> К афише</button>
+            <div class="selected-movie-info" id="sessionMovieTitle"></div>
+        </div>
+        <div class="datetime-picker">
+            <div class="date-selector">
+                <label><i class="fas fa-calendar-alt"></i> Дата сеанса:</label>
+                <input type="date" id="sessionDate" min="">
+            </div>
+            <div class="time-selector">
+                <label><i class="fas fa-clock"></i> Время:</label>
+                <select id="sessionTime">
+                    <option value="12:00">12:00</option>
+                    <option value="15:00">15:00</option>
+                    <option value="18:00">18:00</option>
+                    <option value="21:00">21:00</option>
+                </select>
+            </div>
+            <button id="confirmDateTimeBtn" class="confirm-datetime">Выбрать места</button>
+        </div>
+    </div>
+
+    <!-- Блок зала (схема мест) -->
+    <div id="hallSection" class="hall-section">
+        <div class="session-header">
+            <button class="back-btn" id="backToSessionBtn"><i class="fas fa-arrow-left"></i> Выбрать другую дату</button>
+            <div class="selected-movie-info" id="hallMovieInfo"></div>
+        </div>
+        <div class="screen">
+            <i class="fas fa-tv"></i> ЭКРАН
+        </div>
+        <div class="seats-grid" id="seatsContainer"></div>
+        <div class="legend">
+            <div class="legend-item"><i class="fas fa-couch"></i> <span>Свободный диван</span></div>
+            <div class="legend-item"><i class="fas fa-couch" style="color:#facc15;"></i> <span>Выбранный</span></div>
+            <div class="legend-item"><i class="fas fa-couch" style="color:#6c7a91;"></i> <span>Забронирован</span></div>
+            <div class="legend-item"><i class="fas fa-crown" style="color:#ffd966;"></i> <span>VIP диван</span></div>
+        </div>
+        <div class="booking-bar">
+            <div class="booking-info" id="bookingInfo">Выберите места (можно несколько)</div>
+            <button id="bookButton" class="btn-book" disabled>Забронировать выбранные</button>
+        </div>
+    </div>
+
+    <footer>
+        <i class="fas fa-laptop-code"></i> Демо-версия | Выбор даты, времени, множественный выбор мест, лайтбокс для контактов
+    </footer>
+</div>
+
+<!-- Лайтбокс -->
+<div id="contactModal" class="modal">
+    <div class="modal-content">
+        <h3><i class="fas fa-ticket-alt"></i> Оформление брони</h3>
+        <input type="text" id="contactName" placeholder="Ваше имя" required>
+        <input type="tel" id="contactPhone" placeholder="Телефон" required>
+        <input type="email" id="contactEmail" placeholder="Email">
+        <button id="submitBookingBtn">Отправить бронирование</button>
+        <button class="close-modal" id="closeModalBtn">Отмена</button>
+    </div>
+</div>
+
+<div id="toastMessage" class="toast"></div>
+
+<script>
+    // ---------- Данные фильмов (постеры — встроенные стилизованные заглушки) ----------
+    const movies = [
+        {
+            id: 1,
+            title: "Дюна: Часть вторая",
+            genre: "Фантастика, 2ч 46мин",
+            rating: "8.9",
+            desc: "Продолжение эпической саги о пустынной планете Арракис."
+        },
+        {
+            id: 2,
+            title: "Мастер и Маргарита",
+            genre: "Драма, 2ч 37мин",
+            rating: "8.5",
+            desc: "Мистическая история любви, разворачивающаяся в Москве 30-х годов."
+        },
+        {
+            id: 3,
+            title: "Гарри Поттер и философский камень",
+            genre: "Фэнтези, 2ч 32мин",
+            rating: "8.1",
+            desc: "Мальчик-волшебник поступает в Хогвартс и начинает своё приключение."
+        },
+        {
+            id: 4,
+            title: "Оппенгеймер",
+            genre: "Биография, 3ч",
+            rating: "9.0",
+            desc: "История создания атомной бомбы и её отца Роберта Оппенгеймера."
+        }
+    ];
+
+    // Структура зала: ряды, места (диванчики)
+    const rowsConfig = [
+        { name: "VIP", type: "vip", seats: 8 },
+        { name: 2, type: "standard", seats: 8 },
+        { name: 3, type: "standard", seats: 8 },
+        { name: 4, type: "standard", seats: 8 },
+        { name: 5, type: "standard", seats: 8 }
+    ];
+
+    function generateSeatId(row, seatNum) { return `${row}_${seatNum}`; }
+
+    function getInitialSeats() {
+        const seats = [];
+        rowsConfig.forEach(row => {
+            for (let i = 1; i <= row.seats; i++) {
+                seats.push({
+                    id: generateSeatId(row.name, i),
+                    row: row.name,
+                    seatNumber: i,
+                    type: row.type,
+                    status: "available"
+                });
+            }
+        });
+        return seats;
+    }
+
+    let bookings = {};
+    let currentMovie = null;
+    let currentDate = "";
+    let currentTime = "";
+    let currentSeats = [];
+    let selectedSeatIds = new Set();
+
+    const moviesSection = document.getElementById('moviesSection');
+    const sessionSection = document.getElementById('sessionSection');
+    const hallSection = document.getElementById('hallSection');
+    const moviesGrid = document.getElementById('moviesGrid');
+    const sessionMovieTitle = document.getElementById('sessionMovieTitle');
+    const hallMovieInfo = document.getElementById('hallMovieInfo');
+    const seatsContainer = document.getElementById('seatsContainer');
+    const bookingInfo = document.getElementById('bookingInfo');
+    const bookButton = document.getElementById('bookButton');
+    const sessionDateInput = document.getElementById('sessionDate');
+    const sessionTimeSelect = document.getElementById('sessionTime');
+    const confirmDateTimeBtn = document.getElementById('confirmDateTimeBtn');
+    const backToMoviesFromSessionBtn = document.getElementById('backToMoviesFromSessionBtn');
+    const backToSessionBtn = document.getElementById('backToSessionBtn');
+    const toast = document.getElementById('toastMessage');
+    const modal = document.getElementById('contactModal');
+    const submitBookingBtn = document.getElementById('submitBookingBtn');
+    const closeModalBtn = document.getElementById('closeModalBtn');
+
+    function showToast(msg, isError = false) {
+        toast.style.display = 'block';
+        toast.textContent = msg;
+        toast.style.background = isError ? '#2d1f1f' : '#1e293b';
+        toast.style.borderLeftColor = isError ? '#e11d48' : '#facc15';
+        setTimeout(() => { toast.style.display = 'none'; }, 3000);
+    }
+
+    function setMinDate() {
+        const today = new Date();
+        const yyyy = today.getFullYear();
+        const mm = String(today.getMonth() + 1).padStart(2, '0');
+        const dd = String(today.getDate()).padStart(2, '0');
+        sessionDateInput.min = `${yyyy}-${mm}-${dd}`;
+        sessionDateInput.value = `${yyyy}-${mm}-${dd}`;
+        currentDate = sessionDateInput.value;
+    }
+
+    function loadSeatsForSession() {
+        if (!currentMovie || !currentDate || !currentTime) return;
+        const key = `${currentMovie.id}_${currentDate}_${currentTime}`;
+        const bookedIds = bookings[key] || [];
+        let freshSeats = getInitialSeats();
+        freshSeats.forEach(seat => {
+            if (bookedIds.includes(seat.id)) seat.status = "booked";
+            else seat.status = "available";
+        });
+        currentSeats = freshSeats;
+        selectedSeatIds.clear();
+        renderHall();
+        updateBookingButton();
+    }
+
+    function renderHall() {
+        if (!seatsContainer) return;
+        seatsContainer.innerHTML = '';
+        const rowsMap = new Map();
+        currentSeats.forEach(seat => {
+            if (!rowsMap.has(seat.row)) rowsMap.set(seat.row, []);
+            rowsMap.get(seat.row).push(seat);
+        });
+        for (let [rowName, seatsInRow] of rowsMap.entries()) {
+            const rowDiv = document.createElement('div');
+            rowDiv.className = 'row';
+            const rowLabel = document.createElement('div');
+            rowLabel.style.width = '60px';
+            rowLabel.style.fontWeight = 'bold';
+            rowLabel.style.display = 'flex';
+            rowLabel.style.alignItems = 'center';
+            rowLabel.style.justifyContent = 'center';
+            rowLabel.innerText = rowName === 'VIP' ? 'VIP ряд' : `${rowName} ряд`;
+            rowDiv.appendChild(rowLabel);
+
+            seatsInRow.forEach(seat => {
+                const seatDiv = document.createElement('div');
+                seatDiv.className = `seat ${seat.status}`;
+                if (seat.type === 'vip' && seat.status !== 'booked') seatDiv.classList.add('vip');
+                if (selectedSeatIds.has(seat.id)) seatDiv.classList.add('selected');
+
+                let iconHtml = '';
+                if (seat.type === 'vip') {
+                    iconHtml = '<i class="fas fa-crown"></i><i class="fas fa-couch" style="margin-left: -12px; font-size:1.2rem;"></i>';
+                } else {
+                    iconHtml = '<i class="fas fa-couch"></i>';
+                }
+                seatDiv.innerHTML = `${iconHtml}<span>${seat.seatNumber}</span>`;
+                seatDiv.dataset.id = seat.id;
+
+                if (seat.status === 'available') {
+                    seatDiv.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        if (selectedSeatIds.has(seat.id)) selectedSeatIds.delete(seat.id);
+                        else selectedSeatIds.add(seat.id);
+                        renderHall();
+                        updateBookingButton();
+                        bookingInfo.innerHTML = selectedSeatIds.size ? `Выбрано мест: ${selectedSeatIds.size}` : 'Выберите места (можно несколько)';
+                    });
+                } else if (seat.status === 'booked') {
+                    seatDiv.style.cursor = 'not-allowed';
+                    seatDiv.addEventListener('click', () => {
+                        showToast(`Место ${seat.row} ряд, место ${seat.seatNumber} уже забронировано на этот сеанс`, true);
+                    });
+                }
+                rowDiv.appendChild(seatDiv);
+            });
+            seatsContainer.appendChild(rowDiv);
+        }
+    }
+
+    function updateBookingButton() {
+        bookButton.disabled = selectedSeatIds.size === 0;
+    }
+
+    function showSessionForMovie(movie) {
+        currentMovie = movie;
+        sessionMovieTitle.innerHTML = `<i class="fas fa-film"></i> ${movie.title}`;
+        moviesSection.style.display = 'none';
+        sessionSection.style.display = 'block';
+        hallSection.style.display = 'none';
+        setMinDate();
+        currentDate = sessionDateInput.value;
+        currentTime = sessionTimeSelect.value;
+    }
+
+    function confirmDateTime() {
+        if (!currentMovie) return;
+        currentDate = sessionDateInput.value;
+        currentTime = sessionTimeSelect.value;
+        if (!currentDate) { showToast("Выберите дату", true); return; }
+        loadSeatsForSession();
+        hallMovieInfo.innerHTML = `<i class="fas fa-calendar-alt"></i> ${currentMovie.title} | ${currentDate} ${currentTime}`;
+        sessionSection.style.display = 'none';
+        hallSection.style.display = 'block';
+        bookingInfo.innerHTML = 'Выберите места (можно несколько)';
+    }
+
+    function backToSession() {
+        hallSection.style.display = 'none';
+        sessionSection.style.display = 'block';
+    }
+
+    function backToMovies() {
+        moviesSection.style.display = 'block';
+        sessionSection.style.display = 'none';
+        hallSection.style.display = 'none';
+        currentMovie = null;
+        selectedSeatIds.clear();
+    }
+
+    function openModal() {
+        if (selectedSeatIds.size === 0) {
+            showToast("Выберите хотя бы одно место", true);
+            return;
+        }
+        modal.style.display = 'flex';
+    }
+
+    function submitBooking() {
+        const name = document.getElementById('contactName').value.trim();
+        const phone = document.getElementById('contactPhone').value.trim();
+        if (!name || !phone) {
+            showToast("Заполните имя и телефон", true);
+            return;
+        }
+        const key = `${currentMovie.id}_${currentDate}_${currentTime}`;
+        if (!bookings[key]) bookings[key] = [];
+        const bookedIds = bookings[key];
+        selectedSeatIds.forEach(id => {
+            if (!bookedIds.includes(id)) bookedIds.push(id);
+        });
+        currentSeats.forEach(seat => {
+            if (selectedSeatIds.has(seat.id)) seat.status = 'booked';
+        });
+        selectedSeatIds.clear();
+        renderHall();
+        updateBookingButton();
+        bookingInfo.innerHTML = 'Выберите места (можно несколько)';
+        modal.style.display = 'none';
+        document.getElementById('contactName').value = '';
+        document.getElementById('contactPhone').value = '';
+        document.getElementById('contactEmail').value = '';
+        showToast(`Спасибо, ${name}! Ваше бронирование на ${currentDate} ${currentTime} получено. Мы свяжемся с вами для подтверждения.`);
+    }
+
+    function closeModal() { modal.style.display = 'none'; }
+
+    function renderMovies() {
+        moviesGrid.innerHTML = '';
+        movies.forEach(movie => {
+            const card = document.createElement('div');
+            card.className = 'movie-card';
+            card.innerHTML = `
+                <div class="movie-poster">
+                    <i class="fas fa-film"></i>
+                    <h3>${movie.title}</h3>
+                    <div class="movie-rating"><i class="fas fa-star" style="color:#facc15;"></i> ${movie.rating}</div>
+                </div>
+                <div class="movie-info">
+                    <div class="movie-title">${movie.title}</div>
+                    <div class="movie-desc">${movie.desc}</div>
+                    <div class="movie-meta"><span><i class="fas fa-clock"></i> ${movie.genre}</span><span><i class="fas fa-tag"></i> 2D</span></div>
+                    <button class="btn-select" data-id="${movie.id}">Выбрать билеты <i class="fas fa-couch"></i></button>
+                </div>
+            `;
+            moviesGrid.appendChild(card);
+        });
+        document.querySelectorAll('.btn-select').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const movieId = parseInt(btn.dataset.id);
+                const movie = movies.find(m => m.id === movieId);
+                if (movie) showSessionForMovie(movie);
+            });
+        });
+    }
+
+    confirmDateTimeBtn.addEventListener('click', confirmDateTime);
+    backToMoviesFromSessionBtn.addEventListener('click', backToMovies);
+    backToSessionBtn.addEventListener('click', backToSession);
+    bookButton.addEventListener('click', openModal);
+    submitBookingBtn.addEventListener('click', submitBooking);
+    closeModalBtn.addEventListener('click', closeModal);
+    window.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
+
+    renderMovies();
+    setMinDate();
+</script>
+</body>
+</html>

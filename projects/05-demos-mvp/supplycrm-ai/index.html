@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SupplyCRM AI — демо полного функционала</title>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1e40af;
+            --primary-light: #dbeafe;
+            --success: #16a34a;
+            --warning: #d97706;
+            --danger: #dc2626;
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-500: #6b7280;
+            --gray-700: #374151;
+            --gray-900: #111827;
+            --white: #ffffff;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+            --radius: 8px;
+            --radius-lg: 12px;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            background: var(--gray-100);
+            color: var(--gray-900);
+            line-height: 1.5;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        .header {
+            background: var(--white);
+            border-bottom: 1px solid var(--gray-200);
+            box-shadow: var(--shadow-sm);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .header-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 12px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .logo-area { display: flex; align-items: center; gap: 12px; }
+        .logo-icon {
+            width: 40px; height: 40px; background: var(--primary);
+            border-radius: var(--radius); display: flex; align-items: center;
+            justify-content: center; color: white; font-weight: bold; font-size: 20px;
+        }
+        .logo-text h1 { font-size: 1.25rem; font-weight: 600; }
+        .logo-text p { font-size: 0.8rem; color: var(--gray-500); }
+        .nav-tabs {
+            display: flex; gap: 4px; flex-wrap: wrap; background: var(--gray-100);
+            padding: 4px; border-radius: var(--radius); overflow-x: auto;
+            max-width: 100%;
+        }
+        .nav-tab {
+            padding: 8px 16px; border-radius: var(--radius); border: none;
+            background: transparent; cursor: pointer; font-size: 0.9rem; font-weight: 500;
+            color: var(--gray-700); transition: all 0.2s; white-space: nowrap;
+        }
+        .nav-tab:hover { background: var(--gray-200); }
+        .nav-tab.active { background: var(--white); color: var(--primary); box-shadow: var(--shadow-sm); font-weight: 600; }
+        .user-info { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; }
+        .avatar {
+            width: 36px; height: 36px; border-radius: 50%; background: var(--primary-light);
+            color: var(--primary-dark); display: flex; align-items: center; justify-content: center; font-weight: bold;
+        }
+        .main {
+            flex: 1; max-width: 1400px; width: 100%; margin: 24px auto;
+            padding: 0 24px; display: flex; flex-direction: column; gap: 20px;
+        }
+        .section { display: none; animation: fadeIn 0.2s ease; }
+        .section.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+        .card {
+            background: var(--white); border-radius: var(--radius-lg); box-shadow: var(--shadow);
+            border: 1px solid var(--gray-200); overflow: hidden; margin-bottom: 20px;
+        }
+        .card-header {
+            padding: 16px 20px; border-bottom: 1px solid var(--gray-200);
+            display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;
+        }
+        .card-title { font-size: 1.1rem; font-weight: 600; }
+        .card-body { padding: 20px; }
+        .btn {
+            display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px;
+            border-radius: var(--radius); border: 1px solid var(--gray-300); background: var(--white);
+            color: var(--gray-700); font-size: 0.875rem; font-weight: 500; cursor: pointer; transition: all 0.2s;
+        }
+        .btn:hover { background: var(--gray-50); border-color: var(--gray-400); }
+        .btn-primary { background: var(--primary); border-color: var(--primary); color: white; }
+        .btn-primary:hover { background: var(--primary-dark); border-color: var(--primary-dark); }
+        .btn-success { background: var(--success); border-color: var(--success); color: white; }
+        .btn-success:hover { background: #15803d; border-color: #15803d; }
+        .btn-danger { background: var(--danger); border-color: var(--danger); color: white; }
+        .btn-sm { padding: 6px 12px; font-size: 0.8rem; }
+        .badge {
+            display: inline-block; padding: 2px 8px; border-radius: 9999px;
+            font-size: 0.7rem; font-weight: 600; text-transform: uppercase;
+        }
+        .badge-green { background: #dcfce7; color: #166534; }
+        .badge-yellow { background: #fef3c7; color: #92400e; }
+        .badge-blue { background: #dbeafe; color: #1e40af; }
+        .badge-gray { background: var(--gray-200); color: var(--gray-700); }
+        .badge-red { background: #fee2e2; color: #991b1b; }
+        .table-wrapper { overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+        th {
+            background: var(--gray-50); font-weight: 600; text-align: left;
+            padding: 10px 12px; border-bottom: 2px solid var(--gray-200); white-space: nowrap;
+        }
+        td { padding: 10px 12px; border-bottom: 1px solid var(--gray-100); vertical-align: middle; }
+        tr:hover td { background: var(--gray-50); }
+        .alert {
+            padding: 12px 16px; border-radius: var(--radius); margin-bottom: 16px;
+            font-size: 0.875rem; display: flex; align-items: flex-start; gap: 8px;
+        }
+        .alert-info { background: #eff6ff; border: 1px solid #bfdbfe; color: #1e40af; }
+        .alert-success { background: #f0fdf4; border: 1px solid #bbf7d0; color: #166534; }
+        .alert-warning { background: #fffbeb; border: 1px solid #fde68a; color: #92400e; }
+        .alert-danger { background: #fef2f2; border: 1px solid #fecaca; color: #991b1b; }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+        .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+        .kpi-card {
+            background: var(--white); border-radius: var(--radius-lg); padding: 16px;
+            border: 1px solid var(--gray-200); box-shadow: var(--shadow-sm);
+        }
+        .kpi-value { font-size: 1.8rem; font-weight: 700; color: var(--primary); }
+        .kpi-label { font-size: 0.8rem; color: var(--gray-500); }
+        .progress-bar { height: 8px; background: var(--gray-200); border-radius: 4px; overflow: hidden; }
+        .progress-fill { height: 100%; background: var(--primary); border-radius: 4px; transition: width 0.3s; }
+        .chat-container { height: 400px; display: flex; flex-direction: column; border: 1px solid var(--gray-200); border-radius: var(--radius); overflow: hidden; }
+        .chat-messages { flex: 1; overflow-y: auto; padding: 16px; background: var(--gray-50); }
+        .message { margin-bottom: 12px; max-width: 80%; padding: 10px 14px; border-radius: 12px; font-size: 0.9rem; line-height: 1.4; }
+        .message.user { background: var(--primary); color: white; margin-left: auto; border-bottom-right-radius: 4px; }
+        .message.ai { background: var(--white); border: 1px solid var(--gray-200); margin-right: auto; border-bottom-left-radius: 4px; }
+        .chat-input { display: flex; padding: 12px; background: var(--white); border-top: 1px solid var(--gray-200); }
+        .chat-input input { flex: 1; padding: 8px 12px; border: 1px solid var(--gray-300); border-radius: var(--radius); font-size: 0.9rem; }
+        .chat-input input:focus { outline: none; border-color: var(--primary); }
+        .document-list { display: flex; flex-direction: column; gap: 8px; }
+        .document-item {
+            display: flex; align-items: center; padding: 12px; background: var(--gray-50);
+            border-radius: var(--radius); border: 1px solid var(--gray-200); cursor: pointer; transition: all 0.2s;
+        }
+        .document-item:hover { background: var(--gray-100); }
+        .modal-overlay {
+            display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.5); z-index: 200; align-items: center; justify-content: center; padding: 20px;
+        }
+        .modal-overlay.active { display: flex; }
+        .modal {
+            background: var(--white); border-radius: var(--radius-lg); max-width: 700px;
+            width: 100%; max-height: 80vh; overflow-y: auto; box-shadow: var(--shadow-lg);
+        }
+        .modal-header { padding: 16px 20px; border-bottom: 1px solid var(--gray-200); display: flex; align-items: center; justify-content: space-between; }
+        .modal-close { background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--gray-500); }
+        .modal-body { padding: 20px; }
+        .pipeline { display: flex; gap: 8px; flex-wrap: wrap; }
+        .pipeline-stage {
+            flex: 1; min-width: 120px; background: var(--gray-50); border: 1px solid var(--gray-200);
+            border-radius: var(--radius); padding: 12px; text-align: center;
+        }
+        .pipeline-stage .count { font-size: 1.3rem; font-weight: 700; }
+        .pipeline-stage .sum { font-size: 0.8rem; color: var(--gray-500); }
+        .task-overdue { color: var(--danger); font-weight: 600; }
+        .hidden { display: none; }
+        .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
+        .calendar-day {
+            padding: 8px; background: var(--gray-50); border-radius: 4px; min-height: 60px; cursor: pointer;
+            transition: all 0.2s; font-size: 0.8rem;
+        }
+        .calendar-day:hover { background: var(--gray-100); }
+        .calendar-day.today { background: var(--primary-light); border: 1px solid var(--primary); }
+        .calendar-day .event { background: var(--primary); color: white; border-radius: 4px; padding: 2px 4px; font-size: 0.7rem; margin-top: 4px; display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .filters { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
+        .filters input, .filters select { padding: 6px 10px; border: 1px solid var(--gray-300); border-radius: var(--radius); font-size: 0.85rem; }
+        .canvas-chart { width: 100%; height: 200px; background: var(--gray-50); border-radius: var(--radius); display: flex; align-items: flex-end; gap: 4px; padding: 10px; }
+        .bar { flex: 1; background: var(--primary); border-radius: 4px 4px 0 0; min-height: 5px; transition: height 0.3s; }
+        .bar-label { text-align: center; font-size: 0.7rem; margin-top: 4px; }
+        @media (max-width: 768px) {
+            .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+            .header-container { padding: 8px 12px; }
+            .main { padding: 0 12px; margin: 16px auto; }
+            .pipeline-stage { min-width: 100px; }
+            .calendar-grid { grid-template-columns: repeat(3, 1fr); }
+        }
+    </style>
+</head>
+<body>
+
+<header class="header">
+    <div class="header-container">
+        <div class="logo-area">
+            <div class="logo-icon">AI</div>
+            <div class="logo-text">
+                <h1>SupplyCRM AI</h1>
+                <p>Международные поставки оборудования</p>
+            </div>
+        </div>
+        <div class="nav-tabs" id="navTabs">
+            <button class="nav-tab active" data-section="dashboard">Дашборд</button>
+            <button class="nav-tab" data-section="deals">Сделки</button>
+            <button class="nav-tab" data-section="clients">Клиенты</button>
+            <button class="nav-tab" data-section="documents">Документы</button>
+            <button class="nav-tab" data-section="ai-analysis">AI-анализ</button>
+            <button class="nav-tab" data-section="tasks">Задачи</button>
+            <button class="nav-tab" data-section="supply">Поставки</button>
+            <button class="nav-tab" data-section="finance">Финансы</button>
+            <button class="nav-tab" data-section="calendar">Календарь</button>
+            <button class="nav-tab" data-section="team">Команда</button>
+            <button class="nav-tab" data-section="assistant">AI-помощник</button>
+            <button class="nav-tab" data-section="settings">Настройки</button>
+        </div>
+        <div class="user-info">
+            <div class="avatar">ИВ</div>
+            <span>Иван Васильев</span>
+        </div>
+    </div>
+</header>
+
+<main class="main">
+    <!-- Дашборд -->
+    <div class="section active" id="dashboard">
+        <div class="grid-4">
+            <div class="kpi-card"><div class="kpi-label">Активные сделки</div><div class="kpi-value">24</div></div>
+            <div class="kpi-card"><div class="kpi-label">Сумма в работе</div><div class="kpi-value">€1,8M</div></div>
+            <div class="kpi-card"><div class="kpi-label">Просроченные задачи</div><div class="kpi-value" style="color: var(--danger);">5</div></div>
+            <div class="kpi-card"><div class="kpi-label">Счета на оплату</div><div class="kpi-value">€340k</div></div>
+        </div>
+        <div class="card">
+            <div class="card-header"><span class="card-title">Воронка сделок</span></div>
+            <div class="card-body">
+                <div class="pipeline">
+                    <div class="pipeline-stage"><div class="count">8</div><div class="sum">€420k</div><div>Новые</div></div>
+                    <div class="pipeline-stage"><div class="count">5</div><div class="sum">€310k</div><div>Квалификация</div></div>
+                    <div class="pipeline-stage"><div class="count">6</div><div class="sum">€580k</div><div>Ком. предложение</div></div>
+                    <div class="pipeline-stage"><div class="count">4</div><div class="sum">€390k</div><div>Переговоры</div></div>
+                    <div class="pipeline-stage"><div class="count">1</div><div class="sum">€100k</div><div>Закрыта</div></div>
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-header"><span class="card-title">Финансовый поток (€ тыс.)</span></div>
+            <div class="card-body">
+                <div class="canvas-chart" id="financeChart"></div>
+                <div style="display:flex; justify-content:space-between; font-size:0.7rem; color: var(--gray-500);">
+                    <span>Янв</span><span>Фев</span><span>Мар</span><span>Апр</span><span>Май</span><span>Июн</span><span>Июл</span><span>Авг</span><span>Сен</span><span>Окт</span><span>Ноя</span><span>Дек</span>
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-header"><span class="card-title">Контрольные точки</span></div>
+            <div class="card-body">
+                <table>
+                    <thead><tr><th>Сделка</th><th>Контрольная точка</th><th>Ответственный</th><th>Срок</th><th>Статус</th></tr></thead>
+                    <tbody>
+                        <tr><td>Поставка насосов в Германию</td><td>Согласование ТЗ</td><td>Петров А.</td><td>15.08.2026</td><td><span class="badge badge-green">Выполнено</span></td></tr>
+                        <tr><td>Запчасти для Чехии</td><td>Подписание контракта</td><td>Смирнова Е.</td><td>20.08.2026</td><td><span class="badge badge-yellow">В процессе</span></td></tr>
+                        <tr><td>Электроника в Польшу</td><td>Отгрузка</td><td>Иванов В.</td><td>18.08.2026</td><td><span class="badge badge-red">Просрочено</span></td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Сделки -->
+    <div class="section" id="deals">
+        <div class="card">
+            <div class="card-header">
+                <span class="card-title">Сделки</span>
+                <button class="btn btn-primary btn-sm" onclick="alert('Добавление сделки — демо')">+ Новая сделка</button>
+            </div>
+            <div class="card-body">
+                <div class="filters">
+                    <input type="text" placeholder="Поиск по названию..." oninput="filterDeals(this.value)">
+                    <select onchange="filterDealsByStage(this.value)">
+                        <option value="all">Все этапы</option>
+                        <option value="new">Новые</option>
+                        <option value="qual">Квалификация</option>
+                        <option value="offer">Ком. предложение</option>
+                        <option value="negot">Переговоры</option>
+                        <option value="closed">Закрыта</option>
+                    </select>
+                </div>
+                <div class="table-wrapper">
+                    <table id="dealsTable">
+                        <thead><tr><th>ID</th><th>Название</th><th>Клиент</th><th>Этап</th><th>Ответственный</th><th>Сумма</th><th>Срок</th><th>Действия</th></tr></thead>
+                        <tbody>
+                            <tr data-stage="negot"><td>101</td><td>Поставка насосов в Германию</td><td>GmbH Schmidt</td><td>Переговоры</td><td>Петров А.</td><td>€450k</td><td>30.09.2026</td><td><button class="btn btn-sm" onclick="alert('Открыть сделку 101')">Открыть</button></td></tr>
+                            <tr data-stage="offer"><td>102</td><td>Запчасти для Чехии</td><td>TechEx s.r.o.</td><td>Ком. предложение</td><td>Смирнова Е.</td><td>€85k</td><td>25.09.2026</td><td><button class="btn btn-sm" onclick="alert('Открыть сделку 102')">Открыть</button></td></tr>
+                            <tr data-stage="qual"><td>103</td><td>Электроника в Польшу</td><td>PLL Electronics</td><td>Квалификация</td><td>Иванов В.</td><td>€120k</td><td>15.08.2026</td><td><button class="btn btn-sm" onclick="alert('Открыть сделку 103')">Открыть</button></td></tr>
+                            <tr data-stage="closed"><td>104</td><td>Оборудование для Болгарии</td><td>Balkan Ltd</td><td>Закрыта</td><td>Петров А.</td><td>€300k</td><td>01.08.2026</td><td><button class="btn btn-sm" onclick="alert('Открыть сделку 104')">Открыть</button></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Клиенты -->
+    <div class="section" id="clients">
+        <div class="card">
+            <div class="card-header"><span class="card-title">Клиенты</span></div>
+            <div class="card-body">
+                <table>
+                    <thead><tr><th>Компания</th><th>Страна</th><th>Контактное лицо</th><th>Email</th><th>Телефон</th><th>Активные сделки</th></tr></thead>
+                    <tbody>
+                        <tr><td>GmbH Schmidt</td><td>Германия</td><td>Michael Weber</td><td>m.weber@schmidt.de</td><td>+49 30 123456</td><td>3</td></tr>
+                        <tr><td>TechEx s.r.o.</td><td>Чехия</td><td>Jan Novak</td><td>j.novak@techex.cz</td><td>+420 123 456 789</td><td>2</td></tr>
+                        <tr><td>PLL Electronics</td><td>Польша</td><td>Anna Kowalska</td><td>a.kowalska@pll.pl</td><td>+48 22 987 65 43</td><td>1</td></tr>
+                        <tr><td>Balkan Ltd</td><td>Болгария</td><td>Georgi Dimitrov</td><td>g.dimitrov@balkan.bg</td><td>+359 2 123 456</td><td>0</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Документы -->
+    <div class="section" id="documents">
+        <div class="card">
+            <div class="card-header"><span class="card-title">Документы и ТЗ</span><button class="btn btn-sm" onclick="addDocument()">+ Загрузить</button></div>
+            <div class="card-body">
+                <div class="document-list" id="documentList">
+                    <div class="document-item" onclick="showDocumentHistory(this)"><span style="font-weight:600;">ТЗ_насосы_Германия_v3.pdf</span><span class="badge badge-green" style="margin-left:auto;">AI проверен</span></div>
+                    <div class="document-item" onclick="showDocumentHistory(this)"><span style="font-weight:600;">Спецификация_Чехия_запчасти.xlsx</span><span class="badge badge-yellow" style="margin-left:auto;">Требует внимания</span></div>
+                    <div class="document-item" onclick="showDocumentHistory(this)"><span style="font-weight:600;">Контракт_Польша_электроника.docx</span><span class="badge badge-gray" style="margin-left:auto;">Черновик</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- AI-анализ -->
+    <div class="section" id="ai-analysis">
+        <div class="card">
+            <div class="card-header"><span class="card-title">AI-анализ документов</span></div>
+            <div class="card-body">
+                <button class="btn btn-primary" onclick="startAIAnalysis()">📄 Загрузить ТЗ и запустить анализ</button>
+                <div id="analysisProgress" style="display:none; margin: 20px 0;">
+                    <p>Идет анализ документа...</p>
+                    <div class="progress-bar"><div class="progress-fill" style="width: 0%;" id="progressFill"></div></div>
+                </div>
+                <div id="analysisResult" style="display:none; margin-top:16px;">
+                    <div class="alert alert-danger">
+                        <strong>Обнаружено 3 проблемы:</strong><br>
+                        1. Отсутствует поле «Условия поставки (Инкотермс)».<br>
+                        2. Несоответствие: в спецификации указан насос X-100, а в чертеже X-150.<br>
+                        3. Недостаточно данных для таможенного оформления (код ТН ВЭД).
+                    </div>
+                    <div class="alert alert-success">
+                        <strong>AI предлагает исправления:</strong><br>
+                        - Добавить Инкотермс FOB или CIF.<br>
+                        - Уточнить модель насоса у клиента.<br>
+                        - Запросить код ТН ВЭД у поставщика.
+                    </div>
+                    <div style="display:flex; gap:10px; flex-wrap:wrap;">
+                        <button class="btn btn-success" onclick="alert('Перевод сформирован (демо)')">🌐 Сформировать перевод</button>
+                        <button class="btn btn-sm" onclick="alert('Сравнение версий (демо)')">📊 Сравнить с предыдущей версией</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Задачи -->
+    <div class="section" id="tasks">
+        <div class="card">
+            <div class="card-header"><span class="card-title">Задачи</span><button class="btn btn-primary btn-sm" onclick="addTask()">+ Добавить задачу</button></div>
+            <div class="card-body">
+                <table id="taskTable">
+                    <thead><tr><th>Задача</th><th>Проект</th><th>Исполнитель</th><th>Срок</th><th>Приоритет</th><th>Статус</th></tr></thead>
+                    <tbody>
+                        <tr><td>Подготовить ком. предложение</td><td>Поставка насосов</td><td>Петров А.</td><td>16.08.2026</td><td>Высокий</td><td><span class="badge badge-yellow">В работе</span></td></tr>
+                        <tr><td>Согласовать ТЗ с клиентом</td><td>Запчасти Чехия</td><td>Смирнова Е.</td><td>14.08.2026</td><td>Средний</td><td><span class="badge badge-green">Выполнена</span></td></tr>
+                        <tr><td>Отправить документы на таможню</td><td>Электроника Польша</td><td>Иванов В.</td><td>12.08.2026</td><td>Высокий</td><td><span class="badge badge-red">Просрочена</span></td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Поставки -->
+    <div class="section" id="supply">
+        <div class="card">
+            <div class="card-header"><span class="card-title">Поставки</span></div>
+            <div class="card-body">
+                <table>
+                    <thead><tr><th>Заказ</th><th>Груз</th><th>Маршрут</th><th>Дата отгрузки</th><th>Дата прибытия</th><th>Статус</th></tr></thead>
+                    <tbody>
+                        <tr><td>Поставка 101</td><td>Насосы</td><td>Берлин → Москва</td><td>12.08.2026</td><td>22.08.2026</td><td><span class="badge badge-blue">В пути</span></td></tr>
+                        <tr><td>Поставка 102</td><td>Запчасти</td><td>Прага → Москва</td><td>15.08.2026</td><td>20.08.2026</td><td><span class="badge badge-yellow">Готовится</span></td></tr>
+                        <tr><td>Поставка 103</td><td>Электроника</td><td>Варшава → Москва</td><td>10.08.2026</td><td>18.08.2026</td><td><span class="badge badge-red">Задержана</span></td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Финансы -->
+    <div class="section" id="finance">
+        <div class="card">
+            <div class="card-header"><span class="card-title">Счета и оплаты</span></div>
+            <div class="card-body">
+                <table>
+                    <thead><tr><th>Счет №</th><th>Сделка</th><th>Сумма</th><th>Дата выставления</th><th>Оплачен</th><th>Статус</th></tr></thead>
+                    <tbody>
+                        <tr><td>INV-2026-001</td><td>Поставка насосов</td><td>€150k</td><td>05.08.2026</td><td>Да</td><td><span class="badge badge-green">Оплачен</span></td></tr>
+                        <tr><td>INV-2026-002</td><td>Запчасти Чехия</td><td>€40k</td><td>08.08.2026</td><td>Нет</td><td><span class="badge badge-yellow">Ожидает</span></td></tr>
+                        <tr><td>INV-2026-003</td><td>Электроника Польша</td><td>€60k</td><td>10.08.2026</td><td>Нет</td><td><span class="badge badge-red">Просрочен</span></td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Календарь -->
+    <div class="section" id="calendar">
+        <div class="card">
+            <div class="card-header"><span class="card-title">Календарь событий</span></div>
+            <div class="card-body">
+                <div class="calendar-grid" id="calendarGrid"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Команда -->
+    <div class="section" id="team">
+        <div class="grid-2">
+            <div class="card">
+                <div class="card-header"><span class="card-title">Участники команды</span></div>
+                <div class="card-body">
+                    <table>
+                        <thead><tr><th>Сотрудник</th><th>Роль</th><th>Активность</th></tr></thead>
+                        <tbody>
+                            <tr><td>Иванов Василий</td><td>Руководитель отдела</td><td>Онлайн</td></tr>
+                            <tr><td>Петров Алексей</td><td>Менеджер по поставкам</td><td>Онлайн</td></tr>
+                            <tr><td>Смирнова Елена</td><td>Специалист по документообороту</td><td>Отошла</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header"><span class="card-title">Командный чат</span></div>
+                <div class="card-body">
+                    <div class="chat-container" style="height: 250px;">
+                        <div class="chat-messages" id="teamChatMessages">
+                            <div class="message user" style="max-width:100%; background: var(--gray-100); color: var(--gray-700);">Иванов: Обновите статус по сделке 103</div>
+                            <div class="message user" style="max-width:100%; background: var(--gray-100); color: var(--gray-700);">Петров: Готово, отправил документы</div>
+                        </div>
+                        <div class="chat-input"><input type="text" id="teamChatInput" placeholder="Написать сообщение..."><button class="btn btn-primary btn-sm" onclick="sendTeamChat()">➤</button></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- AI-помощник -->
+    <div class="section" id="assistant">
+        <div class="card">
+            <div class="card-header"><span class="card-title">AI-помощник</span></div>
+            <div class="card-body">
+                <div class="chat-container" style="height: 450px;">
+                    <div class="chat-messages" id="aiChatMessages">
+                        <div class="message ai">Здравствуйте! Я AI-помощник SupplyCRM. Могу ответить на вопросы по сделкам, документам, задачам, поставкам, финансам и срокам.</div>
+                    </div>
+                    <div class="chat-input"><input type="text" id="aiChatInput" placeholder="Например: «Какие задачи просрочены?»"><button class="btn btn-primary btn-sm" onclick="sendAIChat()">➤</button></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Настройки -->
+    <div class="section" id="settings">
+        <div class="grid-2">
+            <div class="card">
+                <div class="card-header"><span class="card-title">Пользователи и роли</span></div>
+                <div class="card-body">
+                    <table>
+                        <thead><tr><th>Пользователь</th><th>Роль</th><th>Права</th></tr></thead>
+                        <tbody>
+                            <tr><td>ivanov@company.com</td><td>Администратор</td><td>Полный доступ</td></tr>
+                            <tr><td>petrov@company.com</td><td>Менеджер</td><td>Сделки, задачи</td></tr>
+                            <tr><td>smirnova@company.com</td><td>Документовед</td><td>Документы, AI-анализ</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header"><span class="card-title">Интеграции</span></div>
+                <div class="card-body">
+                    <p>✅ 1С:Предприятие — подключено</p>
+                    <p>✅ Email — подключено</p>
+                    <p>✅ API для каталогов — настроено</p>
+                    <p>⏳ Telegram-бот — в разработке</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<!-- Модальное окно истории документа -->
+<div class="modal-overlay" id="docModal">
+    <div class="modal">
+        <div class="modal-header"><span class="modal-title">История изменений</span><button class="modal-close" onclick="closeModal('docModal')">×</button></div>
+        <div class="modal-body" id="docModalBody"></div>
+    </div>
+</div>
+
+<script>
+    // Навигация
+    document.querySelectorAll('.nav-tab').forEach(tab => {
+        tab.addEventListener('click', function() {
+            const sectionId = this.dataset.section;
+            document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.getElementById(sectionId).classList.add('active');
+        });
+    });
+
+    // Модальное окно
+    function openModal(id) { document.getElementById(id).classList.add('active'); }
+    function closeModal(id) { document.getElementById(id).classList.remove('active'); }
+
+    // Финансовый график (простые бары)
+    function renderFinanceChart() {
+        const chart = document.getElementById('financeChart');
+        const data = [120, 150, 180, 160, 200, 220, 210, 250, 280, 260, 300, 320];
+        chart.innerHTML = '';
+        data.forEach(val => {
+            const bar = document.createElement('div');
+            bar.className = 'bar';
+            bar.style.height = (val / 350 * 180) + 'px';
+            bar.setAttribute('title', val + ' тыс. €');
+            chart.appendChild(bar);
+        });
+    }
+    renderFinanceChart();
+
+    // Фильтр сделок
+    function filterDeals(query) {
+        const rows = document.querySelectorAll('#dealsTable tbody tr');
+        rows.forEach(row => {
+            const text = row.textContent.toLowerCase();
+            row.style.display = text.includes(query.toLowerCase()) ? '' : 'none';
+        });
+    }
+    function filterDealsByStage(stage) {
+        const rows = document.querySelectorAll('#dealsTable tbody tr');
+        rows.forEach(row => {
+            if (stage === 'all' || row.dataset.stage === stage) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        });
+    }
+
+    // Документы
+    function addDocument() {
+        const list = document.getElementById('documentList');
+        const div = document.createElement('div');
+        div.className = 'document-item';
+        div.innerHTML = `<span style="font-weight:600;">Новый_документ_${Date.now()}.pdf</span><span class="badge badge-blue" style="margin-left:auto;">Черновик</span>`;
+        div.onclick = function() { showDocumentHistory(this); };
+        list.appendChild(div);
+    }
+    function showDocumentHistory(element) {
+        const docName = element.querySelector('span').textContent;
+        document.getElementById('docModalBody').innerHTML = `<p><strong>${docName}</strong></p><ul><li>v1 — 10.08.2026, загружен менеджером</li><li>v2 — 12.08.2026, добавлены технические параметры</li><li>v3 — 13.08.2026, AI проверил: замечания учтены</li></ul>`;
+        openModal('docModal');
+    }
+
+    // AI-анализ
+    function startAIAnalysis() {
+        const progressDiv = document.getElementById('analysisProgress');
+        const resultDiv = document.getElementById('analysisResult');
+        progressDiv.style.display = 'block';
+        resultDiv.style.display = 'none';
+        let progress = 0;
+        const fill = document.getElementById('progressFill');
+        const interval = setInterval(() => {
+            progress += 10;
+            fill.style.width = progress + '%';
+            if (progress >= 100) {
+                clearInterval(interval);
+                progressDiv.style.display = 'none';
+                resultDiv.style.display = 'block';
+            }
+        }, 200);
+    }
+
+    // Задачи
+    function addTask() {
+        const table = document.getElementById('taskTable').querySelector('tbody');
+        const row = table.insertRow();
+        row.innerHTML = `<td>Новая задача</td><td>Проект</td><td>Исполнитель</td><td>20.08.2026</td><td>Средний</td><td><span class="badge badge-blue">Новая</span></td>`;
+    }
+
+    // Календарь
+    function renderCalendar() {
+        const grid = document.getElementById('calendarGrid');
+        const daysInMonth = 31;
+        const events = {
+            5: ['Сделка 101: согласование ТЗ'],
+            12: ['Поставка 102: отгрузка'],
+            18: ['Поставка 103: прибытие'],
+            20: ['Сделка 102: подписание контракта']
+        };
+        grid.innerHTML = '';
+        for (let i = 1; i <= daysInMonth; i++) {
+            const day = document.createElement('div');
+            day.className = 'calendar-day';
+            if (i === 13) day.classList.add('today');
+            day.innerHTML = `<strong>${i}</strong>`;
+            if (events[i]) {
+                events[i].forEach(ev => {
+                    day.innerHTML += `<span class="event">${ev}</span>`;
+                });
+            }
+            day.onclick = () => alert(`События на ${i} августа: ` + (events[i] ? events[i].join(', ') : 'нет'));
+            grid.appendChild(day);
+        }
+    }
+    renderCalendar();
+
+    // Командный чат
+    function sendTeamChat() {
+        const input = document.getElementById('teamChatInput');
+        const msg = input.value.trim();
+        if (!msg) return;
+        const messages = document.getElementById('teamChatMessages');
+        messages.innerHTML += `<div class="message user" style="max-width:100%; background: var(--primary); color:white;">Вы: ${msg}</div>`;
+        input.value = '';
+        messages.scrollTop = messages.scrollHeight;
+    }
+
+    // AI-помощник чат
+    function sendAIChat() {
+        const input = document.getElementById('aiChatInput');
+        const msg = input.value.trim();
+        if (!msg) return;
+        const messages = document.getElementById('aiChatMessages');
+        messages.innerHTML += `<div class="message user">${msg}</div>`;
+        input.value = '';
+        setTimeout(() => {
+            const answer = getAIResponse(msg);
+            messages.innerHTML += `<div class="message ai">${answer}</div>`;
+            messages.scrollTop = messages.scrollHeight;
+        }, 500);
+    }
+
+    function getAIResponse(question) {
+        const q = question.toLowerCase();
+        if (q.includes('просрочен') || q.includes('срок')) {
+            return 'На данный момент просрочены 5 задач. Самая критичная: «Отправить документы на таможню» по сделке «Электроника в Польшу».';
+        } else if (q.includes('сделк') || q.includes('воронк')) {
+            return 'В работе 24 сделки на общую сумму €1,8M. В стадии переговоров — 4 сделки на €390k.';
+        } else if (q.includes('документ') || q.includes('тз')) {
+            return 'Недавно загруженные документы: ТЗ_насосы_Германия_v3.pdf (проверен AI, есть 3 замечания).';
+        } else if (q.includes('поставк') || q.includes('груз')) {
+            return 'Активные поставки: 101 (в пути), 102 (готовится), 103 (задержана).';
+        } else if (q.includes('финанс') || q.includes('счет')) {
+            return 'Выставлено счетов на €340k. Один счет просрочен (INV-2026-003, €60k).';
+        } else if (q.includes('команд') || q.includes('кто')) {
+            return 'Сейчас онлайн: Иванов В., Петров А. Смирнова Е. отошла.';
+        } else {
+            return 'Я могу ответить на вопросы по сделкам, задачам, документам, поставкам, финансам и срокам. Уточните запрос.';
+        }
+    }
+</script>
+</body>
+</html>

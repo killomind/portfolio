@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Pathfinder 1e — Лист персонажа (Юдард Ари)</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #5a4a3a;
+            font-family: 'Segoe UI', 'Century Gothic', 'Georgia', serif;
+            margin: 0;
+            padding: 20px;
+            color: #2c2418;
+        }
+
+        /* основной контейнер с эффектом бумаги */
+        .sheet-container {
+            max-width: 1300px;
+            margin: 0 auto;
+            background: #fef7e0;
+            background-image: linear-gradient(#fdf8e7 1px, transparent 1px);
+            background-size: 100% 24px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            border: 1px solid #c9b27c;
+            overflow: hidden;
+        }
+
+        /* вкладки */
+        .tabs {
+            display: flex;
+            flex-wrap: wrap;
+            background: #e0cfaa;
+            border-bottom: 2px solid #b89a5c;
+            gap: 4px;
+            padding: 8px 12px 0 12px;
+        }
+
+        .tab-btn {
+            background: #f0e2c5;
+            border: none;
+            padding: 10px 20px;
+            font-size: 1rem;
+            font-weight: bold;
+            font-family: inherit;
+            border-radius: 20px 20px 8px 8px;
+            cursor: pointer;
+            transition: 0.2s;
+            color: #4a3722;
+            box-shadow: 0 -1px 0 #b89a5c;
+        }
+
+        .tab-btn.active {
+            background: #fef7e0;
+            box-shadow: inset 0 2px 0 #b37b2e, 0 -1px 0 #fef7e0;
+            border-bottom: 2px solid #fef7e0;
+            color: #2c1a0c;
+        }
+
+        .tab-pane {
+            display: none;
+            padding: 24px 28px;
+            animation: fade 0.2s ease;
+        }
+
+        .tab-pane.active {
+            display: block;
+        }
+
+        @keyframes fade {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* сетки и карточки */
+        .grid-2col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+
+        .stat-block {
+            background: rgba(210, 180, 130, 0.15);
+            border-left: 8px solid #b37b2e;
+            padding: 12px 18px;
+            margin-bottom: 24px;
+            border-radius: 16px;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+        }
+
+        .stat-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            border-bottom: 2px solid #c2a15b;
+            margin-bottom: 12px;
+            padding-left: 6px;
+            letter-spacing: 1px;
+        }
+
+        .attr-row {
+            display: flex;
+            align-items: baseline;
+            flex-wrap: wrap;
+            gap: 16px;
+            margin: 12px 0;
+        }
+
+        .attr-item {
+            background: #fff3df;
+            padding: 8px 14px;
+            border-radius: 24px;
+            box-shadow: inset 0 0 0 1px #e7dbbc, 0 1px 2px rgba(0,0,0,0.05);
+            min-width: 90px;
+            text-align: center;
+        }
+
+        .attr-label {
+            font-weight: bold;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .attr-value {
+            font-size: 1.8rem;
+            font-weight: bold;
+            line-height: 1;
+            margin: 5px 0;
+        }
+
+        input, select, textarea {
+            background: #fffef7;
+            border: 1px solid #ccb87c;
+            border-radius: 12px;
+            padding: 8px 12px;
+            font-family: inherit;
+            font-size: 0.9rem;
+            width: 100%;
+            transition: 0.1s;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            border-color: #b37b2e;
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(179, 123, 46, 0.3);
+        }
+
+        .skill-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+        }
+
+        .skill-table th, .skill-table td {
+            border-bottom: 1px solid #e2d4b5;
+            padding: 6px 4px;
+            text-align: left;
+        }
+
+        .skill-table th {
+            background: #e9dcbc;
+            font-weight: bold;
+        }
+
+        .small-input {
+            width: 60px;
+            text-align: center;
+            padding: 4px;
+        }
+
+        .ac-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: space-between;
+        }
+
+        .ac-card {
+            background: #f6efdb;
+            border-radius: 20px;
+            padding: 12px;
+            flex: 1;
+            text-align: center;
+        }
+
+        button {
+            background: #c7a86b;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 40px;
+            font-weight: bold;
+            cursor: pointer;
+            color: white;
+            transition: 0.2s;
+        }
+
+        button:hover {
+            background: #a47e42;
+            transform: scale(0.98);
+        }
+
+        .toolbar {
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+            margin-bottom: 20px;
+        }
+
+        .weapon-row, .armor-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 12px;
+            align-items: center;
+        }
+
+        hr {
+            border-color: #e0cfaa;
+        }
+
+        @media (max-width: 800px) {
+            .grid-2col {
+                grid-template-columns: 1fr;
+            }
+            .tab-btn {
+                padding: 6px 12px;
+                font-size: 0.8rem;
+            }
+            .tab-pane {
+                padding: 16px;
+            }
+        }
+
+        .note-area {
+            background: #fff6e6;
+            border-radius: 16px;
+            padding: 12px;
+            min-height: 150px;
+        }
+        .inline-label {
+            font-weight: bold;
+            display: inline-block;
+            width: 120px;
+        }
+        .flex-row {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 8px;
+            margin: 8px 0;
+        }
+    </style>
+</head>
+<body>
+<div class="sheet-container">
+    <div class="tabs">
+        <button class="tab-btn active" data-tab="main">📜 ХАРАКТЕРИСТИКИ & НАВЫКИ</button>
+        <button class="tab-btn" data-tab="combat">⚔️ БОЙ / ЗАЩИТА</button>
+        <button class="tab-btn" data-tab="spells">✨ ЗАКЛИНАНИЯ & ОСОБЕННОСТИ</button>
+        <button class="tab-btn" data-tab="gear">🎒 СНАРЯЖЕНИЕ / НАГРУЗКА</button>
+        <button class="tab-btn" data-tab="persona">🧑 ПЕРСОНАЖ / БИОГРАФИЯ</button>
+        <button class="tab-btn" data-tab="notes">📝 ЗАМЕТКИ / ДОБЫЧА</button>
+    </div>
+
+    <!-- ПАНЕЛЬ 1: основные статы + навыки -->
+    <div class="tab-pane active" id="main">
+        <div class="toolbar">
+            <button id="saveBtn">💾 Сохранить персонажа</button>
+            <button id="resetBtn">⟳ Сброс (пример Юдарда)</button>
+        </div>
+        <div class="grid-2col">
+            <div>
+                <div class="stat-block">
+                    <div class="stat-title">🎭 ХАРАКТЕРИСТИКИ</div>
+                    <div class="attr-row" id="abilities">
+                        <!-- динамически через js, но прописываем для наглядности -->
+                    </div>
+                    <div class="flex-row"><span class="inline-label">Уровень:</span><input type="number" id="level" value="9" style="width:70px"></div>
+                    <div class="flex-row"><span class="inline-label">Класс (архетип):</span><input type="text" id="class" value="Воин (Мастер клинка)"></div>
+                    <div class="flex-row"><span class="inline-label">БМА (баз.) :</span><input type="number" id="bab" value="9" step="1" style="width:70px"></div>
+                    <div class="flex-row"><span class="inline-label">Инициатива:</span><span id="initTotal" class="attr-value" style="font-size:1.3rem">0</span> <span>(+<span id="initMiscEdit">0</span> прочее)</div>
+                    <div class="flex-row"><span class="inline-label">Скорость:</span><input type="number" id="speedBase" value="30" style="width:70px"> фт <span id="speedTotal">30</span></div>
+                </div>
+
+                <div class="stat-block">
+                    <div class="stat-title">❤️ ЗДОРОВЬЕ & ЗАЩИТА (основа)</div>
+                    <div class="flex-row"><span class="inline-label">ПЗ (макс):</span><input type="number" id="hpMax" value="89" style="width:80px"></div>
+                    <div class="flex-row"><span class="inline-label">Текущие ПЗ:</span><input type="number" id="hpCurr" value="89" style="width:80px"></div>
+                    <div class="flex-row"><span class="inline-label">КБ (Класс Брони):</span><span id="acTotal">0</span> (касание: <span id="touchTotal">0</span>, врасплох: <span id="flatTotal">0</span>)</div>
+                    <div class="flex-row"><span class="inline-label">Стойкость:</span><span id="fortTotal">0</span>  | Реакция: <span id="refTotal">0</span> | Воля: <span id="willTotal">0</span></div>
+                    <div class="flex-row"><span class="inline-label">СУ (сопротивление):</span><input type="text" id="drValue" placeholder="5/--" value="2/-"></div>
+                </div>
+            </div>
+
+            <div>
+                <div class="stat-block">
+                    <div class="stat-title">🧠 ОСНОВНЫЕ НАВЫКИ (модификаторы расчитываются)</div>
+                    <div style="max-height: 550px; overflow-y: auto;">
+                        <table class="skill-table" id="skillsTableMain">
+                            <thead><tr><th>Навык</th><th>Ранги</th><th>Кл.</th><th>Штр.</th><th>Итог</th></tr></thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="stat-block">
+            <div class="stat-title">📚 ПОБОЧНЫЕ НАВЫКИ / РЕМЁСЛА</div>
+            <table class="skill-table" id="skillsTableSec">
+                <thead><tr><th>Навык</th><th>Ранги</th><th>Кл.</th><th>Итог</th></tr></thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- ПАНЕЛЬ 2: БОЙ, ОРУЖИЕ, ДОСПЕХИ -->
+    <div class="tab-pane" id="combat">
+        <div class="grid-2col">
+            <div>
+                <div class="stat-block">
+                    <div class="stat-title">⚔️ АТАКИ</div>
+                    <div class="flex-row">Ближняя атака: <span id="meleeAttack">0</span> (БМА+СИЛ)</div>
+                    <div class="flex-row">Дальняя атака: <span id="rangedAttack">0</span> (БМА+ЛОВ)</div>
+                    <div class="flex-row">МБМ (Маневр): <span id="cmbTotal">0</span></div>
+                    <div class="flex-row">ЗБМ (Защита): <span id="cmdTotal">0</span> | врасплох: <span id="cmdFlat">0</span></div>
+                    <hr>
+                    <div class="stat-title">🏹 ОРУЖИЕ</div>
+                    <div id="weaponsList"></div>
+                    <button id="addWeapon">+ Добавить оружие</button>
+                </div>
+            </div>
+            <div>
+                <div class="stat-block">
+                    <div class="stat-title">🛡️ ДОСПЕХИ & БРОНЯ</div>
+                    <div class="flex-row"><span class="inline-label">Броня (бонус):</span><input type="number" id="armorBonus" value="9" step="0.5" style="width:70px"></div>
+                    <div class="flex-row"><span class="inline-label">Щит (бонус):</span><input type="number" id="shieldBonus" value="1" step="0.5" style="width:70px"></div>
+                    <div class="flex-row"><span class="inline-label">Естеств. броня:</span><input type="number" id="naturalArmor" value="1" step="1" style="width:70px"></div>
+                    <div class="flex-row"><span class="inline-label">Уклонение/прочее:</span><input type="number" id="miscAc" value="1" style="width:70px"></div>
+                    <div class="flex-row"><span class="inline-label">Размер:</span><input type="number" id="sizeAc" value="0" step="1" style="width:70px"></div>
+                    <div class="flex-row"><span class="inline-label">Штраф доспеха (ACP):</span><input type="number" id="armorCheckPenalty" value="-5" step="1" style="width:70px"></div>
+                    <hr>
+                    <div class="stat-title">💪 Боевые черты / особенности</div>
+                    <textarea id="combatFeats" rows="4" placeholder="Защитная стойка, Помеха заклинаниям, Дух воина...">Защитная стойка, Дух воина (тяжёлые клинки), Мастерство ношения брони</textarea>
+                </div>
+            </div>
+        </div>
+        <div class="stat-block">
+            <div class="stat-title">🌀 Состояния / временные эффекты</div>
+            <textarea id="conditions" rows="2" placeholder="Утомление, благословение и т.д."></textarea>
+        </div>
+    </div>
+
+    <!-- ПАНЕЛЬ 3: ЗАКЛИНАНИЯ, СПОСОБНОСТИ -->
+    <div class="tab-pane" id="spells">
+        <div class="grid-2col">
+            <div>
+                <div class="stat-block">
+                    <div class="stat-title">🌟 ШТРИХИ / ОСОБЫЕ СПОСОБНОСТИ</div>
+                    <textarea id="traits" rows="6">Упрямство, Сердце полей, Пропавший брат, Жизнь в трудах, Спаситель города</textarea>
+                </div>
+                <div class="stat-block">
+                    <div class="stat-title">📖 ЧЕРТЫ (Feats)</div>
+                    <textarea id="featsList" rows="6">Двужильный, Настороженность, Эксперт (Исп.маг.устр.), Мастер-ремесленник (оружейник), Уверенное владение (жнец), Привычное оружие (жнец), Продвинутое мастерство владения (тяжёлые клинки)</textarea>
+                </div>
+            </div>
+            <div>
+                <div class="stat-block">
+                    <div class="stat-title">🌀 КЛАССОВЫЕ / КОМПАНЬОН</div>
+                    <textarea id="classAbilities" rows="6">Фамильяр (Листик – белка-летяга), Стальная воля, Совместное обучение, Бронированный джаггернаут, Адаптивная подготовка (Запугивание)</textarea>
+                </div>
+                <div class="stat-block">
+                    <div class="stat-title">✨ ЗАКЛИНАНИЯ (если есть)</div>
+                    <textarea id="spellsKnown" rows="4" placeholder="Нет заклинаний, но можно записать свитки / эффекты"></textarea>
+                    <div class="flex-row">Концентрация: <input type="text" id="concentration" placeholder="+..."></div>
+                </div>
+            </div>
+        </div>
+        <div class="stat-block">
+            <div class="stat-title">⚙️ ИНСТРУМЕНТЫ / АЛХИМИЯ / РЕМЁСЛА</div>
+            <textarea id="craftNotes" rows="2">Ремесло (оружейник) +15, Ремесло (плотник) +9, Профессия (повар) +8</textarea>
+        </div>
+    </div>
+
+    <!-- ПАНЕЛЬ 4: СНАРЯЖЕНИЕ, ВЕС, ДЕНЬГИ -->
+    <div class="tab-pane" id="gear">
+        <div class="grid-2col">
+            <div>
+                <div class="stat-block">
+                    <div class="stat-title">🎒 НАДЕТО / ЭКИПИРОВКА</div>
+                    <textarea id="wornItems" rows="5">Обманчивый полный латный доспех +1, Шлем с забралом, Тиара безграничной мудрости +2, Амулет естественной брони +1, Сапоги-скороходы, Пояс с инструментами</textarea>
+                    <div class="stat-title">💰 ДЕНЬГИ</div>
+                    <div class="flex-row">ЗМ: <input type="number" id="gold" value="1250" style="width:100px"> &nbsp; СМ: <input type="number" id="silver" value="40"> &nbsp; ММ: <input type="number" id="copper" value="15"></div>
+                </div>
+                <div class="stat-block">
+                    <div class="stat-title">📦 РЮКЗАК / ИНВЕНТАРЬ</div>
+                    <textarea id="backpackItems" rows="5">Композитный длинный лук III (сила +3), Жнец-коса (мифрил/адамантин), Серебряный кинжал, Походный набор, Алхим. набор, Факел иуна, Инструменты кузнеца</textarea>
+                </div>
+            </div>
+            <div>
+                <div class="stat-block">
+                    <div class="stat-title">⚖️ НАГРУЗКА (вес в фунтах)</div>
+                    <div class="flex-row"><span class="inline-label">Общий вес:</span><span id="totalWeight">0</span> lbs</div>
+                    <div class="flex-row"><span class="inline-label">Лёгкая:</span><span id="lightLoad">0</span> | Средняя: <span id="mediumLoad">0</span> | Тяжёлая: <span id="heavyLoad">0</span></div>
+                    <div class="flex-row">Текущая нагрузка: <span id="loadStatus">Лёгкая</span></div>
+                    <hr>
+                    <div class="flex-row"><span class="inline-label">Вес на себе (ориентир):</span><input type="number" id="manualWeight" value="78" style="width:90px"></div>
+                    <button id="calcWeightBtn">Пересчитать нагрузку по инвентарю</button>
+                </div>
+                <div class="stat-block">
+                    <div class="stat-title">🏺 МАГИЧЕСКИЕ ПРЕДМЕТЫ</div>
+                    <textarea id="magicItems" rows="4">Тиара безграничной мудрости +2, Обманчивый доспех, Амулет естеств. брони +1</textarea>
+                </div>
+            </div>
+        </div>
+        <div class="stat-block">
+            <div class="stat-title">📦 ДОПОЛНИТЕЛЬНОЕ СНАРЯЖЕНИЕ / ТРАНСПОРТ</div>
+            <textarea id="extraGear" rows="2">Повозка (способность: +10 фт. скорости 1/день)</textarea>
+        </div>
+    </div>
+
+    <!-- ПАНЕЛЬ 5: ПЕРСОНАЖ -->
+    <div class="tab-pane" id="persona">
+        <div class="grid-2col">
+            <div>
+                <div class="stat-block"><div class="stat-title">🧔 ОСНОВНОЕ</div>
+                    <div class="flex-row">Имя: <input type="text" id="charName" value="Юдард Ари (Чудо-Юдо)"></div>
+                    <div class="flex-row">Народ: <input type="text" id="race" value="Человек (челиец)"></div>
+                    <div class="flex-row">Мировоззрение: <input type="text" id="alignment" value="Принципиально добрый"></div>
+                    <div class="flex-row">Религия: <input type="text" id="deity" value="По случаю"></div>
+                    <div class="flex-row">Родина: <input type="text" id="homeland" value="Варисия, ферма близ Корвосы"></div>
+                    <div class="flex-row">Возраст: <input type="text" id="age" value="24 года"></div>
+                    <div class="flex-row">Рост/Вес: <input type="text" id="looks" value="182 см / 88.5 кг, рыжие волосы, борода"></div>
+                </div>
+                <div class="stat-block"><div class="stat-title">❤️ МОТИВАЦИЯ / ЧЕРТЫ ХАРАКТЕРА</div>
+                    <textarea id="personality" rows="5">Ответственный защитник. Если рядом происходит беда — вмешаюсь. Слабых нужно защищать. Ищет пропавшего брата Сиона. Связан с гвардией Корвосы.</textarea>
+                </div>
+            </div>
+            <div>
+                <div class="stat-block"><div class="stat-title">🔗 СВЯЗИ / СОЮЗНИКИ</div>
+                    <textarea id="connections" rows="5">Семья: отец Барвин, братья Дорман, Сайфер, Сион (пропал). Листик (фамильяр-летяга). Союзники: Златка, Арамин, Моргрим, Крессида Крофт, гвардия Корвосы.</textarea>
+                </div>
+                <div class="stat-block"><div class="stat-title">📖 БИОГРАФИЯ (кратко)</div>
+                    <textarea id="biography" rows="8">Вырос на ферме, после исчезновения младшего брата Сиона остался в Корвосе, стал кузнецом и воином. Спас белку-летягу Листика, которая стала фамильяром. Участвовал в зачистке Старой Корвосы от нежити и культов. Имеет репутацию надёжного защитника.</textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ПАНЕЛЬ 6: ЗАМЕТКИ -->
+    <div class="tab-pane" id="notes">
+        <div class="stat-block"><div class="stat-title">📓 ЖУРНАЛ ПРИКЛЮЧЕНИЙ</div>
+            <textarea id="adventureLog" rows="10" placeholder="Записи по ходу партии: культы Ургатоа, битва с вампирскими отродьями, поиски брата..."></textarea>
+        </div>
+        <div class="stat-block"><div class="stat-title">💎 ДОБЫЧА / ОСОБЫЕ ТРОФЕИ</div>
+            <textarea id="loot" rows="4">Магические компоненты, 2 зелья лечения, алхимический реактив, части брони адамантина.</textarea>
+        </div>
+    </div>
+</div>
+
+<script>
+    // ---------- БАЗОВЫЕ ДАННЫЕ: способности, навыки, формулы ----------
+    let abilities = {
+        str: { base: 18, temp: 0, name: "СИЛА" },   // +4 мод
+        dex: { base: 14, temp: 0, name: "ЛОВКОСТЬ" }, // +2
+        con: { base: 16, temp: 0, name: "ВЫНОСЛИВОСТЬ" }, // +3
+        int: { base: 10, temp: 0, name: "ИНТЕЛЛЕКТ" },  // 0
+        wis: { base: 12, temp: 2, name: "МУДРОСТЬ" },   // +1 +2 от тиары => +2 итого мод +2?
+        cha: { base: 10, temp: 0, name: "ХАРИЗМА" }     // 0
+    };
+    // мудрость с учетом тиары: постоянный +2 усиление (база 12+2=14 мод +2)
+    function getMod(statId) {
+        let a = abilities[statId];
+        let total = a.base + a.temp;
+        return Math.floor((total - 10) / 2);
+    }
+    function updateAllMods() {
+        document.getElementById("strMod").innerText = getMod('str');
+        document.getElementById("dexMod").innerText = getMod('dex');
+        document.getElementById("conMod").innerText = getMod('con');
+        document.getElementById("intMod").innerText = getMod('int');
+        document.getElementById("wisMod").innerText = getMod('wis');
+        document.getElementById("chaMod").innerText = getMod('cha');
+        document.getElementById("strVal").innerText = abilities.str.base + abilities.str.temp;
+        document.getElementById("dexVal").innerText = abilities.dex.base + abilities.dex.temp;
+        document.getElementById("conVal").innerText = abilities.con.base + abilities.con.temp;
+        document.getElementById("intVal").innerText = abilities.int.base + abilities.int.temp;
+        document.getElementById("wisVal").innerText = abilities.wis.base + abilities.wis.temp;
+        document.getElementById("chaVal").innerText = abilities.cha.base + abilities.cha.temp;
+        recalcDerivedStats();
+    }
+    // Отрисовка атрибутов
+    function renderAbilities() {
+        const container = document.getElementById("abilities");
+        container.innerHTML = '';
+        const abList = ['str','dex','con','int','wis','cha'];
+        abList.forEach(id => {
+            const div = document.createElement('div');
+            div.className = 'attr-item';
+            div.innerHTML = `<div class="attr-label">${abilities[id].name}</div>
+                             <div class="attr-value"><span id="${id}Val">${abilities[id].base+abilities[id].temp}</span></div>
+                             <div style="font-size:0.8rem">мод: <span id="${id}Mod">${getMod(id)}</span></div>
+                             <input type="number" id="${id}Base" value="${abilities[id].base}" style="width:60px; margin-top:4px" placeholder="база">
+                             <input type="number" id="${id}Temp" value="${abilities[id].temp}" style="width:60px" placeholder="врем.">`;
+            container.appendChild(div);
+        });
+        document.querySelectorAll('[id$="Base"],[id$="Temp"]').forEach(inp => {
+            inp.addEventListener('change', (e) => {
+                let id = inp.id.slice(0,3);
+                if(inp.id.includes('Base')) abilities[id].base = parseInt(inp.value) || 10;
+                else abilities[id].temp = parseInt(inp.value) || 0;
+                updateAllMods();
+                saveToLocal();
+            });
+        });
+        updateAllMods();
+    }
+
+    // пересчёт AC, инициативы, спасбросков, атак
+    function recalcDerivedStats() {
+        let dexMod = getMod('dex');
+        let strMod = getMod('str');
+        let conMod = getMod('con');
+        let wisMod = getMod('wis');
+        let bab = parseInt(document.getElementById('bab').value) || 0;
+        let armor = parseFloat(document.getElementById('armorBonus').value) || 0;
+        let shield = parseFloat(document.getElementById('shieldBonus').value) || 0;
+        let natural = parseFloat(document.getElementById('naturalArmor').value) || 0;
+        let miscAc = parseFloat(document.getElementById('miscAc').value) || 0;
+        let size = parseInt(document.getElementById('sizeAc').value) || 0;
+        let ac = 10 + armor + shield + natural + dexMod + size + miscAc;
+        let touch = 10 + dexMod + size + miscAc;
+        let flat = 10 + armor + shield + natural + size + miscAc;
+        document.getElementById('acTotal').innerText = ac;
+        document.getElementById('touchTotal').innerText = touch;
+        document.getElementById('flatTotal').innerText = flat;
+        // инициатива
+        let initMisc = parseInt(document.getElementById('initMiscEdit')?.value) || 0;
+        let init = dexMod + initMisc;
+        document.getElementById('initTotal').innerText = init;
+        // спасброски (база от воина 9: стойка +6, реф +3, воля +3 + мудрость)
+        let fortBase = 6, refBase = 3, willBase = 3;
+        let fort = fortBase + conMod;
+        let ref = refBase + dexMod;
+        let will = willBase + wisMod;
+        document.getElementById('fortTotal').innerText = fort;
+        document.getElementById('refTotal').innerText = ref;
+        document.getElementById('willTotal').innerText = will;
+        // атаки
+        let melee = bab + strMod;
+        let ranged = bab + dexMod;
+        document.getElementById('meleeAttack').innerText = melee;
+        document.getElementById('rangedAttack').innerText = ranged;
+        let cmb = bab + strMod + size;
+        let cmd = 10 + bab + strMod + dexMod + size;
+        document.getElementById('cmbTotal').innerText = cmb;
+        document.getElementById('cmdTotal').innerText = cmd;
+        document.getElementById('cmdFlat').innerText = 10 + bab + strMod + size;
+        // скорость
+        let spd = parseInt(document.getElementById('speedBase').value) || 30;
+        document.getElementById('speedTotal').innerText = spd;
+        // нагрузка
+        updateLoadStatus();
+    }
+
+    // навыки (основные + побочные)
+    const mainSkills = [
+        "Акробатика (ЛВК)","Блеф (ХАР)","Верховая езда (ЛВК)","Внимание (МДР)","Выживание (МДР)",
+        "Дипломатия (ХАР)","Запугивание (ХАР)","Знание (краевед.)(ИНТ)","Знание (магия)(ИНТ)","Знание (планы)(ИНТ)",
+        "Знание (подзем.)(ИНТ)","Знание (природа)(ИНТ)","Знание (религия)(ИНТ)","Изворотливость (ЛВК)",
+        "Исп.маг.устр.(ХАР)","Колдовство (ИНТ)","Лазание (СИЛ)","Лечение (МДР)","Маскировка (ХАР)",
+        "Механика (ЛВК)","Плавание (СИЛ)","Полёт (ЛВК)","Проницательность (МДР)","Скрытность (ЛВК)"
+    ];
+    const secSkills = ["Дрессировка (ХАР)","Ловкость рук (ЛВК)","Оценка (ИНТ)","Языкознание (ИНТ)",
+        "Знание (выс.свет)(ИНТ)","Знание (география)(ИНТ)","Знание (история)(ИНТ)","Знание (инж.дело)(ИНТ)",
+        "Ремесло (оружейник)(ИНТ)","Ремесло (плотник)(ИНТ)","Профессия (повар)(МДР)"];
+    let skillRanks = {};
+    let skillClass = {};
+
+    function buildSkillTables() {
+        function renderTable(skills, tableId, acpAffected = true) {
+            let tbody = document.querySelector(`#${tableId} tbody`);
+            tbody.innerHTML = '';
+            skills.forEach(skill => {
+                let key = skill.replace(/[()]/g,'').replace(/\s/g,'_');
+                let rank = skillRanks[key] || 0;
+                let isClass = skillClass[key] || (skill.includes("Внимание")||skill.includes("Запугивание")?true:false);
+                let abilityAbbr = skill.match(/\((.*?)\)/)[1];
+                let abMap = {ЛВК:'dex',СИЛ:'str',ВЫН:'con',ИНТ:'int',МДР:'wis',ХАР:'cha'};
+                let abStat = abMap[abilityAbbr] || 'int';
+                let mod = getMod(abStat);
+                let acp = 0;
+                if(acpAffected && (skill.includes("Акробатика")||skill.includes("Лазание")||skill.includes("Плавание")||skill.includes("Скрытность")||skill.includes("Изворотливость")||skill.includes("Механика")))
+                    acp = parseInt(document.getElementById('armorCheckPenalty').value) || 0;
+                let classBonus = (isClass && rank>0) ? 3 : 0;
+                let total = mod + rank + classBonus + acp;
+                let row = `<tr><td>${skill}</td><td><input type="number" class="small-input skill-rank" data-skill="${key}" value="${rank}" min="0" max="20"></td>
+                <td><input type="checkbox" class="skill-class" data-skill="${key}" ${isClass?'checked':''}></td>
+                <td>${acp!=0?acp:''}</td><td><strong>${total}</strong></td></tr>`;
+                tbody.insertAdjacentHTML('beforeend',row);
+            });
+            attachSkillEvents();
+        }
+        renderTable(mainSkills, 'skillsTableMain', true);
+        renderTable(secSkills, 'skillsTableSec', false);
+    }
+    function attachSkillEvents() {
+        document.querySelectorAll('.skill-rank').forEach(inp => {
+            inp.addEventListener('change', (e) => { skillRanks[e.target.dataset.skill] = parseInt(e.target.value)||0; saveToLocal(); buildSkillTables(); recalcDerivedStats();});
+        });
+        document.querySelectorAll('.skill-class').forEach(ch => {
+            ch.addEventListener('change', (e) => { skillClass[e.target.dataset.skill] = e.target.checked; saveToLocal(); buildSkillTables(); recalcDerivedStats();});
+        });
+    }
+
+    // оружие динамическое
+    let weapons = [{name:"Жнец-коса", attack:"+14/+9", damage:"2d4+7", critical:"20/x4"},{name:"Композитный длинный лук", attack:"+12/+7", damage:"1d8+4", critical:"20/x3"}];
+    function renderWeapons() {
+        let container = document.getElementById('weaponsList');
+        container.innerHTML = '';
+        weapons.forEach((w, idx) => {
+            let div = document.createElement('div');
+            div.className = 'weapon-row';
+            div.innerHTML = `<input type="text" value="${w.name}" placeholder="оружие" style="width:130px"><input type="text" value="${w.attack}" style="width:70px"><input type="text" value="${w.damage}" style="width:80px"><input type="text" value="${w.critical}" style="width:70px"><button data-widx="${idx}" class="delWeapon">🗑️</button>`;
+            container.appendChild(div);
+        });
+        document.querySelectorAll('.delWeapon').forEach(btn => {
+            btn.addEventListener('click', (e) => { let idx = e.target.dataset.widx; weapons.splice(idx,1); renderWeapons(); saveToLocal(); });
+        });
+    }
+    function addWeapon() { weapons.push({name:"Новое оружие", attack:"+0", damage:"1d6", critical:"20/x2"}); renderWeapons(); saveToLocal();}
+
+    function updateLoadStatus() {
+        let strScore = abilities.str.base + abilities.str.temp;
+        let light = strScore * 3, medium = strScore * 6, heavy = strScore * 10;
+        document.getElementById('lightLoad').innerText = light;
+        document.getElementById('mediumLoad').innerText = medium;
+        document.getElementById('heavyLoad').innerText = heavy;
+        let curWeight = parseInt(document.getElementById('manualWeight').value) || 0;
+        document.getElementById('totalWeight').innerText = curWeight;
+        let status = curWeight <= light ? "Лёгкая" : (curWeight <= medium ? "Средняя" : "Тяжёлая");
+        document.getElementById('loadStatus').innerText = status;
+    }
+
+    // сохранение / загрузка
+    function saveToLocal() {
+        let data = {
+            abilities, skillRanks, skillClass, weapons, ...Object.fromEntries(new Map([
+                ['level',document.getElementById('level').value],['class',document.getElementById('class').value],['bab',document.getElementById('bab').value],
+                ['hpMax',document.getElementById('hpMax').value],['hpCurr',document.getElementById('hpCurr').value],['armorBonus',document.getElementById('armorBonus').value],
+                ['shieldBonus',document.getElementById('shieldBonus').value],['naturalArmor',document.getElementById('naturalArmor').value],['miscAc',document.getElementById('miscAc').value],
+                ['sizeAc',document.getElementById('sizeAc').value],['armorCheckPenalty',document.getElementById('armorCheckPenalty').value],['gold',document.getElementById('gold').value],
+                ['silver',document.getElementById('silver').value],['copper',document.getElementById('copper').value],['charName',document.getElementById('charName').value],
+                ['personality',document.getElementById('personality').value],['biography',document.getElementById('biography').value],['wornItems',document.getElementById('wornItems').value],
+                ['backpackItems',document.getElementById('backpackItems').value],['manualWeight',document.getElementById('manualWeight').value],['combatFeats',document.getElementById('combatFeats').value],
+                ['traits',document.getElementById('traits').value],['featsList',document.getElementById('featsList').value],['adventureLog',document.getElementById('adventureLog').value]
+            ]))
+        };
+        localStorage.setItem('pfCharSheet', JSON.stringify(data));
+    }
+    function loadFromLocal() {
+        let saved = localStorage.getItem('pfCharSheet');
+        if(saved) {
+            let d = JSON.parse(saved);
+            if(d.abilities) abilities = d.abilities;
+            if(d.skillRanks) skillRanks = d.skillRanks;
+            if(d.skillClass) skillClass = d.skillClass;
+            if(d.weapons) weapons = d.weapons;
+            for(let [k,v] of Object.entries(d)) { let el = document.getElementById(k); if(el && typeof v !== 'object') el.value = v; }
+            renderAbilities(); buildSkillTables(); renderWeapons(); recalcDerivedStats(); updateLoadStatus();
+        }
+    }
+    function resetToYudo() {
+        abilities = { str:{base:18,temp:0}, dex:{base:14,temp:0}, con:{base:16,temp:0}, int:{base:10,temp:0}, wis:{base:12,temp:2}, cha:{base:10,temp:0} };
+        skillRanks = {}; skillClass = {};
+        weapons = [{name:"Жнец-коса (адамантин)", attack:"+14/+9", damage:"2d4+7", critical:"20/x4"},{name:"Композитный лук +3", attack:"+13/+8", damage:"1d8+5", critical:"20/x3"}];
+        document.getElementById('level').value = 9; document.getElementById('bab').value = 9; document.getElementById('hpMax').value = 89; document.getElementById('hpCurr').value = 89;
+        document.getElementById('armorBonus').value = 9; document.getElementById('shieldBonus').value = 1; document.getElementById('naturalArmor').value = 1; document.getElementById('miscAc').value = 1;
+        document.getElementById('manualWeight').value = 78; document.getElementById('charName').value = "Юдард Ари (Чудо-Юдо)";
+        renderAbilities(); buildSkillTables(); renderWeapons(); recalcDerivedStats(); updateLoadStatus(); saveToLocal();
+    }
+
+    // инициализация
+    window.onload = () => {
+        renderAbilities(); buildSkillTables(); renderWeapons();
+        document.getElementById('addWeapon').addEventListener('click', addWeapon);
+        document.getElementById('saveBtn').addEventListener('click', () => { saveToLocal(); alert("Сохранено!"); });
+        document.getElementById('resetBtn').addEventListener('click', resetToYudo);
+        document.getElementById('calcWeightBtn').addEventListener('click', updateLoadStatus);
+        document.getElementById('bab').addEventListener('change', recalcDerivedStats);
+        document.getElementById('armorBonus').addEventListener('change', recalcDerivedStats);
+        document.getElementById('shieldBonus').addEventListener('change', recalcDerivedStats);
+        document.getElementById('naturalArmor').addEventListener('change', recalcDerivedStats);
+        document.getElementById('miscAc').addEventListener('change', recalcDerivedStats);
+        document.getElementById('speedBase').addEventListener('change', recalcDerivedStats);
+        document.getElementById('initMiscEdit')?.addEventListener('change', recalcDerivedStats);
+        loadFromLocal();
+        // вкладки
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+                btn.classList.add('active');
+                document.getElementById(btn.dataset.tab).classList.add('active');
+            });
+        });
+        if(!document.getElementById('initMiscEdit')) {
+            let span = document.createElement('span');
+            span.innerHTML = `<input type="number" id="initMiscEdit" value="1" style="width:60px">`;
+            document.querySelector('#initTotal').parentElement.appendChild(span);
+        }
+        recalcDerivedStats();
+    };
+</script>
+</body>
+</html>

@@ -1,0 +1,58 @@
+[
+  {
+    "id": 1,
+    "login": "admin",
+    "pass": "admin",
+    "name": "Анна Соколова",
+    "role": "admin",
+    "phone": "+7 495 120-30-40",
+    "email": "a.sokolova@grk-horizon.ru"
+  },
+  {
+    "id": 2,
+    "login": "hr",
+    "pass": "hr",
+    "name": "Марина Ковалёва",
+    "role": "hr",
+    "phone": "+7 495 120-30-41",
+    "email": "m.kovaleva@grk-horizon.ru"
+  },
+  {
+    "id": 3,
+    "login": "employer",
+    "pass": "employer",
+    "name": "Усольский калийный комбинат",
+    "role": "employer",
+    "company_id": 1,
+    "phone": "+7 342 200-10-10",
+    "email": "hr@ukk-horizon.ru"
+  },
+  {
+    "id": 4,
+    "login": "employer2",
+    "pass": "employer2",
+    "name": "Волга-Калий",
+    "role": "employer",
+    "company_id": 2,
+    "phone": "+7 845 234-56-78",
+    "email": "hr@volgakaliy.ru"
+  },
+  {
+    "id": 5,
+    "login": "candidate",
+    "pass": "candidate",
+    "name": "Дмитрий Орлов",
+    "role": "candidate",
+    "phone": "+7 912 555-77-88",
+    "email": "d.orlov@mail.ru"
+  },
+  {
+    "id": 6,
+    "login": "guest",
+    "pass": "guest",
+    "name": "Гость",
+    "role": "guest",
+    "phone": "",
+    "email": ""
+  }
+]

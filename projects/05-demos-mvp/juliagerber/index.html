@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Юлия Гербер — бизнес-тренер по продажам</title>
+  <!-- Подключаем оригинальные стили и шрифты с вашего сервера -->
+  <link rel="stylesheet" href="https://юлиягербер.рф/t/v681/images/mosaic/designs/design-indrndv9t-1688982590_styles.css">
+  <link rel="stylesheet" href="https://юлиягербер.рф/g/s3/mosaic/css/ms_site_default.css">
+  <script src="https://юлиягербер.рф/g/libs/jquery/1.10.2/jquery.min.js"></script>
+  <style>
+    /* Дополнительные отступы для контейнеров — чтобы не прилипало к краям */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+    @media (max-width: 768px) {
+      .container { padding: 0 15px; }
+    }
+    /* Кнопки, карточки — наследуют стили вашего сайта */
+    .btn-orange {
+      background: #ff6b00;
+      color: #fff;
+      padding: 12px 24px;
+      border-radius: 4px;
+      text-decoration: none;
+      display: inline-block;
+      font-weight: bold;
+    }
+    .btn-outline {
+      border: 1px solid #ff6b00;
+      color: #ff6b00;
+      padding: 12px 24px;
+      border-radius: 4px;
+      text-decoration: none;
+      display: inline-block;
+    }
+    .card {
+      background: #1c1d22;
+      border-radius: 16px;
+      overflow: hidden;
+      transition: transform 0.2s;
+    }
+    .card:hover { transform: translateY(-5px); }
+  </style>
+</head>
+<body>
+
+<div class="mosaic-wrap">
+  <!-- ШАПКА (как на оригинале) -->
+  <div style="background:#0b0c10; padding:20px 0;">
+    <div class="container" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:15px;">
+      <div>
+        <div style="font-size:24px; font-weight:bold; color:#fff;">Юлия Гербер</div>
+        <div style="color:#aaa;">Бизнес-тренер. Увеличиваю продажи через обучение команд</div>
+      </div>
+      <div style="display:flex; gap:20px; align-items:center;">
+        <a href="tel:+79623830224" style="color:#fff; text-decoration:none;">+7 (962) 383-02-24</a>
+        <a href="#" class="btn-orange" id="callRequestBtn">Онлайн заявка</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ГЕРОЙ (с ВАШИМ фото) -->
+  <div style="background:#0b0c10; padding:60px 0;">
+    <div class="container" style="display:flex; align-items:center; gap:40px; flex-wrap:wrap;">
+      <div style="flex:1;">
+        <h1 style="font-size:48px; color:#fff; margin-bottom:20px;">Ваши менеджеры <span style="color:#ff6b00;">сливают сделки</span> на возражениях?</h1>
+        <p style="font-size:20px; color:#ccc; margin-bottom:30px;">Внедряю системное обучение продажам и управлению, которое увеличивает конверсию и выручку. <strong>Результат за 4–8 недель</strong>.</p>
+        <div style="display:flex; gap:20px; flex-wrap:wrap;">
+          <a href="#" class="btn-orange" id="caseBtn">Разобрать ваш кейс →</a>
+          <a href="#" class="btn-outline" id="checklistBtn">Чек-лист РОПа</a>
+        </div>
+      </div>
+      <div style="flex:1; text-align:center;">
+        <!-- ВАШЕ реальное изображение (полный URL) -->
+        <img src="https://юлиягербер.рф/thumb/2/woj65CQAZf2jZKj4ZrZrAg/r/d/tpl25_young_woman55.png" alt="Юлия Гербер" style="max-width:100%; border-radius:20px;">
+      </div>
+    </div>
+  </div>
+
+  <!-- БЛОК «БОЛИ» (для кого) -->
+  <div style="background:#111215; padding:60px 0;">
+    <div class="container">
+      <h2 style="text-align:center; color:#fff; font-size:36px; margin-bottom:50px;">Это для вас, если:</h2>
+      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px,1fr)); gap:30px;">
+        <div class="card" style="padding:30px;">
+          <div style="font-size:32px; color:#ff6b00;">01</div>
+          <h3 style="color:#fff;">Собственник бизнеса</h3>
+          <p style="color:#ccc;">Устали контролировать каждый шаг отдела продаж. Продажи — чёрный ящик, план не выполняется.</p>
+        </div>
+        <div class="card" style="padding:30px;">
+          <div style="font-size:32px; color:#ff6b00;">02</div>
+          <h3 style="color:#fff;">Руководитель отдела продаж</h3>
+          <p style="color:#ccc;">Команда сливает сделки на возражениях, нет единой методики, менеджеры «варятся в соку».</p>
+        </div>
+        <div class="card" style="padding:30px;">
+          <div style="font-size:32px; color:#ff6b00;">03</div>
+          <h3 style="color:#fff;">Коммерческий директор</h3>
+          <p style="color:#ccc;">Нужна масштабируемая система управления продажами во всех филиалах.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- НАПРАВЛЕНИЯ (с вашими картинками — абсолютные ссылки) -->
+  <div style="background:#0b0c10; padding:60px 0;">
+    <div class="container">
+      <h2 style="text-align:center; color:#fff; font-size:36px;">Что я предлагаю</h2>
+      <p style="text-align:center; color:#aaa; max-width:700px; margin:0 auto 50px;">Индивидуальные и корпоративные программы</p>
+      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(300px,1fr)); gap:30px;">
+        <!-- Тренинги -->
+        <div class="card">
+          <img src="https://юлиягербер.рф/thumb/2/KoI9K0BfmqT8bXk_g9JOPw/2000r1333/d/2663f15f-d087-41e2-8587-9d2337f2febc.webp" style="width:100%; height:200px; object-fit:cover;">
+          <div style="padding:25px;">
+            <h3 style="color:#ff6b00;">Тренинги по продажам</h3>
+            <p style="color:#ccc;">Практикумы с отработкой в полях. Навыки → деньги.</p>
+            <a href="#" class="btn-outline" style="display:inline-block; margin-top:10px;" id="trainingBtn">Подробнее</a>
+          </div>
+        </div>
+        <!-- Коучинг -->
+        <div class="card">
+          <img src="https://юлиягербер.рф/thumb/2/Wn0skPNaNk-ai0aCWguCww/2000r1333/d/stp25_55208259_2.jpg" style="width:100%; height:200px; object-fit:cover;">
+          <div style="padding:25px;">
+            <h3 style="color:#ff6b00;">Коучинг для бизнеса</h3>
+            <p style="color:#ccc;">Индивидуальная работа с руководителями. Прорыв за 2–6 мес.</p>
+            <a href="#" class="btn-outline" style="display:inline-block; margin-top:10px;" id="coachBtn">Подробнее</a>
+          </div>
+        </div>
+        <!-- Командные сессии -->
+        <div class="card">
+          <img src="https://юлиягербер.рф/thumb/2/fKParvuIyzjxsHZPRXb9WA/2000r1333/d/71d4d282-8b6f-40ca-a935-117cf8b31877.webp" style="width:100%; height:200px; object-fit:cover;">
+          <div style="padding:25px;">
+            <h3 style="color:#ff6b00;">Командные сессии</h3>
+            <p style="color:#ccc;">Синхронизация отделов, снятие конфликтов, дорожная карта.</p>
+            <a href="#" class="btn-outline" style="display:inline-block; margin-top:10px;" id="sessionBtn">Подробнее</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- РЕЗУЛЬТАТЫ (цифры) -->
+  <div style="background:#111215; padding:60px 0;">
+    <div class="container">
+      <h2 style="text-align:center; color:#fff; font-size:36px;">Результаты, которые мы получаем</h2>
+      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px,1fr)); gap:30px; margin-top:40px;">
+        <div style="text-align:center;">
+          <div style="font-size:48px; font-weight:bold; color:#ff6b00;">+38%</div>
+          <p style="color:#ccc;">выручки через 6 месяцев</p>
+        </div>
+        <div style="text-align:center;">
+          <div style="font-size:48px; font-weight:bold; color:#ff6b00;">2,5x</div>
+          <p style="color:#ccc;">рост конверсии из лида в сделку</p>
+        </div>
+        <div style="text-align:center;">
+          <div style="font-size:48px; font-weight:bold; color:#ff6b00;">-40%</div>
+          <p style="color:#ccc;">времени на подготовку к переговорам</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ФОРМА ЗАХВАТА (улучшенная) -->
+  <div style="background:#0b0c10; padding:80px 0;">
+    <div class="container">
+      <div style="max-width:600px; margin:0 auto; background:#1c1d22; padding:40px; border-radius:24px; text-align:center;">
+        <h2 style="color:#fff;">Получите программу под ваш отдел</h2>
+        <p style="color:#ccc;">Ответьте на 4 вопроса — я подготовлю предложение с прогнозом KPI</p>
+        <form id="leadForm">
+          <input type="text" name="name" placeholder="Ваше имя" style="width:100%; padding:12px; margin-bottom:15px; background:#2a2b30; border:none; color:#fff; border-radius:8px;">
+          <input type="tel" name="phone" placeholder="Телефон *" required style="width:100%; padding:12px; margin-bottom:15px; background:#2a2b30; border:none; color:#fff; border-radius:8px;">
+          <button type="submit" class="btn-orange" style="width:100%; border:none;">Получить предложение</button>
+          <label style="display:flex; align-items:center; gap:8px; margin-top:15px; color:#aaa; font-size:12px;">
+            <input type="checkbox" required> Я согласен с <a href="/user/agreement" target="_blank" style="color:#ff6b00;">обработкой данных</a>
+          </label>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- ФУТЕР -->
+  <div style="background:#050608; padding:40px 0; text-align:center; color:#aaa;">
+    <div class="container">
+      <div>© 2026 Юлия Гербер. Бизнес-тренер по продажам и управлению.</div>
+      <div style="margin-top:15px;"><a href="/user/agreement" style="color:#ff6b00;">Политика конфиденциальности</a></div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Эмуляция открытия попапов (можно заменить на ваши реальные ID)
+  document.querySelectorAll('#callRequestBtn, #caseBtn, #checklistBtn, #trainingBtn, #coachBtn, #sessionBtn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      alert('Здесь будет открытие попапа (например, ixbu9jm6t_0). Вы можете привязать к вашим реальным формам.');
+    });
+  });
+  // Простая отправка формы (можно заменить на AJAX)
+  document.getElementById('leadForm')?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    alert('Форма отправлена. Спасибо!');
+  });
+</script>
+
+</body>
+</html>

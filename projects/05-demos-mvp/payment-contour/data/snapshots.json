@@ -1,0 +1,30 @@
+[
+  {
+    "id": 1,
+    "order_id": 1,
+    "order_number": "ORD-00001",
+    "client_id": 1,
+    "at": "2026-08-10 11:42:00",
+    "payment_id": 1,
+    "amount": 299000.00,
+    "status": "paid",
+    "items": [
+      { "name": "Диван «Манчестер» 3-местный", "price": 89000.00, "qty": 1 },
+      { "name": "Кухня «Токио» 2,4 м", "price": 210000.00, "qty": 1 }
+    ]
+  },
+  {
+    "id": 2,
+    "order_id": 2,
+    "order_number": "ORD-00002",
+    "client_id": 2,
+    "at": "2026-08-12 15:03:00",
+    "payment_id": 2,
+    "amount": 187000.00,
+    "status": "paid",
+    "items": [
+      { "name": "Шкаф-купе «Лофт» 3 м", "price": 145000.00, "qty": 1 },
+      { "name": "Комод «Сканди» 4 ящика", "price": 42000.00, "qty": 1 }
+    ]
+  }
+]

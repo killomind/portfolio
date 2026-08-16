@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Отчёт о трудозатратах</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background: #f5f7fa;
+            color: #1A2C3E;
+            line-height: 1.6;
+            padding: 20px;
+        }
+        .container { max-width: 750px; margin: 0 auto; }
+        .header {
+            background: white;
+            padding: 32px 32px 24px;
+            border-radius: 24px 24px 0 0;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+            border-bottom: 1px solid #E9EDF2;
+            margin-bottom: 0;
+        }
+        .logo-line { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+        .logo-line img { height: 40px; width: auto; }
+        .logo-text { font-size: 1.3rem; font-weight: 600; color: #0B2A41; }
+        .logo-text .middot { font-weight: 500; margin: 0 2px; }
+        .header h1 { font-size: 1.7rem; font-weight: 700; margin: 8px 0 4px; color: #0B2A41; }
+        .header .subtitle { font-size: 0.95rem; color: #4A6A85; }
+        .card {
+            background: white;
+            padding: 28px 32px;
+            border-radius: 0 0 24px 24px;
+            box-shadow: 0 12px 28px -8px rgba(0,0,0,0.06);
+        }
+        .date-block {
+            margin-bottom: 24px;
+            border-bottom: 1px solid #EEE;
+            padding-bottom: 16px;
+        }
+        .date-header {
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            margin-bottom: 8px;
+        }
+        .date-header .day {
+            font-weight: 700;
+            font-size: 1rem;
+            color: #0B2A41;
+        }
+        .date-header .day i {
+            color: #0066CC;
+            margin-right: 6px;
+        }
+        .date-header .hours {
+            background: #E6F0FF;
+            padding: 4px 12px;
+            border-radius: 100px;
+            font-weight: 600;
+            color: #0066CC;
+            font-size: 0.85rem;
+        }
+        .description {
+            color: #2C3E50;
+            margin-bottom: 6px;
+        }
+        .day-sum {
+            font-size: 0.85rem;
+            color: #4A6A85;
+            font-weight: 500;
+        }
+        .total-block {
+            margin-top: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #F0F7FF;
+            padding: 16px 20px;
+            border-radius: 16px;
+            border: 1px solid #D6E6FF;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .total-label {
+            font-weight: 700;
+            color: #0B2A41;
+        }
+        .total-amount {
+            font-weight: 700;
+            font-size: 1.3rem;
+            color: #0066CC;
+            background: white;
+            padding: 6px 18px;
+            border-radius: 100px;
+            border: 1px solid #D6E6FF;
+        }
+        .footer-note {
+            margin-top: 24px;
+            font-size: 0.9rem;
+            color: #4A6A85;
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+        }
+        .footer-note i { color: #0066CC; margin-top: 2px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo-line">
+                <span class="logo-text">Исполнитель<span class="middot"> · </span>Пример</span>
+            </div>
+            <h1>Отчёт о трудозатратах</h1>
+            <div class="subtitle">Сводка за период (демо-пример, данные обезличены)</div>
+        </div>
+
+        <div class="card">
+            <div class="date-block">
+                <div class="date-header">
+                    <span class="day"><i class="fas fa-calendar-alt"></i> День 1 (пн)</span>
+                    <span class="hours">4,5 часа</span>
+                </div>
+                <div class="description">
+                    Анализ окружения и кода, настройка доступа, изучение структуры проекта,
+                    поиск целевых компонентов, исследование БД и моделей.
+                </div>
+                <div class="day-sum">Ставка × 4,5 = сумма 1</div>
+            </div>
+
+            <div class="date-block">
+                <div class="date-header">
+                    <span class="day"><i class="fas fa-calendar-alt"></i> День 2 (вт)</span>
+                    <span class="hours">5 часов</span>
+                </div>
+                <div class="description">
+                    Внедрение наработок, доработка API-ресурса, уточнение вопросов
+                    по статусу и архитектуре.
+                </div>
+                <div class="day-sum">Ставка × 5 = сумма 2</div>
+            </div>
+
+            <div class="date-block">
+                <div class="date-header">
+                    <span class="day"><i class="fas fa-calendar-alt"></i> День 3 (ср)</span>
+                    <span class="hours">4,5 часа</span>
+                </div>
+                <div class="description">
+                    Тестирование и доводка: сортировка, устранение ошибок,
+                    проверка пагинации, финальная сборка.
+                </div>
+                <div class="day-sum">Ставка × 4,5 = сумма 3</div>
+            </div>
+
+            <div class="total-block">
+                <span class="total-label">Итого: N часов</span>
+                <span class="total-amount">Итого: сумма</span>
+            </div>
+
+            <div class="footer-note">
+                <i class="fas fa-check-circle"></i>
+                <span>Все изменения выполнены по архитектурным паттернам проекта.
+                Готов предоставить детализацию.</span>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

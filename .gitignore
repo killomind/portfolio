@@ -1,0 +1,33 @@
+# macOS
+.DS_Store
+
+# Логи, временные файлы
+*.log
+tmp/
+temp/
+
+# Секреты (на всякий случай — не должны попасть в публичный репозиторий)
+*.env
+deploy.env
+.env.*
+*.pem
+*_token*.txt
+vk_token.txt
+
+# Личные данные
+contacts.csv
+*.key
+
+# Зависимости / сборка (если вдруг попадут в подпапки)
+node_modules/
+vendor/
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Локальные выгрузки данных
+input/
+output/
+logs/
+images/

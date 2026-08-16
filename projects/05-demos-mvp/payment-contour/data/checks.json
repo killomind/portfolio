@@ -1,0 +1,22 @@
+[
+  {
+    "id": 1,
+    "payment_id": 1,
+    "order_id": 1,
+    "amount": 299000.00,
+    "type": "sale",
+    "fn": "CHECK-8A3F1B2C",
+    "fiscal": "ФФД 1.2 — фискализирован",
+    "at": "2026-08-10 11:42:00"
+  },
+  {
+    "id": 2,
+    "payment_id": 2,
+    "order_id": 2,
+    "amount": 187000.00,
+    "type": "sale",
+    "fn": "CHECK-9D4E2C3D",
+    "fiscal": "ФФД 1.2 — фискализирован",
+    "at": "2026-08-12 15:03:00"
+  }
+]

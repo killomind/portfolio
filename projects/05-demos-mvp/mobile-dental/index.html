@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=yes">
+    <title>Дентал Клиник — Мобильное приложение пациента</title>
+    <!-- Font Awesome 6 (free) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Google Fonts: Inter & Roboto для чистоты -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #e9f0f5;
+            font-family: 'Inter', sans-serif;
+            padding: 20px 12px 40px;
+            color: #1e2a3e;
+        }
+
+        /* мобильная карточка-обёртка */
+        .app-container {
+            max-width: 500px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: 32px;
+            box-shadow: 0 20px 35px -12px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* хедер с градиентом */
+        .header {
+            background: linear-gradient(135deg, #0077b6 0%, #00b4aa 100%);
+            padding: 24px 20px 20px;
+            color: white;
+        }
+        .clinic-name {
+            font-size: 1.65rem;
+            font-weight: 700;
+            letter-spacing: -0.3px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .clinic-name i {
+            font-size: 1.8rem;
+            background: rgba(255,255,255,0.2);
+            padding: 8px;
+            border-radius: 30px;
+        }
+        .location {
+            font-size: 0.85rem;
+            opacity: 0.9;
+            margin-top: 8px;
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .map-tag {
+            background: rgba(255,255,255,0.2);
+            border-radius: 40px;
+            padding: 4px 12px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            cursor: default;
+        }
+        .integration-badge {
+            background: #ffffff20;
+            backdrop-filter: blur(2px);
+            border-radius: 30px;
+            padding: 6px 12px;
+            font-size: 0.7rem;
+            font-weight: 500;
+            margin-top: 12px;
+            display: inline-block;
+        }
+
+        /* общие стили */
+        .section {
+            padding: 0 20px 16px;
+            border-bottom: 8px solid #f4f9fe;
+        }
+        .section-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #0f2b3d;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 16px;
+            padding-top: 8px;
+        }
+        .section-title i {
+            color: #0077b6;
+            font-size: 1.3rem;
+        }
+        .card {
+            background: #ffffff;
+            border-radius: 24px;
+            box-shadow: 0 5px 12px rgba(0, 0, 0, 0.03), 0 1px 2px rgba(0, 0, 0, 0.05);
+            padding: 16px;
+            margin-bottom: 16px;
+            border: 1px solid #eef2f8;
+        }
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            flex-wrap: wrap;
+            margin-bottom: 12px;
+            font-size: 0.9rem;
+        }
+        .info-label {
+            font-weight: 500;
+            color: #5b6f82;
+        }
+        .info-value {
+            font-weight: 600;
+            color: #1e2f3f;
+        }
+        .badge {
+            background: #eef2ff;
+            padding: 4px 12px;
+            border-radius: 40px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+        .grid-2col {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .stat-card {
+            flex: 1;
+            background: #f8fbfe;
+            border-radius: 20px;
+            padding: 12px;
+            text-align: center;
+        }
+        .stat-number {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: #0077b6;
+        }
+        hr {
+            margin: 16px 0;
+            border: none;
+            border-top: 1px solid #e9edf2;
+        }
+        .payment-table, .bonus-table {
+            width: 100%;
+            font-size: 0.8rem;
+            border-collapse: collapse;
+        }
+        .payment-table th, .bonus-table th {
+            text-align: left;
+            padding: 8px 4px 4px 0;
+            font-weight: 600;
+            color: #3b5c7a;
+        }
+        .payment-table td, .bonus-table td {
+            padding: 8px 4px 8px 0;
+            border-bottom: 1px solid #ecf3f8;
+        }
+        .installment-plan {
+            background: #eef6fc;
+            border-radius: 20px;
+            padding: 12px;
+            margin: 12px 0;
+        }
+        .notification-item {
+            background: #ffffff;
+            border-radius: 18px;
+            padding: 14px;
+            margin-bottom: 12px;
+            border-left: 5px solid #00b4aa;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            transition: all 0.1s ease;
+        }
+        .notification-title {
+            font-weight: 700;
+            font-size: 0.9rem;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        .notification-desc {
+            font-size: 0.8rem;
+            color: #3c5a73;
+            margin-top: 6px;
+            padding-left: 28px;
+        }
+        .note-dms {
+            background: #fff7e5;
+            border-radius: 14px;
+            padding: 8px 12px;
+            font-size: 0.7rem;
+            color: #b85c00;
+            margin-top: 8px;
+        }
+        .btn-outline {
+            background: transparent;
+            border: 1px solid #bdd3e6;
+            border-radius: 40px;
+            padding: 8px 12px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: #2c6e9e;
+            margin-top: 8px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            cursor: default;
+        }
+        .footer-note {
+            background: #f9fafc;
+            padding: 16px 20px;
+            text-align: center;
+            font-size: 0.7rem;
+            color: #6f8eaa;
+        }
+        i.fa, i.far, i.fas {
+            width: 20px;
+        }
+        @media (max-width: 450px) {
+            .section {
+                padding: 0 16px 16px;
+            }
+            .stat-number {
+                font-size: 1.3rem;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="app-container">
+    <!-- Шапка с картой и локацией -->
+    <div class="header">
+        <div class="clinic-name">
+            <span>🦷 Дентал Профи</span>
+            <i class="fas fa-tooth"></i>
+        </div>
+        <div class="location">
+            <span><i class="fas fa-map-marker-alt"></i> Санкт-Петербург, Невский пр. 88</span>
+            <span class="map-tag"><i class="fas fa-map"></i> Показать на карте</span>
+        </div>
+        <div class="integration-badge">
+            <i class="fas fa-sync-alt"></i> Интеграция с МИС «Дентал Про»
+        </div>
+    </div>
+
+    <!-- ========== 1. ПРОФИЛЬ (личная информация) ========== -->
+    <div class="section">
+        <div class="section-title">
+            <i class="fas fa-user-circle"></i> <span>Профиль пациента</span>
+        </div>
+        <div class="card">
+            <div class="info-row"><span class="info-label">ФИО:</span><span class="info-value">Анна Викторовна Соколова</span></div>
+            <div class="info-row"><span class="info-label">Дата рождения:</span><span class="info-value">12.04.1985</span></div>
+            <div class="info-row"><span class="info-label">Телефон:</span><span class="info-value">+7 (921) 123-45-67</span></div>
+            <div class="info-row"><span class="info-label">Email:</span><span class="info-value">a.sokolova@email.ru</span></div>
+        </div>
+        
+        <!-- История посещений / приемов -->
+        <div class="section-title" style="margin-top: 4px;"><i class="fas fa-history"></i> История посещений</div>
+        <div class="card">
+            <div class="info-row"><span class="info-label">10.04.2025</span><span class="info-value">Врач: Кравченко М.И. — Осмотр, консультация</span></div>
+            <div class="info-row"><span class="info-label">18.03.2025</span><span class="info-value">Врач: Лебедева Е.А. — Лечение кариеса (зуб 36)</span></div>
+            <div class="info-row"><span class="info-label">05.02.2025</span><span class="info-value">Врач: Новиков Д.С. — Профессиональная гигиена</span></div>
+            <div class="info-row"><span class="info-label">12.01.2025</span><span class="info-value">Врач: Смирнова О.В. — Диагностика, снимок КЛКТ</span></div>
+        </div>
+
+        <!-- Планы лечения (согласованный и альтернативный) -->
+        <div class="section-title"><i class="fas fa-clinic-medical"></i> Планы лечения</div>
+        <div class="grid-2col">
+            <div class="card" style="flex:1; margin-bottom: 12px;">
+                <div><i class="fas fa-check-circle" style="color:#2b9348;"></i> <strong>Согласованный план</strong></div>
+                <div style="font-size:0.85rem; margin-top: 8px;">🔹 Имплантация зуба 46 (Nobel Biocare)<br>🔹 Коронка из диоксида циркония<br>🔹 Срок: май-июнь 2025<br>💰 68 500 ₽ (с учетом бонусов)</div>
+            </div>
+            <div class="card" style="flex:1; margin-bottom: 12px;">
+                <div><i class="fas fa-exchange-alt" style="color:#f4a261;"></i> <strong>Альтернативный план</strong></div>
+                <div style="font-size:0.85rem; margin-top: 8px;">🔸 Мостовидный протез (3 ед.)<br>🔸 Металлокерамика<br>🔸 Ориентировочная стоимость: 42 000 ₽<br>🔸 Возможна рассрочка</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== 2. РАСПИСАНИЕ И ЗАПИСЬ ========== -->
+    <div class="section">
+        <div class="section-title"><i class="fas fa-calendar-alt"></i> Расписание и запись</div>
+        <div class="card">
+            <div><strong>📅 Предстоящие приемы</strong></div>
+            <div class="info-row" style="margin-top: 12px;"><span>🗓️ 22.05.2025 | 10:30</span><span>Врач: Кравченко М.И. — Установка формирователя десны</span></div>
+            <div class="info-row"><span>🗓️ 05.06.2025 | 15:00</span><span>Врач: Лебедева Е.А. — Контрольный осмотр имплантата</span></div>
+            <div class="info-row"><span>🗓️ 18.06.2025 | 12:15</span><span>Врач: Стоматолог-ортопед — Снятие слепков</span></div>
+            <div class="btn-outline"><i class="fas fa-plus-circle"></i> Записаться на прием</div>
+        </div>
+    </div>
+
+    <!-- ========== 3. ФИНАНСЫ: авансы, долги, предстоящие оплаты, рассрочка, бонусы ========== -->
+    <div class="section">
+        <div class="section-title"><i class="fas fa-coins"></i> Финансы</div>
+        
+        <!-- Авансы, Долги, Предстоящие оплаты -->
+        <div class="grid-2col" style="margin-bottom: 12px;">
+            <div class="stat-card"><span class="info-label">💰 Аванс</span><div class="stat-number">5 200 ₽</div><span style="font-size:0.7rem;">внесен 10.04</span></div>
+            <div class="stat-card"><span class="info-label">⚠️ Долг</span><div class="stat-number" style="color:#d9534f;">12 350 ₽</div><span>по плану лечения</span></div>
+            <div class="stat-card"><span class="info-label">⏳ Предстоящие оплаты</span><div class="stat-number">7 800 ₽</div><span>до 30.05.2025</span></div>
+        </div>
+
+        <!-- Рассрочка (при наличии) -->
+        <div class="installment-plan">
+            <div><i class="fas fa-hand-holding-usd"></i> <strong>Рассрочка от клиники</strong> — лечение «Имплантация + коронка»</div>
+            <div class="info-row"><span>Общая сумма рассрочки:</span><span>68 500 ₽</span></div>
+            <div class="info-row"><span>Внесено:</span><span>20 000 ₽</span></div>
+            <div class="info-row"><span>Остаток к оплате:</span><span>48 500 ₽</span></div>
+            <div class="info-row"><span>Ежемесячный платеж:</span><span>8 083 ₽ (след. списание 10.06.2025)</span></div>
+            <div class="info-row"><span>Осталось платежей:</span><span>6</span></div>
+        </div>
+
+        <!-- Бонусная программа Лоялмед -->
+        <div class="card" style="background: linear-gradient(115deg, #f0f7ff, #ffffff);">
+            <div><i class="fas fa-gem" style="color:#e6b422;"></i> <strong>Баланс бонусных баллов Лоялмед</strong> <span style="float: right; font-size: 1.8rem; font-weight: 800;">2 480</span></div>
+            <div style="font-size:0.7rem; margin-top: 8px;">1 балл = 1 рубль на услуги клиники (кроме ДМС и материалов)</div>
+        </div>
+
+        <!-- История оплат с учетом скидок/бонусов (Исключены приемы по ДМС!) -->
+        <div class="section-title" style="margin-top: 8px;"><i class="fas fa-receipt"></i> История оплат</div>
+        <div class="card">
+            <div style="font-size:0.75rem; color:#2c6e2f; margin-bottom: 12px;"><i class="fas fa-ban"></i> Согласно настройкам, суммы по ДМС скрыты (не отображаются)</div>
+            <table class="payment-table">
+                <thead><tr><th>Дата</th><th>Услуга / Прием</th><th>Сумма с учетом скидок/бонусов</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>12.04.2025</td><td>Профессиональная гигиена <br><span style="font-size:0.7rem;">скидка 15% + бонусы -350</span></td><td>3 150 ₽</td></tr>
+                    <tr><td>20.03.2025</td><td>Лечение кариеса (зуб 36) <br><span style="font-size:0.7rem;">скидка по акции 10%</span></td><td>4 950 ₽</td></tr>
+                    <tr><td>05.02.2025</td><td>Консультация имплантолога <br><span style="font-size:0.7rem;">бонусы -200</span></td><td>1 300 ₽</td></tr>
+                    <tr><td>14.01.2025</td><td>КТ-диагностика <br><span style="font-size:0.7rem;">скидка 20%</span></td><td>2 400 ₽</td></tr>
+                </tbody>
+            </table>
+            <div class="note-dms"><i class="fas fa-info-circle"></i> Приемы по ДМС полностью исключены из истории (соответствует требованию безопасности данных).</div>
+        </div>
+
+        <!-- История бонусных баллов Лоялмед: начисление, списание, сгорание -->
+        <div class="section-title"><i class="fas fa-star-of-life"></i> История бонусов Лоялмед</div>
+        <div class="card">
+            <table class="bonus-table">
+                <thead><tr><th>Дата</th><th>Операция</th><th>Баллы</th></tr></thead>
+                <tbody>
+                    <tr><td>10.04.2025</td><td>Начисление за лечение (гигиена)</td><td style="color:#2b8c2e;">+320</td></tr>
+                    <tr><td>01.04.2025</td><td>Списание по акции «Улыбка»</td><td style="color:#c93a3a;">-150</td></tr>
+                    <tr><td>20.03.2025</td><td>Сгорание (неиспользованные за 2024)</td><td style="color:#c93a3a;">-80</td></tr>
+                    <tr><td>05.03.2025</td><td>Начисление за день рождения</td><td style="color:#2b8c2e;">+500</td></tr>
+                    <tr><td>18.02.2025</td><td>Начисление за прохождение профилактики</td><td style="color:#2b8c2e;">+200</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- ========== 4. PUSH-УВЕДОМЛЕНИЯ (полный спектр) ========== -->
+    <div class="section">
+        <div class="section-title"><i class="fas fa-bell"></i> Push-уведомления</div>
+        <div style="margin-bottom: 4px;">
+            <!-- 1. Напоминание о приёме / переносе / отмене -->
+            <div class="notification-item">
+                <div class="notification-title"><i class="fas fa-clock" style="color:#0096c7;"></i> Напоминание о приёме</div>
+                <div class="notification-desc">🦷 Завтра, 22.05 в 10:30 — приём у имплантолога Кравченко М.И. Не забудьте паспорт и снимки.</div>
+                <div style="font-size:0.7rem; margin-top: 6px; color:#7089a3;">📅 21.05.2025 14:00</div>
+            </div>
+            <div class="notification-item">
+                <div class="notification-title"><i class="fas fa-exchange-alt" style="color:#e85d04;"></i> Перенос приёма</div>
+                <div class="notification-desc">Ваш приём 05.06 перенесён на 07.06 в 11:30. Врач Лебедева Е.А. Приносим извинения.</div>
+                <div style="font-size:0.7rem; margin-top: 6px;">⏱️ 19.05.2025</div>
+            </div>
+            <!-- 2. Информация об акциях -->
+            <div class="notification-item">
+                <div class="notification-title"><i class="fas fa-tag" style="color:#f4a261;"></i> Акция месяца</div>
+                <div class="notification-desc">🔥 Скидка 25% на профессиональное отбеливание Zoom! Только до 10.06. Запишитесь сейчас.</div>
+            </div>
+            <!-- 3. Индивидуальные предложения -->
+            <div class="notification-item">
+                <div class="notification-title"><i class="fas fa-gift" style="color:#9c89b8;"></i> Индивидуальное предложение</div>
+                <div class="notification-desc">Анна Викторовна, для вас — бесплатная консультация ортодонта + 3D-планирование лечения (до 30.06).</div>
+            </div>
+            <!-- 4. Сгорание бонусов Лоялмед -->
+            <div class="notification-item">
+                <div class="notification-title"><i class="fas fa-fire" style="color:#d00000;"></i> Сгорание бонусов Лоялмед</div>
+                <div class="notification-desc">⚠️ 480 баллов сгорят 01.07.2025. Успейте использовать их на любые услуги клиники!</div>
+            </div>
+            <!-- 5. Постгарантийное обслуживание -->
+            <div class="notification-item">
+                <div class="notification-title"><i class="fas fa-shield-alt" style="color:#2a9d8f;"></i> Постгарантийное обслуживание</div>
+                <div class="notification-desc">Гарантия на коронку зуба 46 истекает через 14 дней (до 05.06.2025). Рекомендуем профилактический осмотр.</div>
+            </div>
+            <!-- 6. Персонализированные рекомендации -->
+            <div class="notification-item">
+                <div class="notification-title"><i class="fas fa-heartbeat" style="color:#e63946;"></i> Персональные рекомендации</div>
+                <div class="notification-desc">💡 На основе вашего плана лечения: не забывайте ирригатор и нить. Рекомендуем записаться на контроль гигиены через 2 месяца.</div>
+            </div>
+            <!-- дополнительно про отмену приёма (для полноты списка) -->
+            <div class="notification-item">
+                <div class="notification-title"><i class="fas fa-ban" style="color:#bc6c25;"></i> Отмена приёма</div>
+                <div class="notification-desc">Приём 18.05 был отменён по вашей просьбе. Для новой записи перейдите в раздел «Расписание».</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- блок дополнительной информации о демо-версии и соответствии требованиям -->
+    <div class="footer-note">
+        <i class="fas fa-mobile-alt"></i> Демо-версия мобильного приложения стоматологической клиники<br>
+        ✔️ Интеграция с МИС «Дентал Про» | ✔️ Бонусная программа Лоялмед | ✔️ История оплат без ДМС | ✔️ Рассрочка и push-уведомления
+    </div>
+</div>
+<!-- дополнительный маленький текст про исключение ДМС -->
+<div style="max-width:500px; margin: 12px auto 0; text-align: center; font-size: 11px; color: #6f8faa;">
+    <i class="fas fa-check-circle"></i> Финансовый раздел: суммы за приемы по ДМС исключены из истории оплат (соответствует техзаданию).
+</div>
+</body>
+</html>

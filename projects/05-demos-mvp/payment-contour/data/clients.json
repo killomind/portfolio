@@ -1,0 +1,6 @@
+[
+  { "id": 1, "name": "ООО «МебельГрад»", "email": "info@mebelgrad.ru", "phone": "+7 495 120-45-67" },
+  { "id": 2, "name": "ИП Соколова А. В.", "email": "sokolova@yandex.ru", "phone": "+7 903 778-12-90" },
+  { "id": 3, "name": "ООО «Интерьер Плюс»", "email": "hello@interiorplus.ru", "phone": "+7 812 340-22-11" },
+  { "id": 4, "name": "ЧП Ерёмин Д. С.", "email": "eremin@mail.ru", "phone": "+7 916 555-34-21" }
+]

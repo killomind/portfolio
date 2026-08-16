@@ -1,0 +1,7 @@
+[
+  {"id": 1, "login": "admin", "pass": "admin", "name": "Андрей Волков", "role": "admin", "phone": "+7 905 111-22-33", "email": "a.volkov@belaya-gora.ru"},
+  {"id": 2, "login": "manager", "pass": "manager", "name": "Елена Соколова", "role": "manager", "phone": "+7 905 222-33-44", "email": "e.sokolova@belaya-gora.ru"},
+  {"id": 3, "login": "operator", "pass": "operator", "name": "Дмитрий Романов", "role": "operator", "phone": "+7 905 333-44-55", "email": "d.romanov@belaya-gora.ru"},
+  {"id": 4, "login": "housekeeper", "pass": "housekeeper", "name": "Наталья Сорокина", "role": "housekeeper", "phone": "+7 905 444-55-66", "email": "n.sorokina@belaya-gora.ru"},
+  {"id": 5, "login": "client", "pass": "client", "name": "Сергей Каторгин", "role": "client", "phone": "+7 953 913 13 16", "email": "katorgin@mail.ru"}
+]

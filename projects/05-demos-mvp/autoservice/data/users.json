@@ -1,0 +1,9 @@
+[
+  {"id": 1, "login": "admin", "pass": "admin", "name": "Александр Иванов", "role": "admin", "branch_id": 0, "phone": "+7 (900) 111-22-33", "email": "admin@auto360.ru"},
+  {"id": 2, "login": "manager", "pass": "manager", "name": "Ольга Петрова", "role": "manager", "branch_id": 1, "phone": "+7 (900) 222-33-44", "email": "o.petrova@auto360.ru"},
+  {"id": 3, "login": "advisor", "pass": "advisor", "name": "Дмитрий Смирнов", "role": "advisor", "branch_id": 1, "phone": "+7 (900) 333-44-55", "email": "d.smirnov@auto360.ru"},
+  {"id": 4, "login": "mechanic", "pass": "mechanic", "name": "Павел Кузнецов", "role": "mechanic", "branch_id": 1, "phone": "+7 (900) 444-55-66", "email": "p.kuznetsov@auto360.ru"},
+  {"id": 5, "login": "advisor2", "pass": "advisor", "name": "Мария Власова", "role": "advisor", "branch_id": 2, "phone": "+7 (900) 555-66-77", "email": "m.vlasova@auto360.ru"},
+  {"id": 6, "login": "mechanic2", "pass": "mechanic", "name": "Игорь Фомин", "role": "mechanic", "branch_id": 2, "phone": "+7 (900) 666-77-88", "email": "i.fomin@auto360.ru"},
+  {"id": 7, "login": "client", "pass": "client", "name": "Сергей Каторгин", "role": "client", "branch_id": 0, "phone": "+7 (900) 777-88-99", "email": "katorgin@mail.ru"}
+]

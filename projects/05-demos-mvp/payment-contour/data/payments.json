@@ -1,0 +1,44 @@
+[
+  {
+    "id": 1,
+    "payment_key": "2e16a7c0-8b3f-4f2d-9c1a-000000000001",
+    "order_id": 1,
+    "amount": 299000.00,
+    "status": "succeeded",
+    "created_at": "2026-08-10 11:38:00",
+    "paid_at": "2026-08-10 11:42:00"
+  },
+  {
+    "id": 2,
+    "payment_key": "2e16a7c0-8b3f-4f2d-9c1a-000000000002",
+    "order_id": 2,
+    "amount": 187000.00,
+    "status": "succeeded",
+    "created_at": "2026-08-12 15:00:00",
+    "paid_at": "2026-08-12 15:03:00"
+  },
+  {
+    "id": 3,
+    "payment_key": "2e16a7c0-8b3f-4f2d-9c1a-000000000003",
+    "order_id": 3,
+    "amount": 94000.00,
+    "status": "pending",
+    "created_at": "2026-08-15 13:24:00"
+  },
+  {
+    "id": 4,
+    "payment_key": "2e16a7c0-8b3f-4f2d-9c1a-000000000004",
+    "order_id": 4,
+    "amount": 138000.00,
+    "status": "pending",
+    "created_at": "2026-08-15 08:57:00"
+  },
+  {
+    "id": 5,
+    "payment_key": "2e16a7c0-8b3f-4f2d-9c1a-000000000005",
+    "order_id": 5,
+    "amount": 55000.00,
+    "status": "pending",
+    "created_at": "2026-08-15 16:07:00"
+  }
+]

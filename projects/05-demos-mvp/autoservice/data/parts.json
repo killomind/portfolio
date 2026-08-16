@@ -1,0 +1,16 @@
+[
+  {"id": 1, "sku": "OIL-5W40", "name": "Масло моторное 5W-40 (4 л)", "price": 2800, "branch_id": 1, "qty": 15, "min_qty": 6, "unit": "шт"},
+  {"id": 2, "sku": "OIL-5W40", "name": "Масло моторное 5W-40 (4 л)", "price": 2800, "branch_id": 2, "qty": 13, "min_qty": 6, "unit": "шт"},
+  {"id": 3, "sku": "FLT-OIL", "name": "Фильтр масляный", "price": 450, "branch_id": 1, "qty": 22, "min_qty": 8, "unit": "шт"},
+  {"id": 4, "sku": "FLT-OIL", "name": "Фильтр масляный", "price": 450, "branch_id": 2, "qty": 9, "min_qty": 8, "unit": "шт"},
+  {"id": 5, "sku": "FLT-AIR", "name": "Фильтр воздушный", "price": 800, "branch_id": 1, "qty": 4, "min_qty": 6, "unit": "шт"},
+  {"id": 6, "sku": "PAD-FRT", "name": "Колодки тормозные передние", "price": 2500, "branch_id": 1, "qty": 12, "min_qty": 5, "unit": "компл"},
+  {"id": 7, "sku": "SPK-4", "name": "Свечи зажигания (комплект 4)", "price": 900, "branch_id": 1, "qty": 5, "min_qty": 6, "unit": "компл"},
+  {"id": 8, "sku": "BLT-GRM", "name": "Ремень ГРМ", "price": 4200, "branch_id": 1, "qty": 3, "min_qty": 4, "unit": "шт"},
+  {"id": 9, "sku": "BAT-60", "name": "Аккумулятор 60 Ач", "price": 7800, "branch_id": 1, "qty": 6, "min_qty": 3, "unit": "шт"},
+  {"id": 10, "sku": "HUB-FRT", "name": "Подшипник ступичный передний", "price": 3500, "branch_id": 1, "qty": 2, "min_qty": 4, "unit": "шт"},
+  {"id": 11, "sku": "FLT-CBN", "name": "Фильтр салона", "price": 650, "branch_id": 2, "qty": 14, "min_qty": 6, "unit": "шт"},
+  {"id": 12, "sku": "DSC-FRT", "name": "Диск тормозной передний", "price": 2800, "branch_id": 1, "qty": 7, "min_qty": 4, "unit": "шт"},
+  {"id": 13, "sku": "FLT-AIR", "name": "Фильтр воздушный", "price": 800, "branch_id": 2, "qty": 5, "min_qty": 6, "unit": "шт"},
+  {"id": 14, "sku": "BLT-GRM", "name": "Ремень ГРМ", "price": 4200, "branch_id": 2, "qty": 4, "min_qty": 4, "unit": "шт"}
+]
