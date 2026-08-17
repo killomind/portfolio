@@ -106,6 +106,7 @@ portfolio/
 | [Оповещения о БПЛА](projects/05-demos-mvp/bpla-alert/README.md) | Прототип мобильного приложения системы оповещения о БПЛА: карта, уровни угрозы, звуковая тревога | [demo/bpla-alert.html](https://leader-it.com/demo/bpla-alert.html) | в портфолио |
 | [Платёжный контур](projects/05-demos-mvp/payment-contour/README.md) | Финансовый модуль торговой платформы: регистр проводок (двойная запись), идемпотентные webhooks, ЮKassa, облачная ККТ, автотесты (PHP + JSON-БД) | [demo/payment-contour](https://leader-it.com/demo/payment-contour/) | в портфолио |
 | [Music CRM](projects/05-demos-mvp/music-crm/README.md) | CRM музыкантов для квартирников: карточки с фото, поиск и фильтры, накопитель заметок (PHP + JSON-БД, демо без реальных контактов). Исходники в публичном репо | [demo/music-crm](https://leader-it.com/demo/music-crm/) | в портфолио (ссылки) |
+| [Интерактивное тестирование Tovarum.ru](projects/05-demos-mvp/tovarum-testing/README.md) | Симуляция ручного тестирования веб-сервиса: автопроход сценариев, журнал с вердиктами, фиксация найденных багов (HTML+CSS+JS) | [demo/tovarum-testing.html](https://leader-it.com/demo/tovarum-testing.html) | в портфолио |
 
 ### 06 · Проекты под НДА (публичное описание)
 

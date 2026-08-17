@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Интерактивное тестирование Tovarum.ru — демо</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: #eef2f7;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px 16px 40px;
+            color: #1a2c3e;
+        }
+        .demo-header { max-width: 1100px; width: 100%; text-align: center; margin-bottom: 24px; }
+        .demo-header h1 { font-size: 2rem; font-weight: 800; color: #0b2a41; }
+        .demo-header p { color: #5a7184; margin-top: 8px; font-size: 1rem; }
+        .badge { display: inline-block; background: #e6f0ff; color: #2b6cb0; font-weight: 600; font-size: 0.85rem; padding: 6px 14px; border-radius: 40px; margin-top: 10px; }
+        .main-container { display: flex; gap: 20px; max-width: 1100px; width: 100%; flex-wrap: wrap; justify-content: center; }
+        .browser-mockup { flex: 2 1 600px; background: #fff; border-radius: 24px; box-shadow: 0 20px 40px rgba(0,0,0,0.1); overflow: hidden; display: flex; flex-direction: column; position: relative; min-height: 500px; }
+        .browser-top { background: #1e293b; padding: 12px 18px; display: flex; align-items: center; gap: 12px; color: #fff; }
+        .browser-dots { display: flex; gap: 6px; }
+        .dot { width: 12px; height: 12px; border-radius: 50%; }
+        .dot.red { background: #ff5f57; } .dot.yellow { background: #febc2e; } .dot.green { background: #28c840; }
+        .browser-url { flex: 1; background: #0f172a; border-radius: 8px; padding: 6px 12px; font-size: 0.85rem; color: #94a3b8; }
+        .browser-content { flex: 1; position: relative; overflow: hidden; background: #f8fafc; min-height: 450px; }
+
+        /* Интерфейс Tovarum */
+        .tovarum-header { background: #fff; border-bottom: 1px solid #e2e8f0; padding: 10px 20px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
+        .tovarum-logo img { height: 36px; }
+        .tovarum-nav { display: flex; gap: 16px; font-weight: 600; color: #334e68; font-size: 0.9rem; flex-wrap: wrap; }
+        .tovarum-nav a { text-decoration: none; color: inherit; cursor: pointer; }
+        .tovarum-nav a:hover { color: #2b6cb0; }
+        .tovarum-actions { display: flex; gap: 10px; align-items: center; }
+        .tovarum-btn { padding: 8px 16px; border-radius: 8px; font-weight: 600; font-size: 0.9rem; cursor: pointer; border: none; transition: 0.2s; }
+        .tovarum-btn-primary { background: #2b6cb0; color: #fff; }
+        .tovarum-btn-secondary { background: #e6f0ff; color: #2b6cb0; }
+        .tovarum-btn:hover { filter: brightness(1.05); }
+        .tovarum-categories { display: flex; gap: 12px; padding: 12px 20px; background: #f8fafc; border-bottom: 1px solid #e2e8f0; overflow-x: auto; white-space: nowrap; }
+        .tovarum-category { display: inline-flex; align-items: center; gap: 6px; padding: 8px 14px; background: #fff; border: 1px solid #e2e8f0; border-radius: 20px; font-size: 0.8rem; font-weight: 600; color: #334e68; cursor: pointer; transition: 0.2s; }
+        .tovarum-category:hover { border-color: #2b6cb0; color: #2b6cb0; }
+        .tovarum-category img { width: 20px; height: 20px; object-fit: contain; }
+        .tovarum-banner { margin: 10px 20px; border-radius: 12px; overflow: hidden; background: #fff; border: 1px solid #e2e8f0; text-align: center; }
+        .tovarum-banner img { width: 100%; height: auto; display: block; }
+        .tovarum-content { padding: 10px 20px; }
+        .tovarum-product-grid { display: flex; gap: 12px; flex-wrap: wrap; }
+        .tovarum-product-card { border: 1px solid #e2e8f0; border-radius: 12px; padding: 12px; width: 150px; text-align: center; background: #fff; }
+        .tovarum-product-card img { width: 100%; height: 100px; object-fit: cover; border-radius: 8px; margin-bottom: 8px; }
+        .tovarum-product-card .name { font-weight: 600; font-size: 0.9rem; }
+        .tovarum-product-card .price { color: #1d9e5c; font-weight: 700; }
+        .tovarum-mobile-menu { display: none; background: #fff; border-top: 1px solid #e2e8f0; padding: 10px; }
+        .tovarum-support-widget { position: absolute; bottom: 20px; right: 20px; background: #2b6cb0; color: #fff; border-radius: 50%; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; cursor: pointer; }
+        .search-bar { display: flex; align-items: center; gap: 8px; background: #fff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 6px 12px; margin: 0 20px 10px; }
+        .search-bar input { border: none; outline: none; font-size: 0.9rem; width: 100%; }
+        .header-icons { display: flex; gap: 12px; align-items: center; }
+        .header-icons span { cursor: pointer; font-size: 1.2rem; }
+        .language-selector { cursor: pointer; font-weight: 600; color: #334e68; }
+        .geo-button { cursor: pointer; color: #334e68; }
+        .footer-links { display: flex; gap: 16px; flex-wrap: wrap; margin-top: 20px; padding: 10px 20px; background: #fff; border-top: 1px solid #e2e8f0; font-size: 0.8rem; color: #5a7184; }
+        .footer-links a { text-decoration: none; color: inherit; cursor: pointer; }
+        .footer-links a:hover { color: #2b6cb0; }
+
+        /* Панель журнала */
+        .log-panel { flex: 1 1 320px; max-width: 380px; background: #fff; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.06); padding: 20px; display: flex; flex-direction: column; height: fit-content; }
+        .log-panel h2 { font-size: 1.2rem; font-weight: 700; color: #0b2a41; margin-bottom: 16px; }
+        .log-list { list-style: none; max-height: 400px; overflow-y: auto; margin-bottom: 16px; }
+        .log-item { display: flex; align-items: flex-start; gap: 10px; padding: 10px 0; border-bottom: 1px solid #f1f5f9; font-size: 0.9rem; animation: slideIn 0.3s ease; }
+        .log-item:last-child { border-bottom: none; }
+        .log-icon { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; font-weight: 700; }
+        .log-icon.pass { background: #e7f6ec; color: #1d9e5c; }
+        .log-icon.fail { background: #ffe8e2; color: #e0441f; }
+        .log-icon.info { background: #e6f0ff; color: #2b6cb0; }
+        .log-text { flex: 1; }
+        .log-text strong { display: block; font-size: 0.9rem; color: #0b2a41; }
+        .log-text small { color: #5a7184; font-size: 0.8rem; }
+        .bug-note { background: #fff5f2; border-left: 3px solid #e0441f; padding: 8px 10px; border-radius: 6px; margin-top: 6px; font-size: 0.8rem; color: #a03a24; }
+        .controls { display: flex; gap: 10px; flex-wrap: wrap; }
+        .btn { border: none; border-radius: 10px; padding: 12px 18px; font-family: inherit; font-size: 0.95rem; font-weight: 600; cursor: pointer; transition: 0.2s; flex: 1; min-width: 100px; }
+        .btn:hover { transform: translateY(-1px); filter: brightness(1.05); }
+        .btn.primary { background: #2b6cb0; color: #fff; }
+        .btn.secondary { background: #e6f0ff; color: #2b6cb0; }
+        .btn.danger { background: #ff5a3c; color: #fff; }
+        .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+        /* Курсор (теперь внутри browser-content) */
+        .cursor-sim {
+            position: absolute;
+            width: 24px;
+            height: 24px;
+            pointer-events: none;
+            z-index: 100;
+            transition: left 0.5s cubic-bezier(0.25,0.46,0.45,0.94),
+                        top 0.5s cubic-bezier(0.25,0.46,0.45,0.94),
+                        transform 0.5s cubic-bezier(0.25,0.46,0.45,0.94);
+            filter: drop-shadow(0 2px 6px rgba(0,0,0,0.3));
+        }
+        .cursor-sim svg { width: 100%; height: 100%; }
+        .highlight { outline: 3px solid #2b6cb0; outline-offset: 2px; animation: highlightPulse 0.8s infinite alternate; }
+        @keyframes highlightPulse { from { outline-color: #2b6cb0; } to { outline-color: #6ea8e0; } }
+        .click-effect {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: rgba(43,108,176,0.3);
+            pointer-events: none;
+            animation: clickRipple 0.5s ease-out forwards;
+            z-index: 101;
+        }
+        @keyframes clickRipple { 0% { transform: scale(0.5); opacity: 1; } 100% { transform: scale(2); opacity: 0; } }
+        .error-toast {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #e0441f;
+            color: #fff;
+            padding: 12px 20px;
+            border-radius: 12px;
+            font-weight: 600;
+            box-shadow: 0 8px 20px rgba(224,68,31,0.3);
+            z-index: 200;
+            animation: toastIn 0.3s ease;
+        }
+        @keyframes toastIn { from { opacity: 0; transform: translate(-50%,20px); } to { opacity: 1; transform: translate(-50%,0); } }
+    </style>
+</head>
+<body>
+
+<div class="demo-header">
+    <h1>🖱️ Интерактивное ручное тестирование</h1>
+    <p>Симуляция проверки сервиса Tovarum.ru на основе реального интерфейса</p>
+    <span class="badge">Подготовлено «Лидер·Айти»</span>
+</div>
+
+<div class="main-container">
+    <div class="browser-mockup">
+        <div class="browser-top">
+            <div class="browser-dots">
+                <div class="dot red"></div>
+                <div class="dot yellow"></div>
+                <div class="dot green"></div>
+            </div>
+            <div class="browser-url">https://tovarum.ru</div>
+        </div>
+        <div class="browser-content" id="browserContent">
+            <!-- Шапка -->
+            <div class="tovarum-header">
+                <div class="tovarum-logo">
+                    <img src="https://tovarum.ru/storage/images/2075e5fbe6f2b86d231d2321a67a4b17.webp" alt="Tovarum">
+                </div>
+                <nav class="tovarum-nav">
+                    <a data-target="home">Главная</a>
+                    <a data-target="catalog">Каталог</a>
+                    <a data-target="requests">Заявки</a>
+                    <a data-target="cooperation">Сотрудничество</a>
+                    <a data-target="business">Бизнес тарифы</a>
+                </nav>
+                <div class="tovarum-actions">
+                    <button class="tovarum-btn tovarum-btn-primary" data-target="ad-create">Разместить объявление</button>
+                    <button class="tovarum-btn tovarum-btn-secondary" data-target="auth">Войти</button>
+                </div>
+            </div>
+
+            <!-- Поиск и иконки -->
+            <div class="search-bar">
+                <input type="text" placeholder="Поиск по объявлениям" data-target="search">
+                <span class="header-icons">
+                    <span data-target="favorites" title="Избранное">❤️</span>
+                    <span data-target="chat" title="Чат">💬</span>
+                    <span data-target="cart" title="Корзина">🛒</span>
+                </span>
+                <span class="language-selector" data-target="language">🌐 RU</span>
+                <span class="geo-button" data-target="geo" title="Геолокация">📍 Все города</span>
+            </div>
+
+            <!-- Категории с изображениями -->
+            <div class="tovarum-categories">
+                <span class="tovarum-category" data-target="transport"><img src="https://tovarum.ru/storage/images/357d9f65a2880666cc78058067b6cbbb.webp" alt="Транспорт"> Транспорт</span>
+                <span class="tovarum-category" data-target="nedvizhimost"><img src="https://tovarum.ru/storage/images/3daebac3e15c53c0d1eb01de4d1ee176.webp" alt="Недвижимость"> Недвижимость</span>
+                <span class="tovarum-category" data-target="vakansii"><img src="https://tovarum.ru/storage/images/8f4d7b5379daa34c593492d7c7a2fc90.webp" alt="Вакансии"> Вакансии</span>
+                <span class="tovarum-category" data-target="uslugi"><img src="https://tovarum.ru/storage/images/9a045725a0c1172df0b7b64cdcf05c04.webp" alt="Услуги"> Услуги</span>
+                <span class="tovarum-category" data-target="moda"><img src="https://tovarum.ru/storage/images/802a2daf306ac43ba6cc2cc7ad15679b.webp" alt="Мода и стиль"> Мода и стиль</span>
+                <span class="tovarum-category" data-target="detskie"><img src="https://tovarum.ru/storage/images/7074d2d246f145290f5717c7c680ca10.webp" alt="Детские товары"> Детские товары</span>
+                <span class="tovarum-category" data-target="elektronika"><img src="https://tovarum.ru/storage/images/3e6f53de48ab9a81817cf39c5874ea16.webp" alt="Электроника"> Электроника</span>
+            </div>
+
+            <!-- Баннер -->
+            <div class="tovarum-banner">
+                <img src="https://tovarum.ru/storage/images/ec6b90186794c5dbab58ec7e8bb98fae.webp" alt="Рекламный баннер">
+            </div>
+
+            <!-- Контент -->
+            <div class="tovarum-content">
+                <h3>Рекомендации для вас</h3>
+                <div class="tovarum-product-grid">
+                    <div class="tovarum-product-card" data-target="product1">
+                        <img src="https://tovarum.ru/storage/images/cb73d820b13fccd40fab44ad3064fec3.webp" alt="Товар 1">
+                        <div class="name">Смартфон</div>
+                        <div class="price">24 990 ₽</div>
+                    </div>
+                    <div class="tovarum-product-card" data-target="product2">
+                        <img src="https://tovarum.ru/storage/images/5a37c080eca4c08e961c94280b8ef014.webp" alt="Товар 2">
+                        <div class="name">Ноутбук</div>
+                        <div class="price">45 500 ₽</div>
+                    </div>
+                    <div class="tovarum-product-card" data-target="product3">
+                        <img src="https://tovarum.ru/storage/images/2c4885ca8e3c766f53ea85033a80c0fe.webp" alt="Товар 3">
+                        <div class="name">Наушники</div>
+                        <div class="price">8 990 ₽</div>
+                    </div>
+                </div>
+                <div class="footer-links">
+                    <a data-target="shops">Магазины</a>
+                    <a data-target="requests-footer">Заявки покупателей</a>
+                    <a data-target="blog">Блог</a>
+                    <a data-target="about">О нас</a>
+                    <a data-target="support-link">Служба поддержки</a>
+                </div>
+            </div>
+
+            <!-- Мобильное меню -->
+            <div class="tovarum-mobile-menu" id="mobileMenu" style="display:none;">
+                <a>Главная</a> | <a>Каталог</a> | <a>Объявления</a> | <a>Профиль</a>
+            </div>
+            <div class="tovarum-support-widget" data-target="support">?</div>
+
+            <!-- Курсор теперь внутри browser-content -->
+            <div class="cursor-sim" id="cursorSim">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M5 3L19 12L12 13L9 19L5 3Z" fill="#1e293b" stroke="#ffffff" stroke-width="1.5"/>
+                </svg>
+            </div>
+        </div>
+    </div>
+
+    <!-- Журнал -->
+    <div class="log-panel">
+        <h2>📋 Журнал проверки</h2>
+        <ul class="log-list" id="logList"></ul>
+        <div class="controls">
+            <button class="btn primary" id="btnAuto" onclick="toggleAuto()">⏸ Пауза</button>
+            <button class="btn secondary" onclick="stepForward()">Шаг</button>
+            <button class="btn danger" onclick="resetDemo()">Сброс</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    const testSteps = [
+        { action: 'Загрузка главной страницы', target: null, element: null, status: 'pass', description: 'Страница загрузилась, структура корректна' },
+        { action: 'Клик по категории «Транспорт»', target: null, element: '[data-target="transport"]', status: 'pass', description: 'Переход в категорию работает' },
+        { action: 'Клик по кнопке «Разместить объявление»', target: null, element: '[data-target="ad-create"]', status: 'pass', description: 'Форма создания объявления открывается' },
+        { action: 'Проверка формы регистрации (слабый пароль)', target: null, element: '[data-target="auth"]', status: 'fail', description: 'Обнаружен баг: можно установить пароль из 1 символа', bugNote: 'Нарушение безопасности: отсутствует валидация длины пароля' },
+        { action: 'Загрузка фото в объявлении', target: null, element: '[data-target="ad-create"]', status: 'fail', description: 'Нет индикатора прогресса загрузки', bugNote: 'Пользователь может закрыть страницу до завершения загрузки' },
+        { action: 'Проверка мобильной версии (меню перекрыто)', target: 'mobile', element: null, status: 'fail', description: 'Меню перекрывается рекламным баннером на экранах <375px', bugNote: 'Проблема адаптивной вёрстки, требуется исправление CSS' },
+        { action: 'Проверка виджета поддержки', target: null, element: '[data-target="support"]', status: 'pass', description: 'Виджет открывается, форма работает' },
+        { action: 'Использование поиска', target: null, element: '[data-target="search"]', status: 'pass', description: 'Поиск работает, результаты отображаются' },
+        { action: 'Клик по иконке «Избранное»', target: null, element: '[data-target="favorites"]', status: 'pass', description: 'Переход в избранное' },
+        { action: 'Клик по иконке «Чат»', target: null, element: '[data-target="chat"]', status: 'pass', description: 'Открывается чат' },
+        { action: 'Клик по иконке «Корзина»', target: null, element: '[data-target="cart"]', status: 'fail', description: 'Иконка корзины неактивна без авторизации', bugNote: 'Нет уведомления о необходимости войти' },
+        { action: 'Переключение языка', target: null, element: '[data-target="language"]', status: 'pass', description: 'Язык меняется корректно' },
+        { action: 'Выбор геолокации', target: null, element: '[data-target="geo"]', status: 'pass', description: 'Открывается модальное окно выбора города' },
+        { action: 'Клик по ссылке в подвале «Магазины»', target: null, element: '[data-target="shops"]', status: 'pass', description: 'Переход на страницу магазинов' },
+        { action: 'Финальный отчёт', target: null, element: null, status: 'info', description: 'Найдено 4 бага, 10 проверок пройдено' }
+    ];
+
+    let currentStep = -1;
+    let isRunning = false;
+    let autoLoop = true;
+
+    const cursor = document.getElementById('cursorSim');
+    const content = document.getElementById('browserContent');
+    const logList = document.getElementById('logList');
+    const btnAuto = document.getElementById('btnAuto');
+
+    function moveCursorTo(element) {
+        return new Promise(resolve => {
+            if (!element) {
+                setTimeout(resolve, 600);
+                return;
+            }
+            const rect = element.getBoundingClientRect();
+            const contentRect = content.getBoundingClientRect();
+            // Координаты центра элемента относительно browser-content
+            const centerX = rect.left - contentRect.left + rect.width / 2;
+            const centerY = rect.top - contentRect.top + rect.height / 2;
+
+            // Позиционируем курсор: left/top указывают на точку, где должно быть остриё
+            cursor.style.left = centerX + 'px';
+            cursor.style.top = centerY + 'px';
+            cursor.style.transform = 'translate(-5px, -3px)';
+
+            element.classList.add('highlight');
+            setTimeout(() => {
+                element.classList.remove('highlight');
+                const click = document.createElement('div');
+                click.className = 'click-effect';
+                click.style.left = (centerX - 10) + 'px';
+                click.style.top = (centerY - 10) + 'px';
+                content.appendChild(click);
+                setTimeout(() => click.remove(), 500);
+                resolve();
+            }, 500);
+        });
+    }
+
+    function addLog(step) {
+        const li = document.createElement('li');
+        li.className = 'log-item';
+        const iconClass = step.status === 'pass' ? 'pass' : step.status === 'fail' ? 'fail' : 'info';
+        const iconSymbol = step.status === 'pass' ? '✓' : step.status === 'fail' ? '✗' : 'ℹ';
+        let bugHtml = '';
+        if (step.bugNote) {
+            bugHtml = `<div class="bug-note">🐞 ${step.bugNote}</div>`;
+        }
+        li.innerHTML = `
+            <div class="log-icon ${iconClass}">${iconSymbol}</div>
+            <div class="log-text">
+                <strong>${step.action}</strong>
+                <small>${step.description}</small>
+                ${bugHtml}
+            </div>
+        `;
+        logList.appendChild(li);
+        logList.scrollTop = logList.scrollHeight;
+    }
+
+    async function performStep(index) {
+        const step = testSteps[index];
+        if (!step) return false;
+        if (step.target === 'mobile') {
+            const mobileMenu = document.getElementById('mobileMenu');
+            mobileMenu.style.display = 'block';
+            addLog(step);
+            showErrorToast('⚠ Меню перекрыто баннером на ширине <375px');
+            return true;
+        }
+        if (step.element) {
+            const el = document.querySelector(step.element);
+            await moveCursorTo(el);
+            if (step.status === 'fail') {
+                showErrorToast(step.bugNote || 'Ошибка');
+            }
+        } else {
+            await new Promise(resolve => setTimeout(resolve, 600));
+        }
+        addLog(step);
+        return true;
+    }
+
+    function showErrorToast(message) {
+        const toast = document.createElement('div');
+        toast.className = 'error-toast';
+        toast.textContent = '⚠ ' + message;
+        content.appendChild(toast);
+        setTimeout(() => toast.remove(), 2500);
+    }
+
+    function resetDemo() {
+        isRunning = false;
+        currentStep = -1;
+        logList.innerHTML = '';
+        cursor.style.left = '50%';
+        cursor.style.top = '50%';
+        cursor.style.transform = 'translate(-5px, -3px)';
+        btnAuto.textContent = '▶ Автозапуск';
+        document.getElementById('mobileMenu').style.display = 'none';
+    }
+
+    function stepForward() {
+        if (!isRunning) {
+            if (currentStep < testSteps.length - 1) {
+                currentStep++;
+                performStep(currentStep);
+            } else {
+                alert('Демо завершено. Нажмите "Сброс" для повторного запуска.');
+            }
+        }
+    }
+
+    function startAuto() {
+        if (isRunning) return;
+        isRunning = true;
+        btnAuto.textContent = '⏸ Пауза';
+        currentStep = -1;
+        logList.innerHTML = '';
+        cursor.style.left = '50%';
+        cursor.style.top = '50%';
+        cursor.style.transform = 'translate(-5px, -3px)';
+        document.getElementById('mobileMenu').style.display = 'none';
+
+        function runNext() {
+            if (!isRunning) return;
+            if (currentStep < testSteps.length - 1) {
+                currentStep++;
+                performStep(currentStep).then(() => {
+                    setTimeout(runNext, 2000);
+                });
+            } else {
+                if (autoLoop) {
+                    addLog({ action: 'Цикл завершён', description: 'Перезапуск демо...', status: 'info' });
+                    setTimeout(() => {
+                        resetDemo();
+                        startAuto();
+                    }, 1500);
+                } else {
+                    isRunning = false;
+                    btnAuto.textContent = '▶ Автозапуск';
+                }
+            }
+        }
+        runNext();
+    }
+
+    function toggleAuto() {
+        if (isRunning) {
+            isRunning = false;
+            btnAuto.textContent = '▶ Автозапуск';
+        } else {
+            startAuto();
+        }
+    }
+
+    window.addEventListener('load', () => {
+        resetDemo();
+        startAuto();
+    });
+</script>
+</body>
+</html>
