@@ -107,6 +107,7 @@ portfolio/
 | [Платёжный контур](projects/05-demos-mvp/payment-contour/README.md) | Финансовый модуль торговой платформы: регистр проводок (двойная запись), идемпотентные webhooks, ЮKassa, облачная ККТ, автотесты (PHP + JSON-БД) | [demo/payment-contour](https://leader-it.com/demo/payment-contour/) | в портфолио |
 | [Music CRM](projects/05-demos-mvp/music-crm/README.md) | CRM музыкантов для квартирников: карточки с фото, поиск и фильтры, накопитель заметок (PHP + JSON-БД, демо без реальных контактов). Исходники в публичном репо | [demo/music-crm](https://leader-it.com/demo/music-crm/) | в портфолио (ссылки) |
 | [Интерактивное тестирование Tovarum.ru](projects/05-demos-mvp/tovarum-testing/README.md) | Симуляция ручного тестирования веб-сервиса: автопроход сценариев, журнал с вердиктами, фиксация найденных багов (HTML+CSS+JS) | [demo/tovarum-testing.html](https://leader-it.com/demo/tovarum-testing.html) | в портфолио |
+| [Транспортная биржа с геопоиском](projects/05-demos-mvp/transport-exchange/README.md) | Транспортная биржа: карта с геопоиском (радиус и коридор), грузы и транспорт с подбором по кузову/весу/объёму, экономика рейса, отклики, рейтинги, Telegram-бот и админка (PHP + SQLite, Leaflet) | [demo/transport-demo](https://leader-it.com/demo/transport-demo/) | в портфолио |
 
 ### 06 · Проекты под НДА (публичное описание)
 
