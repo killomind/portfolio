@@ -1,0 +1,136 @@
+[
+ {
+  "id": 1,
+  "name": "Иван Петров",
+  "phone": "+7 900 123-45-67",
+  "email": "ivan.petrov@mail.ru",
+  "visits": [
+   {
+    "date": "2026-08-03",
+    "service": "Стрижка",
+    "amount": 1500
+   },
+   {
+    "date": "2026-08-10",
+    "service": "Стрижка",
+    "amount": 1500
+   }
+  ]
+ },
+ {
+  "id": 2,
+  "name": "Анна Смирнова",
+  "phone": "+7 900 222-33-44",
+  "email": "anna.smirnova@gmail.com",
+  "visits": [
+   {
+    "date": "2026-08-04",
+    "service": "Маникюр",
+    "amount": 2000
+   },
+   {
+    "date": "2026-08-11",
+    "service": "Маникюр",
+    "amount": 2000
+   }
+  ]
+ },
+ {
+  "id": 3,
+  "name": "Пётр Сидоров",
+  "phone": "+7 900 555-66-77",
+  "email": "petr.sidorov@yandex.ru",
+  "visits": [
+   {
+    "date": "2026-08-05",
+    "service": "Окрашивание",
+    "amount": 4500
+   }
+  ]
+ },
+ {
+  "id": 4,
+  "name": "Елена Кузнецова",
+  "phone": "+7 921 445-67-89",
+  "email": "elena.k@bk.ru",
+  "visits": [
+   {
+    "date": "2026-08-06",
+    "service": "Педикюр",
+    "amount": 2500
+   },
+   {
+    "date": "2026-08-13",
+    "service": "Спа-уход",
+    "amount": 3500
+   }
+  ]
+ },
+ {
+  "id": 5,
+  "name": "Дмитрий Волков",
+  "phone": "+7 903 111-22-33",
+  "email": "d.volkov@gmail.com",
+  "visits": [
+   {
+    "date": "2026-08-07",
+    "service": "Мужская стрижка",
+    "amount": 1200
+   }
+  ]
+ },
+ {
+  "id": 6,
+  "name": "Марина Фёдорова",
+  "phone": "+7 926 888-99-00",
+  "email": "marina.fedorova@mail.ru",
+  "visits": [
+   {
+    "date": "2026-08-08",
+    "service": "Укладка",
+    "amount": 1000
+   },
+   {
+    "date": "2026-08-15",
+    "service": "Окрашивание",
+    "amount": 4500
+   }
+  ]
+ },
+ {
+  "id": 7,
+  "name": "Сергей Орлов",
+  "phone": "+7 905 333-44-55",
+  "email": "s.orlov@yandex.ru",
+  "visits": [
+   {
+    "date": "2026-08-09",
+    "service": "Стрижка",
+    "amount": 1500
+   },
+   {
+    "date": "2026-08-16",
+    "service": "Стрижка",
+    "amount": 1500
+   }
+  ]
+ },
+ {
+  "id": 8,
+  "name": "Ольга Соколова",
+  "phone": "+7 919 777-88-99",
+  "email": "olga.sokolova@gmail.com",
+  "visits": [
+   {
+    "date": "2026-08-10",
+    "service": "Маникюр",
+    "amount": 2000
+   },
+   {
+    "date": "2026-08-17",
+    "service": "Педикюр",
+    "amount": 2500
+   }
+  ]
+ }
+]

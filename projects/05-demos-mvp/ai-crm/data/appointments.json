@@ -1,0 +1,172 @@
+[
+ {
+  "id": 1,
+  "client_id": 1,
+  "service_id": 1,
+  "date": "2026-08-18",
+  "time": "10:00",
+  "duration": 60,
+  "status": "confirmed",
+  "note": "Постоянный клиент"
+ },
+ {
+  "id": 2,
+  "client_id": 2,
+  "service_id": 3,
+  "date": "2026-08-18",
+  "time": "11:30",
+  "duration": 90,
+  "status": "confirmed",
+  "note": ""
+ },
+ {
+  "id": 3,
+  "client_id": 3,
+  "service_id": 2,
+  "date": "2026-08-18",
+  "time": "14:00",
+  "duration": 120,
+  "status": "confirmed",
+  "note": "Тонкое окрашивание"
+ },
+ {
+  "id": 4,
+  "client_id": 4,
+  "service_id": 5,
+  "date": "2026-08-18",
+  "time": "16:30",
+  "duration": 90,
+  "status": "pending",
+  "note": ""
+ },
+ {
+  "id": 5,
+  "client_id": 5,
+  "service_id": 6,
+  "date": "2026-08-19",
+  "time": "10:00",
+  "duration": 45,
+  "status": "confirmed",
+  "note": ""
+ },
+ {
+  "id": 6,
+  "client_id": 6,
+  "service_id": 2,
+  "date": "2026-08-19",
+  "time": "12:00",
+  "duration": 120,
+  "status": "confirmed",
+  "note": ""
+ },
+ {
+  "id": 7,
+  "client_id": 7,
+  "service_id": 1,
+  "date": "2026-08-19",
+  "time": "15:00",
+  "duration": 60,
+  "status": "pending",
+  "note": ""
+ },
+ {
+  "id": 8,
+  "client_id": 8,
+  "service_id": 3,
+  "date": "2026-08-20",
+  "time": "11:00",
+  "duration": 90,
+  "status": "confirmed",
+  "note": ""
+ },
+ {
+  "id": 9,
+  "client_id": 1,
+  "service_id": 4,
+  "date": "2026-08-20",
+  "time": "14:00",
+  "duration": 30,
+  "status": "confirmed",
+  "note": ""
+ },
+ {
+  "id": 10,
+  "client_id": 2,
+  "service_id": 7,
+  "date": "2026-08-20",
+  "time": "15:30",
+  "duration": 120,
+  "status": "pending",
+  "note": ""
+ },
+ {
+  "id": 11,
+  "client_id": 4,
+  "service_id": 1,
+  "date": "2026-08-21",
+  "time": "10:00",
+  "duration": 60,
+  "status": "confirmed",
+  "note": ""
+ },
+ {
+  "id": 12,
+  "client_id": 6,
+  "service_id": 6,
+  "date": "2026-08-21",
+  "time": "12:00",
+  "duration": 45,
+  "status": "confirmed",
+  "note": ""
+ },
+ {
+  "id": 13,
+  "client_id": 8,
+  "service_id": 2,
+  "date": "2026-08-22",
+  "time": "11:00",
+  "duration": 120,
+  "status": "pending",
+  "note": ""
+ },
+ {
+  "id": 14,
+  "client_id": 3,
+  "service_id": 1,
+  "date": "2026-08-22",
+  "time": "14:00",
+  "duration": 60,
+  "status": "confirmed",
+  "note": ""
+ },
+ {
+  "id": 15,
+  "client_id": 7,
+  "service_id": 3,
+  "date": "2026-08-23",
+  "time": "12:00",
+  "duration": 90,
+  "status": "pending",
+  "note": ""
+ },
+ {
+  "id": 16,
+  "client_id": 5,
+  "service_id": 7,
+  "date": "2026-08-24",
+  "time": "10:30",
+  "duration": 120,
+  "status": "confirmed",
+  "note": ""
+ },
+ {
+  "id": 17,
+  "client_id": 1,
+  "service_id": 2,
+  "date": "2026-08-24",
+  "time": "14:30",
+  "duration": 120,
+  "status": "pending",
+  "note": ""
+ }
+]

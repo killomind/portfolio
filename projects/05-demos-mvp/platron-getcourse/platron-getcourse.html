@@ -1,0 +1,1779 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Интеграция Platron ↔ GetCourse — Интерактивное демо</title>
+    <style>
+        :root {
+            --bg: #0f172a;
+            --panel: rgba(30, 41, 59, 0.85);
+            --panel-solid: #1e293b;
+            --border: #334155;
+            --text: #e2e8f0;
+            --text-muted: #94a3b8;
+            --accent: #6366f1;
+            --accent-hover: #818cf8;
+            --accent-dark: #4f46e5;
+            --success: #10b981;
+            --success-bg: rgba(16, 185, 129, 0.15);
+            --error: #ef4444;
+            --error-bg: rgba(239, 68, 68, 0.15);
+            --warning: #f59e0b;
+            --warning-bg: rgba(245, 158, 11, 0.15);
+            --info: #3b82f6;
+            --info-bg: rgba(59, 130, 246, 0.15);
+            --purple: #8b5cf6;
+            --purple-bg: rgba(139, 92, 246, 0.15);
+            --card-light: #f8fafc;
+            --card-text: #0f172a;
+            --radius: 12px;
+            --radius-sm: 8px;
+            --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+            --font: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font);
+            background: var(--bg);
+            background-image: radial-gradient(ellipse at 20% 20%, rgba(99, 102, 241, 0.08) 0%, transparent 60%),
+                radial-gradient(ellipse at 80% 80%, rgba(139, 92, 246, 0.06) 0%, transparent 60%);
+            color: var(--text);
+            min-height: 100vh;
+            line-height: 1.6;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .container {
+            max-width: 1440px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 16px;
+            padding: 20px 28px;
+            background: var(--panel);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .header-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, var(--accent), var(--purple));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: 700;
+            color: #fff;
+            flex-shrink: 0;
+        }
+
+        .header h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            background: linear-gradient(135deg, #e2e8f0, #a5b4fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .header .subtitle {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        .header-badge {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            border-radius: 20px;
+            background: var(--success-bg);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--success);
+            white-space: nowrap;
+        }
+        .header-badge .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--success);
+            animation: pulse-dot 2s infinite;
+        }
+
+        @keyframes pulse-dot {
+            0%,
+            100% {
+                opacity: 1;
+                box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.5);
+            }
+            50% {
+                opacity: 0.7;
+                box-shadow: 0 0 0 6px rgba(16, 185, 129, 0);
+            }
+        }
+
+        /* Main Dashboard Grid */
+        .dashboard {
+            display: grid;
+            grid-template-columns: 1fr 1.2fr;
+            gap: 24px;
+            align-items: start;
+        }
+
+        @media (max-width: 1100px) {
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .panel {
+            background: var(--panel);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 24px;
+            transition: var(--transition);
+        }
+
+        .panel-title {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            letter-spacing: -0.01em;
+        }
+        .panel-title .icon {
+            font-size: 1.1rem;
+        }
+
+        /* Course Card */
+        .course-card {
+            background: var(--card-light);
+            color: var(--card-text);
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            margin-bottom: 20px;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+        .course-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent), var(--purple));
+        }
+        .course-tag {
+            display: inline-block;
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            background: var(--purple-bg);
+            color: var(--purple);
+            padding: 4px 10px;
+            border-radius: 4px;
+            margin-bottom: 10px;
+        }
+        .course-card h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+        .course-desc {
+            font-size: 0.85rem;
+            color: #475569;
+            margin-bottom: 12px;
+        }
+        .course-meta {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+            font-size: 0.8rem;
+            color: #475569;
+        }
+        .course-price {
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: var(--accent-dark);
+            letter-spacing: -0.02em;
+        }
+        .btn-buy {
+            display: inline-block;
+            padding: 12px 24px;
+            background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+            color: #fff;
+            border: none;
+            border-radius: var(--radius-sm);
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            letter-spacing: 0.01em;
+            white-space: nowrap;
+        }
+        .btn-buy:hover {
+            background: linear-gradient(135deg, var(--accent-hover), var(--accent));
+            box-shadow: 0 4px 16px rgba(99, 102, 241, 0.4);
+            transform: translateY(-1px);
+        }
+        .btn-buy:active {
+            transform: translateY(0);
+        }
+        .btn-buy:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        /* Platron Payment Form */
+        .platron-form {
+            background: #fff;
+            color: #1e293b;
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            border: 1px solid #e2e8f0;
+            transition: var(--transition);
+            opacity: 0;
+            transform: translateY(10px);
+            pointer-events: none;
+            display: none;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+        }
+        .platron-form.visible {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+            display: block;
+            animation: slide-up 0.4s ease-out;
+        }
+
+        @keyframes slide-up {
+            from {
+                opacity: 0;
+                transform: translateY(16px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .platron-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .platron-logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 700;
+            font-size: 1rem;
+            color: #1e293b;
+        }
+        .platron-logo .logo-mark {
+            width: 28px;
+            height: 28px;
+            border-radius: 6px;
+            background: #1e293b;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: 800;
+        }
+        .platron-amount {
+            font-weight: 800;
+            font-size: 1.2rem;
+            color: #4f46e5;
+        }
+        .form-group {
+            margin-bottom: 14px;
+        }
+        .form-group label {
+            display: block;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            color: #64748b;
+            margin-bottom: 4px;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 10px 14px;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-family: inherit;
+            color: #1e293b;
+            transition: var(--transition);
+            background: #f8fafc;
+        }
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+            background: #fff;
+        }
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+        .payment-toggle {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+        .payment-toggle label {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            cursor: pointer;
+            padding: 8px 14px;
+            border-radius: 8px;
+            border: 1.5px solid #e2e8f0;
+            transition: var(--transition);
+            color: #475569;
+            background: #f8fafc;
+            flex: 1;
+            justify-content: center;
+        }
+        .payment-toggle label:has(input:checked) {
+            border-color: var(--accent);
+            background: rgba(99, 102, 241, 0.08);
+            color: var(--accent-dark);
+            font-weight: 600;
+        }
+        .payment-toggle input[type="radio"] {
+            display: none;
+        }
+        .btn-pay {
+            width: 100%;
+            padding: 14px;
+            background: #1e293b;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            letter-spacing: 0.01em;
+        }
+        .btn-pay:hover {
+            background: #0f172a;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+        .btn-pay:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        .btn-pay .spinner {
+            width: 18px;
+            height: 18px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-top-color: #fff;
+            border-radius: 50%;
+            animation: spin 0.7s linear infinite;
+            display: none;
+        }
+        .btn-pay.loading .spinner {
+            display: inline-block;
+        }
+        .btn-pay.loading .pay-text {
+            display: none;
+        }
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+        .payment-result {
+            margin-top: 12px;
+            padding: 12px 16px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            display: none;
+            animation: slide-up 0.3s ease-out;
+        }
+        .payment-result.visible {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .payment-result.success {
+            background: var(--success-bg);
+            color: #065f46;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+        .payment-result.error {
+            background: var(--error-bg);
+            color: #991b1b;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+
+        /* Integration Timeline */
+        .timeline {
+            position: relative;
+            padding-left: 32px;
+            margin-bottom: 24px;
+        }
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 13px;
+            top: 8px;
+            bottom: 8px;
+            width: 2px;
+            background: var(--border);
+            border-radius: 2px;
+        }
+        .timeline-step {
+            position: relative;
+            margin-bottom: 18px;
+            padding: 12px 16px;
+            border-radius: var(--radius-sm);
+            background: rgba(15, 23, 42, 0.5);
+            border: 1px solid var(--border);
+            cursor: pointer;
+            transition: var(--transition);
+            user-select: none;
+        }
+        .timeline-step:hover {
+            border-color: var(--accent);
+            background: rgba(99, 102, 241, 0.06);
+        }
+        .timeline-step .step-dot {
+            position: absolute;
+            left: -24px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: var(--panel-solid);
+            border: 2px solid var(--border);
+            transition: var(--transition);
+            z-index: 2;
+        }
+        .timeline-step.active .step-dot {
+            border-color: var(--accent);
+            background: var(--accent);
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.25);
+            animation: step-pulse 1.5s infinite;
+        }
+        @keyframes step-pulse {
+            0%,
+            100% {
+                box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.25);
+            }
+            50% {
+                box-shadow: 0 0 0 8px rgba(99, 102, 241, 0.05);
+            }
+        }
+        .timeline-step.done .step-dot {
+            border-color: var(--success);
+            background: var(--success);
+            box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.2);
+        }
+        .timeline-step.error-step .step-dot {
+            border-color: var(--error);
+            background: var(--error);
+            box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.2);
+        }
+        .timeline-step .step-num {
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+            margin-bottom: 4px;
+        }
+        .timeline-step .step-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text);
+        }
+        .timeline-step .step-desc {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+        .timeline-step.done {
+            border-color: rgba(16, 185, 129, 0.3);
+            background: rgba(16, 185, 129, 0.05);
+        }
+        .timeline-step.active {
+            border-color: var(--accent);
+            background: rgba(99, 102, 241, 0.08);
+        }
+        .timeline-step.error-step {
+            border-color: rgba(239, 68, 68, 0.3);
+            background: rgba(239, 68, 68, 0.05);
+        }
+
+        /* GetCourse Order Card */
+        .order-card {
+            background: var(--card-light);
+            color: var(--card-text);
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            border: 1px solid #e2e8f0;
+            transition: var(--transition);
+        }
+        .order-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 16px;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .order-id {
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #64748b;
+            margin-bottom: 4px;
+        }
+        .order-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+        }
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.02em;
+            transition: var(--transition);
+            white-space: nowrap;
+        }
+        .status-badge .dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+        }
+        .status-pending {
+            background: var(--warning-bg);
+            color: #b45309;
+            border: 1px solid rgba(245, 158, 11, 0.3);
+        }
+        .status-pending .dot {
+            background: var(--warning);
+        }
+        .status-paid {
+            background: var(--success-bg);
+            color: #065f46;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+        .status-paid .dot {
+            background: var(--success);
+        }
+        .status-access {
+            background: var(--purple-bg);
+            color: #5b21b6;
+            border: 1px solid rgba(139, 92, 246, 0.3);
+        }
+        .status-access .dot {
+            background: var(--purple);
+            animation: pulse-dot 2s infinite;
+        }
+        .status-idle {
+            background: rgba(100, 116, 139, 0.15);
+            color: #475569;
+            border: 1px solid rgba(100, 116, 139, 0.25);
+        }
+        .status-idle .dot {
+            background: #94a3b8;
+        }
+        .order-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px 20px;
+            font-size: 0.8rem;
+            color: #475569;
+            margin-bottom: 16px;
+        }
+        .order-details .label {
+            font-weight: 600;
+            color: #94a3b8;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+        .order-details .value {
+            font-weight: 500;
+            color: #1e293b;
+        }
+        .access-notification {
+            display: none;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 14px 16px;
+            border-radius: 8px;
+            background: rgba(139, 92, 246, 0.1);
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: #5b21b6;
+            animation: slide-up 0.5s ease-out;
+        }
+        .access-notification.visible {
+            display: flex;
+        }
+        .access-notification .icon {
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+
+        /* Event Log */
+        .log-panel {
+            background: var(--panel-solid);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 20px 24px;
+        }
+        .log-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .log-header h3 {
+            font-size: 0.95rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .log-clear {
+            padding: 6px 12px;
+            font-size: 0.7rem;
+            background: transparent;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        .log-clear:hover {
+            border-color: var(--error);
+            color: var(--error);
+        }
+        .log-list {
+            max-height: 280px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            padding-right: 4px;
+        }
+        .log-list::-webkit-scrollbar {
+            width: 4px;
+        }
+        .log-list::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .log-list::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 4px;
+        }
+        .log-entry {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 8px 12px;
+            border-radius: 6px;
+            background: rgba(15, 23, 42, 0.6);
+            font-size: 0.75rem;
+            font-family: 'SF Mono', 'Fira Code', monospace;
+            animation: log-appear 0.3s ease-out;
+            border-left: 3px solid var(--border);
+        }
+        @keyframes log-appear {
+            from {
+                opacity: 0;
+                transform: translateX(-8px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        .log-entry .log-time {
+            color: var(--text-muted);
+            white-space: nowrap;
+            font-size: 0.7rem;
+            min-width: 70px;
+        }
+        .log-entry .log-component {
+            font-weight: 700;
+            white-space: nowrap;
+            min-width: 70px;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.65rem;
+            text-align: center;
+            background: rgba(100, 116, 139, 0.2);
+            color: var(--text-muted);
+        }
+        .log-entry .log-component.platron {
+            background: rgba(99, 102, 241, 0.2);
+            color: #a5b4fc;
+        }
+        .log-entry .log-component.getcourse {
+            background: rgba(16, 185, 129, 0.2);
+            color: #6ee7b7;
+        }
+        .log-entry .log-component.client {
+            background: rgba(139, 92, 246, 0.2);
+            color: #c4b5fd;
+        }
+        .log-entry .log-component.system {
+            background: rgba(245, 158, 11, 0.2);
+            color: #fcd34d;
+        }
+        .log-entry .log-message {
+            flex: 1;
+            color: var(--text);
+            font-size: 0.75rem;
+        }
+        .log-entry .log-status {
+            font-weight: 700;
+            font-size: 0.65rem;
+            padding: 2px 8px;
+            border-radius: 4px;
+            white-space: nowrap;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+        }
+        .log-status.success {
+            background: var(--success-bg);
+            color: var(--success);
+        }
+        .log-status.error {
+            background: var(--error-bg);
+            color: var(--error);
+        }
+        .log-status.info {
+            background: var(--info-bg);
+            color: var(--info);
+        }
+        .log-status.warning {
+            background: var(--warning-bg);
+            color: var(--warning);
+        }
+
+        /* Controls */
+        .controls {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            padding: 16px 0;
+        }
+        .btn {
+            padding: 12px 22px;
+            border-radius: var(--radius-sm);
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: var(--transition);
+            letter-spacing: 0.01em;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-family: inherit;
+        }
+        .btn:active {
+            transform: scale(0.97);
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+            color: #fff;
+        }
+        .btn-primary:hover {
+            box-shadow: 0 4px 16px rgba(99, 102, 241, 0.4);
+        }
+        .btn-secondary {
+            background: var(--panel-solid);
+            color: var(--text);
+            border: 1px solid var(--border);
+        }
+        .btn-secondary:hover {
+            border-color: var(--text-muted);
+            background: rgba(51, 65, 85, 0.8);
+        }
+        .btn-danger {
+            background: transparent;
+            color: var(--error);
+            border: 1px solid rgba(239, 68, 68, 0.4);
+        }
+        .btn-danger:hover {
+            background: var(--error-bg);
+            border-color: var(--error);
+        }
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        /* Footer / Budget */
+        .footer {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            margin-top: 8px;
+            padding-top: 24px;
+            border-top: 1px solid var(--border);
+        }
+        @media (max-width: 900px) {
+            .footer {
+                grid-template-columns: 1fr;
+            }
+        }
+        .footer-section {
+            background: var(--panel);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 20px;
+        }
+        .footer-section h4 {
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text);
+        }
+        .budget-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.75rem;
+        }
+        .budget-table th,
+        .budget-table td {
+            padding: 8px 10px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+        .budget-table th {
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            font-size: 0.65rem;
+            letter-spacing: 0.04em;
+        }
+        .budget-table tr:last-child td {
+            border-bottom: none;
+        }
+        .budget-table .total-row td {
+            font-weight: 700;
+            font-size: 0.85rem;
+            color: var(--accent-hover);
+            border-top: 2px solid var(--border);
+            padding-top: 12px;
+        }
+        .feature-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            font-size: 0.8rem;
+        }
+        .feature-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            color: var(--text-muted);
+        }
+        .feature-list li .check {
+            color: var(--success);
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            body {
+                padding: 10px;
+            }
+            .header {
+                padding: 16px 18px;
+            }
+            .header h1 {
+                font-size: 1.2rem;
+            }
+            .panel {
+                padding: 16px;
+            }
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            .order-details {
+                grid-template-columns: 1fr;
+            }
+            .controls {
+                flex-direction: column;
+            }
+            .btn {
+                justify-content: center;
+            }
+        }
+
+        /* Success overlay flash */
+        .flash-overlay {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .flash-overlay.active {
+            opacity: 1;
+        }
+        .flash-content {
+            background: var(--success);
+            color: #fff;
+            font-size: 2rem;
+            font-weight: 800;
+            padding: 20px 40px;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(16, 185, 129, 0.4);
+            transform: scale(0.8);
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            text-align: center;
+        }
+        .flash-overlay.active .flash-content {
+            transform: scale(1);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-left">
+                <div class="header-icon">⚡</div>
+                <div>
+                    <h1>Интеграция Platron ↔ GetCourse</h1>
+                    <div class="subtitle">Демо-прототип цепочки приёма платежей и автоматической выдачи доступа</div>
+                </div>
+            </div>
+            <div class="header-badge">
+                <span class="dot"></span>
+                Система готова к тестированию
+            </div>
+        </header>
+
+        <!-- Main Dashboard -->
+        <div class="dashboard">
+            <!-- Left Panel: Course + Platron -->
+            <div class="panel">
+                <div class="panel-title"><span class="icon">🛒</span> Витрина онлайн-школы</div>
+
+                <!-- Course Card -->
+                <div class="course-card" id="courseCard">
+                    <span class="course-tag">Профессиональная программа</span>
+                    <h3>Профессия: Fullstack-разработчик на Python</h3>
+                    <p class="course-desc">Полный курс: Python, Django, REST API, JavaScript, React, деплой. 6 месяцев, 240+ уроков, дипломный проект.</p>
+                    <div class="course-meta">
+                        <span class="course-price">49 900 ₽</span>
+                        <span>•</span>
+                        <span>6 месяцев</span>
+                        <span>•</span>
+                        <span>Сертификат</span>
+                    </div>
+                    <div style="margin-top:16px; display:flex; gap:12px; flex-wrap:wrap; align-items:center;">
+                        <button class="btn-buy" id="btnBuy" onclick="createOrder()">Купить / Оплатить</button>
+                        <span style="font-size:0.75rem; color:#94a3b8;">Оплата через Platron</span>
+                    </div>
+                </div>
+
+                <!-- Platron Payment Form -->
+                <div class="platron-form" id="platronForm">
+                    <div class="platron-header">
+                        <div class="platron-logo">
+                            <span class="logo-mark">P</span>
+                            Platron
+                        </div>
+                        <div class="platron-amount">49 900 ₽</div>
+                    </div>
+                    <div style="font-size:0.75rem; color:#64748b; margin-bottom:12px;">
+                        Платёж № <span id="paymentId">—</span> • Заказ № <span id="orderIdSpan">—</span>
+                    </div>
+                    <div class="form-group">
+                        <label>Номер карты</label>
+                        <input type="text" value="4111 1111 1111 1111" readonly>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Срок действия</label>
+                            <input type="text" value="12/27" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label>CVC</label>
+                            <input type="text" value="123" readonly>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Имя держателя карты</label>
+                        <input type="text" value="IVAN PETROV" readonly>
+                    </div>
+                    <div class="payment-toggle">
+                        <label>
+                            <input type="radio" name="payScenario" value="success" checked>
+                            ✅ Успешная оплата
+                        </label>
+                        <label>
+                            <input type="radio" name="payScenario" value="error">
+                            ❌ Отклонённая оплата
+                        </label>
+                    </div>
+                    <button class="btn-pay" id="btnPay" onclick="processPayment()">
+                        <span class="spinner"></span>
+                        <span class="pay-text">Оплатить 49 900 ₽</span>
+                    </button>
+                    <div class="payment-result" id="paymentResult"></div>
+                </div>
+            </div>
+
+            <!-- Right Panel: Timeline + Order -->
+            <div class="panel">
+                <div class="panel-title"><span class="icon">🔗</span> Цепочка интеграции</div>
+
+                <!-- Timeline -->
+                <div class="timeline" id="timeline">
+                    <div class="timeline-step" id="step1" onclick="manualStep(1)">
+                        <span class="step-dot"></span>
+                        <div class="step-num">Шаг 1</div>
+                        <div class="step-title">Клиент оформляет заказ</div>
+                        <div class="step-desc">GetCourse создаёт заказ со статусом «Ожидает оплаты»</div>
+                    </div>
+                    <div class="timeline-step" id="step2" onclick="manualStep(2)">
+                        <span class="step-dot"></span>
+                        <div class="step-num">Шаг 2</div>
+                        <div class="step-title">Перенаправление в Platron</div>
+                        <div class="step-desc">Клиент попадает на платёжную форму Platron</div>
+                    </div>
+                    <div class="timeline-step" id="step3" onclick="manualStep(3)">
+                        <span class="step-dot"></span>
+                        <div class="step-num">Шаг 3</div>
+                        <div class="step-title">Platron обрабатывает платёж</div>
+                        <div class="step-desc">Банк-эквайер подтверждает или отклоняет транзакцию</div>
+                    </div>
+                    <div class="timeline-step" id="step4" onclick="manualStep(4)">
+                        <span class="step-dot"></span>
+                        <div class="step-num">Шаг 4</div>
+                        <div class="step-title">Webhook: Platron → GetCourse</div>
+                        <div class="step-desc">Platron отправляет уведомление об успешной оплате</div>
+                    </div>
+                    <div class="timeline-step" id="step5" onclick="manualStep(5)">
+                        <span class="step-dot"></span>
+                        <div class="step-num">Шаг 5</div>
+                        <div class="step-title">GetCourse обновляет статус заказа</div>
+                        <div class="step-desc">Статус меняется с «Ожидает оплаты» на «Оплачен»</div>
+                    </div>
+                    <div class="timeline-step" id="step6" onclick="manualStep(6)">
+                        <span class="step-dot"></span>
+                        <div class="step-num">Шаг 6</div>
+                        <div class="step-title">Автоматическая выдача доступа</div>
+                        <div class="step-desc">GetCourse активирует доступ к курсу для ученика</div>
+                    </div>
+                    <div class="timeline-step" id="step7" onclick="manualStep(7)">
+                        <span class="step-dot"></span>
+                        <div class="step-num">Шаг 7</div>
+                        <div class="step-title">✅ Доступ предоставлен</div>
+                        <div class="step-desc">Ученик видит курс в личном кабинете, всё готово</div>
+                    </div>
+                </div>
+
+                <!-- GetCourse Order Card -->
+                <div style="margin-top:8px;">
+                    <div class="panel-title" style="font-size:0.85rem; margin-bottom:12px;"><span class="icon">📋</span> Заказ в GetCourse</div>
+                    <div class="order-card" id="orderCard">
+                        <div class="order-header">
+                            <div>
+                                <div class="order-id">Заказ #GC-2024-0817-001</div>
+                                <div class="order-title">Fullstack-разработчик на Python</div>
+                            </div>
+                            <span class="status-badge status-idle" id="orderStatusBadge">
+                                <span class="dot"></span>
+                                <span id="orderStatusText">Не создан</span>
+                            </span>
+                        </div>
+                        <div class="order-details">
+                            <div><div class="label">Ученик</div><div class="value">Иван Петров</div></div>
+                            <div><div class="label">Email</div><div class="value">ivan.petrov@example.com</div></div>
+                            <div><div class="label">Сумма</div><div class="value">49 900 ₽</div></div>
+                            <div><div class="label">Платёж</div><div class="value" id="paymentRef">—</div></div>
+                        </div>
+                        <div class="access-notification" id="accessNotification">
+                            <span class="icon">🎓</span>
+                            <span>Доступ к курсу «Fullstack-разработчик на Python» выдан автоматически. Ученик может начать обучение.</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Event Log -->
+        <div class="log-panel">
+            <div class="log-header">
+                <h3><span>📡</span> Журнал событий интеграции</h3>
+                <button class="log-clear" onclick="clearLog()">Очистить журнал</button>
+            </div>
+            <div class="log-list" id="logList">
+                <div class="log-entry" style="border-left-color: var(--text-muted);">
+                    <span class="log-time">—</span>
+                    <span class="log-component system">SYSTEM</span>
+                    <span class="log-message">Демо-прототип загружен. Нажмите «Купить / Оплатить» для старта.</span>
+                    <span class="log-status info">INFO</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Controls -->
+        <div class="controls">
+            <button class="btn btn-primary" onclick="runAutoScenario()" id="btnAutoRun">
+                ▶ Пройти сценарий целиком
+            </button>
+            <button class="btn btn-secondary" onclick="runSuccessScenario()" id="btnSuccessRun">
+                ✅ Успешный платёж
+            </button>
+            <button class="btn btn-secondary" onclick="runErrorScenario()" id="btnErrorRun">
+                ❌ Отказ платежа
+            </button>
+            <button class="btn btn-danger" onclick="resetAll()" id="btnReset">
+                🔄 Сбросить всё
+            </button>
+        </div>
+
+        <!-- Footer: Budget & Scope -->
+        <div class="footer">
+            <div class="footer-section">
+                <h4>📦 Карта функциональных блоков</h4>
+                <ul class="feature-list">
+                    <li><span class="check">✓</span> Связка GetCourse ↔ Platron через API (мерчант, подпись, ключи)</li>
+                    <li><span class="check">✓</span> Приём платежей через Platron (форма, обработка транзакций)</li>
+                    <li><span class="check">✓</span> Передача webhook об успешной оплате в GetCourse</li>
+                    <li><span class="check">✓</span> Корректное изменение статуса заказа: «Ожидает оплаты» → «Оплачен»</li>
+                    <li><span class="check">✓</span> Автоматическая выдача доступа к продукту/курсу</li>
+                    <li><span class="check">✓</span> Проверка всей цепочки: от заказа до выдачи доступа</li>
+                    <li><span class="check">✓</span> Тестовый платёж и контроль отображения в GetCourse</li>
+                    <li><span class="check">✓</span> Обработка ошибок: отказ → статус не меняется, доступ не выдаётся</li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>💰 Оценка внедрения под ключ</h4>
+                <table class="budget-table">
+                    <thead>
+                        <tr><th>Этап</th><th>Срок</th><th>Стоимость</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Анализ и проектирование интеграции</td><td>1–2 дня</td><td>15 000 ₽</td></tr>
+                        <tr><td>Настройка Platron API (мерчант, подпись)</td><td>1 день</td><td>18 000 ₽</td></tr>
+                        <tr><td>Настройка GetCourse API (webhook, заказы)</td><td>1 день</td><td>18 000 ₽</td></tr>
+                        <tr><td>Разработка middleware / скрипта обмена</td><td>1–2 дня</td><td>25 000 ₽</td></tr>
+                        <tr><td>Тестирование (тестовый платёж, отладка)</td><td>1 день</td><td>12 000 ₽</td></tr>
+                        <tr><td>Документация и запуск в проде</td><td>1 день</td><td>12 000 ₽</td></tr>
+                        <tr class="total-row"><td>Итого под ключ</td><td>5–8 дней</td><td>100 000 ₽</td></tr>
+                    </tbody>
+                </table>
+                <p style="font-size:0.7rem; color:var(--text-muted); margin-top:10px;">
+                    * Сроки зависят от согласования доступа к API Platron и GetCourse. Возможна почасовая ставка 3 500 ₽/час.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Flash overlay for success -->
+    <div class="flash-overlay" id="flashOverlay">
+        <div class="flash-content">✅ Доступ выдан!</div>
+    </div>
+
+    <script>
+        // ========== STATE ==========
+        const state = {
+            step: 0, // 0 = initial, 1..7
+            orderStatus: 'idle', // idle, pending, paid, access_granted
+            paymentStatus: null, // null, processing, success, error
+            orderId: null,
+            paymentId: null,
+            log: [],
+            isRunning: false,
+            scenarioType: null, // 'auto', 'success', 'error'
+        };
+
+        const MAX_STEP = 7;
+
+        // ========== DOM REFS ==========
+        const $btnBuy = document.getElementById('btnBuy');
+        const $platronForm = document.getElementById('platronForm');
+        const $btnPay = document.getElementById('btnPay');
+        const $paymentResult = document.getElementById('paymentResult');
+        const $orderStatusBadge = document.getElementById('orderStatusBadge');
+        const $orderStatusText = document.getElementById('orderStatusText');
+        const $paymentRef = document.getElementById('paymentRef');
+        const $accessNotification = document.getElementById('accessNotification');
+        const $logList = document.getElementById('logList');
+        const $paymentIdSpan = document.getElementById('paymentId');
+        const $orderIdSpan = document.getElementById('orderIdSpan');
+        const $btnAutoRun = document.getElementById('btnAutoRun');
+        const $btnSuccessRun = document.getElementById('btnSuccessRun');
+        const $btnErrorRun = document.getElementById('btnErrorRun');
+        const $btnReset = document.getElementById('btnReset');
+        const $flashOverlay = document.getElementById('flashOverlay');
+        const timelineSteps = {
+            1: document.getElementById('step1'),
+            2: document.getElementById('step2'),
+            3: document.getElementById('step3'),
+            4: document.getElementById('step4'),
+            5: document.getElementById('step5'),
+            6: document.getElementById('step6'),
+            7: document.getElementById('step7'),
+        };
+
+        // ========== UTILS ==========
+        function getTime() {
+            const d = new Date();
+            return d.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+        }
+
+        function getDate() {
+            const d = new Date();
+            return d.toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric' });
+        }
+
+        function generateOrderId() {
+            return 'GC-2024-0817-' + String(Math.floor(100 + Math.random() * 900));
+        }
+
+        function generatePaymentId() {
+            return 'PL-0817-' + String(Math.floor(10000 + Math.random() * 90000));
+        }
+
+        function addLog(component, message, status = 'info') {
+            const time = getTime();
+            const entry = { time, component, message, status };
+            state.log.push(entry);
+            renderLog();
+        }
+
+        function renderLog() {
+            const entries = state.log;
+            if (entries.length === 0) {
+                $logList.innerHTML = `
+                    <div class="log-entry" style="border-left-color: var(--text-muted);">
+                        <span class="log-time">—</span>
+                        <span class="log-component system">SYSTEM</span>
+                        <span class="log-message">Журнал пуст. Нажмите «Сбросить всё» для полного сброса.</span>
+                        <span class="log-status info">INFO</span>
+                    </div>`;
+                return;
+            }
+            $logList.innerHTML = entries.map(e => {
+                const compClass = e.component === 'Platron' ? 'platron' :
+                    e.component === 'GetCourse' ? 'getcourse' :
+                    e.component === 'Клиент' ? 'client' : 'system';
+                const statusClass = e.status === 'success' ? 'success' :
+                    e.status === 'error' ? 'error' :
+                    e.status === 'warning' ? 'warning' : 'info';
+                return `<div class="log-entry" style="border-left-color: var(--${e.status === 'success' ? 'success' : e.status === 'error' ? 'error' : e.status === 'warning' ? 'warning' : 'info'});">
+                    <span class="log-time">${e.time}</span>
+                    <span class="log-component ${compClass}">${e.component}</span>
+                    <span class="log-message">${e.message}</span>
+                    <span class="log-status ${statusClass}">${e.status.toUpperCase()}</span>
+                </div>`;
+            }).join('');
+            $logList.scrollTop = $logList.scrollHeight;
+        }
+
+        function clearLog() {
+            state.log = [];
+            renderLog();
+        }
+
+        function updateTimeline() {
+            for (let i = 1; i <= MAX_STEP; i++) {
+                const el = timelineSteps[i];
+                el.classList.remove('active', 'done', 'error-step');
+                if (state.step > i) {
+                    el.classList.add('done');
+                } else if (state.step === i) {
+                    if (state.paymentStatus === 'error' && i === 3) {
+                        el.classList.add('error-step');
+                    } else {
+                        el.classList.add('active');
+                    }
+                }
+                // If error at step 3 and we haven't moved past, keep step 3 error
+                if (state.paymentStatus === 'error' && i === 3 && state.step >= 3) {
+                    el.classList.remove('done', 'active');
+                    el.classList.add('error-step');
+                }
+            }
+        }
+
+        function updateOrderCard() {
+            const badge = $orderStatusBadge;
+            const text = $orderStatusText;
+            badge.classList.remove('status-idle', 'status-pending', 'status-paid', 'status-access');
+
+            switch (state.orderStatus) {
+                case 'idle':
+                    badge.classList.add('status-idle');
+                    text.textContent = 'Не создан';
+                    $paymentRef.textContent = '—';
+                    $accessNotification.classList.remove('visible');
+                    break;
+                case 'pending':
+                    badge.classList.add('status-pending');
+                    text.textContent = 'Ожидает оплаты';
+                    $paymentRef.textContent = state.paymentId || '—';
+                    $accessNotification.classList.remove('visible');
+                    break;
+                case 'paid':
+                    badge.classList.add('status-paid');
+                    text.textContent = 'Оплачен';
+                    $paymentRef.textContent = state.paymentId || '—';
+                    $accessNotification.classList.remove('visible');
+                    break;
+                case 'access_granted':
+                    badge.classList.add('status-access');
+                    text.textContent = 'Доступ выдан';
+                    $paymentRef.textContent = state.paymentId || '—';
+                    $accessNotification.classList.add('visible');
+                    break;
+                default:
+                    badge.classList.add('status-idle');
+                    text.textContent = 'Не создан';
+            }
+        }
+
+        function updateUI() {
+            updateTimeline();
+            updateOrderCard();
+            // Payment form visibility
+            if (state.step >= 2 && state.step < 7 && state.paymentStatus !== 'error') {
+                $platronForm.classList.add('visible');
+            } else if (state.paymentStatus === 'error' && state.step >= 2) {
+                $platronForm.classList.add('visible');
+            } else {
+                $platronForm.classList.remove('visible');
+            }
+            // Buy button
+            if (state.step >= 1) {
+                $btnBuy.disabled = true;
+                $btnBuy.textContent = 'Заказ создан';
+            } else {
+                $btnBuy.disabled = false;
+                $btnBuy.textContent = 'Купить / Оплатить';
+            }
+            // Pay button state
+            if (state.paymentStatus === 'processing') {
+                $btnPay.classList.add('loading');
+                $btnPay.disabled = true;
+            } else {
+                $btnPay.classList.remove('loading');
+                $btnPay.disabled = (state.step < 2 || state.step >= 4 || state.paymentStatus === 'success');
+                if (state.paymentStatus === 'success') {
+                    $btnPay.disabled = true;
+                }
+                if (state.paymentStatus === 'error' && state.step >= 2) {
+                    $btnPay.disabled = false; // allow retry
+                }
+            }
+            // Payment result
+            if (state.paymentStatus === 'success') {
+                $paymentResult.classList.add('visible', 'success');
+                $paymentResult.classList.remove('error');
+                $paymentResult.innerHTML = '✅ Платёж успешно обработан Platron';
+            } else if (state.paymentStatus === 'error') {
+                $paymentResult.classList.add('visible', 'error');
+                $paymentResult.classList.remove('success');
+                $paymentResult.innerHTML = '❌ Платёж отклонён банком-эквайером';
+            } else {
+                $paymentResult.classList.remove('visible');
+                $paymentResult.innerHTML = '';
+            }
+            // Buttons
+            $btnAutoRun.disabled = state.isRunning || state.step >= 1;
+            $btnSuccessRun.disabled = state.isRunning || state.step >= 1;
+            $btnErrorRun.disabled = state.isRunning || state.step >= 1;
+            $btnReset.disabled = state.isRunning;
+        }
+
+        function setStep(step) {
+            state.step = step;
+            updateUI();
+        }
+
+        function showFlash(text) {
+            $flashOverlay.querySelector('.flash-content').textContent = text;
+            $flashOverlay.classList.add('active');
+            setTimeout(() => {
+                $flashOverlay.classList.remove('active');
+            }, 1200);
+        }
+
+        // ========== CORE ACTIONS ==========
+        function createOrder() {
+            if (state.step >= 1 || state.isRunning) return;
+            state.orderId = generateOrderId();
+            state.paymentId = generatePaymentId();
+            state.orderStatus = 'pending';
+            state.paymentStatus = null;
+            $orderIdSpan.textContent = state.orderId;
+            $paymentIdSpan.textContent = state.paymentId;
+            addLog('GetCourse', `Заказ ${state.orderId} создан. Статус: «Ожидает оплаты».`, 'info');
+            addLog('Клиент', 'Клиент оформил заказ на курс.', 'info');
+            setStep(1);
+            // Auto-advance to step 2 after a moment
+            setTimeout(() => {
+                if (state.step === 1 && !state.isRunning) {
+                    addLog('Platron', 'Клиент перенаправлен на платёжную форму.', 'info');
+                    setStep(2);
+                }
+            }, 600);
+        }
+
+        function processPayment() {
+            if (state.step < 2 || state.step >= 4 || state.paymentStatus === 'success' || state.isRunning) return;
+            const radios = document.getElementsByName('payScenario');
+            let scenario = 'success';
+            for (const r of radios) {
+                if (r.checked) scenario = r.value;
+            }
+
+            state.paymentStatus = 'processing';
+            updateUI();
+            addLog('Platron', `Обработка платежа ${state.paymentId}...`, 'warning');
+
+            $btnPay.classList.add('loading');
+            $btnPay.disabled = true;
+
+            setTimeout(() => {
+                $btnPay.classList.remove('loading');
+
+                if (scenario === 'error') {
+                    // Payment rejected
+                    state.paymentStatus = 'error';
+                    state.step = 3;
+                    updateUI();
+                    addLog('Platron', `Платёж ${state.paymentId} отклонён банком-эквайером.`, 'error');
+                    addLog('GetCourse', 'Статус заказа НЕ изменён — остаётся «Ожидает оплаты». Доступ НЕ выдан.', 'warning');
+                    addLog('Клиент', 'Клиент получил уведомление об отказе платежа.', 'warning');
+                    // Keep step 3 active with error
+                    state.step = 3;
+                    updateUI();
+                } else {
+                    // Success
+                    state.paymentStatus = 'success';
+                    state.step = 3;
+                    updateUI();
+                    addLog('Platron', `Платёж ${state.paymentId} успешно обработан.`, 'success');
+                    addLog('Platron', `Отправка webhook в GetCourse...`, 'info');
+                    setTimeout(() => {
+                        if (state.paymentStatus === 'success' && state.step === 3) {
+                            state.step = 4;
+                            updateUI();
+                            addLog('Platron', 'Webhook доставлен: платёж подтверждён, сумма 49 900 ₽.', 'success');
+                            setTimeout(() => {
+                                if (state.paymentStatus === 'success' && state.step === 4) {
+                                    state.step = 5;
+                                    state.orderStatus = 'paid';
+                                    updateUI();
+                                    addLog('GetCourse', 'Webhook получен. Статус заказа обновлён: «Оплачен».', 'success');
+                                    setTimeout(() => {
+                                        if (state.paymentStatus === 'success' && state.step === 5) {
+                                            state.step = 6;
+                                            state.orderStatus = 'access_granted';
+                                            updateUI();
+                                            addLog('GetCourse',
+                                                'Автоматическая выдача доступа к курсу «Fullstack-разработчик на Python».',
+                                                'success');
+                                            addLog('GetCourse',
+                                                'Доступ активирован. Ученик может войти в личный кабинет.',
+                                            'success');
+                                            showFlash('✅ Доступ выдан!');
+                                            setTimeout(() => {
+                                                if (state.paymentStatus === 'success' && state.step === 6) {
+                                                    state.step = 7;
+                                                    updateUI();
+                                                    addLog('GetCourse',
+                                                        'Цепочка завершена: клиент оплатил → доступ выдан автоматически.',
+                                                        'success');
+                                                }
+                                            }, 500);
+                                        }
+                                    }, 700);
+                                }
+                            }, 700);
+                        }
+                    }, 500);
+                }
+            }, 1200);
+        }
+
+        function manualStep(step) {
+            if (state.isRunning) return;
+            // Prevent jumping ahead illogically
+            if (step === 1) {
+                createOrder();
+            } else if (step === 2 && state.step >= 1) {
+                if (state.step === 1) {
+                    addLog('Platron', 'Клиент перенаправлен на платёжную форму.', 'info');
+                    setStep(2);
+                }
+            } else if (step === 3 && state.step >= 2) {
+                addLog('Platron', 'Ожидание обработки платежа (нажмите «Оплатить»).', 'warning');
+            } else if (step === 4 && state.step >= 3 && state.paymentStatus === 'success') {
+                state.step = 4;
+                updateUI();
+                addLog('Platron', 'Webhook доставлен в GetCourse.', 'success');
+            } else if (step === 5 && state.step >= 4 && state.paymentStatus === 'success') {
+                state.step = 5;
+                state.orderStatus = 'paid';
+                updateUI();
+                addLog('GetCourse', 'Статус заказа обновлён: «Оплачен».', 'success');
+            } else if (step === 6 && state.step >= 5 && state.paymentStatus === 'success') {
+                state.step = 6;
+                state.orderStatus = 'access_granted';
+                updateUI();
+                addLog('GetCourse', 'Доступ выдан автоматически.', 'success');
+                showFlash('✅ Доступ выдан!');
+            } else if (step === 7 && state.step >= 6) {
+                state.step = 7;
+                updateUI();
+                addLog('GetCourse', 'Цепочка завершена успешно.', 'success');
+            } else {
+                addLog('SYSTEM', 'Невозможно выполнить этот шаг. Проверьте последовательность.', 'warning');
+            }
+        }
+
+        function runAutoScenario() {
+            if (state.isRunning || state.step >= 1) return;
+            state.isRunning = true;
+            updateUI();
+            addLog('SYSTEM', 'Запуск автоматического сценария: полный цикл.', 'info');
+
+            // Step 1
+            state.orderId = generateOrderId();
+            state.paymentId = generatePaymentId();
+            state.orderStatus = 'pending';
+            state.paymentStatus = null;
+            $orderIdSpan.textContent = state.orderId;
+            $paymentIdSpan.textContent = state.paymentId;
+            addLog('GetCourse', `Заказ ${state.orderId} создан. Статус: «Ожидает оплаты».`, 'info');
+            setStep(1);
+
+            setTimeout(() => {
+                addLog('Platron', 'Клиент перенаправлен на платёжную форму.', 'info');
+                setStep(2);
+            }, 600);
+
+            setTimeout(() => {
+                state.paymentStatus = 'success';
+                state.step = 3;
+                updateUI();
+                addLog('Platron', `Платёж ${state.paymentId} успешно обработан.`, 'success');
+                addLog('Platron', 'Отправка webhook в GetCourse...', 'info');
+            }, 1400);
+
+            setTimeout(() => {
+                state.step = 4;
+                updateUI();
+                addLog('Platron', 'Webhook доставлен в GetCourse.', 'success');
+            }, 1900);
+
+            setTimeout(() => {
+                state.step = 5;
+                state.orderStatus = 'paid';
+                updateUI();
+                addLog('GetCourse', 'Webhook получен. Статус заказа: «Оплачен».', 'success');
+            }, 2400);
+
+            setTimeout(() => {
+                state.step = 6;
+                state.orderStatus = 'access_granted';
+                updateUI();
+                addLog('GetCourse', 'Автоматическая выдача доступа...', 'success');
+                addLog('GetCourse', 'Доступ активирован для ученика.', 'success');
+                showFlash('✅ Доступ выдан!');
+            }, 2900);
+
+            setTimeout(() => {
+                state.step = 7;
+                updateUI();
+                addLog('GetCourse', 'Цепочка завершена. Клиент получил доступ к курсу.', 'success');
+                state.isRunning = false;
+                updateUI();
+            }, 3400);
+        }
+
+        function runSuccessScenario() {
+            if (state.isRunning || state.step >= 1) return;
+            state.isRunning = true;
+            updateUI();
+            addLog('SYSTEM', 'Запуск сценария: успешный платёж.', 'info');
+            // Same as auto but without delays so user can see
+            createOrder();
+            setTimeout(() => {
+                // Set payment to success and advance
+                state.paymentStatus = 'success';
+                state.step = 3;
+                updateUI();
+                addLog('Platron', `Платёж ${state.paymentId} успешно обработан.`, 'success');
+                addLog('Platron', 'Отправка webhook...', 'info');
+                setTimeout(() => {
+                    state.step = 4;
+                    updateUI();
+                    addLog('Platron', 'Webhook доставлен.', 'success');
+                    setTimeout(() => {
+                        state.step = 5;
+                        state.orderStatus = 'paid';
+                        updateUI();
+                        addLog('GetCourse', 'Статус: «Оплачен».', 'success');
+                        setTimeout(() => {
+                            state.step = 6;
+                            state.orderStatus = 'access_granted';
+                            updateUI();
+                            addLog('GetCourse', 'Доступ выдан.', 'success');
+                            showFlash('✅ Доступ выдан!');
+                            setTimeout(() => {
+                                state.step = 7;
+                                updateUI();
+                                addLog('GetCourse', 'Завершено.', 'success');
+                                state.isRunning = false;
+                                updateUI();
+                            }, 400);
+                        }, 500);
+                    }, 500);
+                }, 500);
+            }, 600);
+        }
+
+        function runErrorScenario() {
+            if (state.isRunning || state.step >= 1) return;
+            state.isRunning = true;
+            updateUI();
+            addLog('SYSTEM', 'Запуск сценария: отказ платежа.', 'info');
+            createOrder();
+            setTimeout(() => {
+                state.paymentStatus = 'error';
+                state.step = 3;
+                updateUI();
+                addLog('Platron', `Платёж ${state.paymentId} отклонён.`, 'error');
+                addLog('GetCourse', 'Статус заказа НЕ изменён. Доступ НЕ выдан.', 'warning');
+                addLog('Клиент', 'Клиент получил отказ.', 'warning');
+                state.isRunning = false;
+                updateUI();
+            }, 1000);
+        }
+
+        function resetAll() {
+            if (state.isRunning) return;
+            state.step = 0;
+            state.orderStatus = 'idle';
+            state.paymentStatus = null;
+            state.orderId = null;
+            state.paymentId = null;
+            state.isRunning = false;
+            state.scenarioType = null;
+            $orderIdSpan.textContent = '—';
+            $paymentIdSpan.textContent = '—';
+            $paymentResult.classList.remove('visible');
+            $paymentResult.innerHTML = '';
+            $platronForm.classList.remove('visible');
+            $btnPay.classList.remove('loading');
+            $btnPay.disabled = true;
+            $btnBuy.disabled = false;
+            $btnBuy.textContent = 'Купить / Оплатить';
+            $accessNotification.classList.remove('visible');
+            updateUI();
+            addLog('SYSTEM', 'Все состояния сброшены. Готово к новому сценарию.', 'warning');
+        }
+
+        // ========== INIT ==========
+        updateUI();
+        addLog('SYSTEM', 'Демо-прототип интеграции Platron ↔ GetCourse загружен.', 'info');
+        addLog('SYSTEM', 'Выберите сценарий или нажмите «Купить» на карточке курса.', 'info');
+    </script>
+</body>
+</html>

@@ -1,0 +1,35 @@
+[
+  {
+    "id": 1,
+    "login": "admin",
+    "name": "Алексей Владелец",
+    "role": "admin",
+    "company_id": 1,
+    "email": "owner@salon.ru"
+  },
+  {
+    "id": 2,
+    "login": "manager",
+    "name": "Мария Руководитель",
+    "role": "manager",
+    "company_id": 1,
+    "email": "manager@salon.ru"
+  },
+  {
+    "id": 3,
+    "login": "operator",
+    "name": "Ольга Оператор",
+    "role": "operator",
+    "company_id": 1,
+    "email": "operator@salon.ru"
+  },
+  {
+    "id": 4,
+    "login": "client",
+    "name": "Иван Клиент",
+    "role": "client",
+    "company_id": 1,
+    "email": "client@example.com",
+    "client_id": 1
+  }
+]

@@ -1,0 +1,128 @@
+[
+ {
+  "id": 1,
+  "date": "2026-08-03",
+  "amount": 1500,
+  "type": "service",
+  "client_id": 1
+ },
+ {
+  "id": 2,
+  "date": "2026-08-04",
+  "amount": 2000,
+  "type": "service",
+  "client_id": 2
+ },
+ {
+  "id": 3,
+  "date": "2026-08-05",
+  "amount": 4500,
+  "type": "service",
+  "client_id": 3
+ },
+ {
+  "id": 4,
+  "date": "2026-08-06",
+  "amount": 2500,
+  "type": "service",
+  "client_id": 4
+ },
+ {
+  "id": 5,
+  "date": "2026-08-07",
+  "amount": 1200,
+  "type": "service",
+  "client_id": 5
+ },
+ {
+  "id": 6,
+  "date": "2026-08-08",
+  "amount": 1000,
+  "type": "service",
+  "client_id": 6
+ },
+ {
+  "id": 7,
+  "date": "2026-08-09",
+  "amount": 1500,
+  "type": "service",
+  "client_id": 7
+ },
+ {
+  "id": 8,
+  "date": "2026-08-10",
+  "amount": 1500,
+  "type": "service",
+  "client_id": 1
+ },
+ {
+  "id": 9,
+  "date": "2026-08-11",
+  "amount": 2000,
+  "type": "service",
+  "client_id": 2
+ },
+ {
+  "id": 10,
+  "date": "2026-08-12",
+  "amount": 3000,
+  "type": "product",
+  "client_id": 1
+ },
+ {
+  "id": 11,
+  "date": "2026-08-13",
+  "amount": 3500,
+  "type": "service",
+  "client_id": 4
+ },
+ {
+  "id": 12,
+  "date": "2026-08-15",
+  "amount": 4500,
+  "type": "service",
+  "client_id": 6
+ },
+ {
+  "id": 13,
+  "date": "2026-08-16",
+  "amount": 1500,
+  "type": "service",
+  "client_id": 7
+ },
+ {
+  "id": 14,
+  "date": "2026-08-17",
+  "amount": 2000,
+  "type": "service",
+  "client_id": 8
+ },
+ {
+  "id": 15,
+  "date": "2026-08-17",
+  "amount": 2500,
+  "type": "service",
+  "client_id": 8
+ },
+ {
+  "id": 16,
+  "date": "2026-08-18",
+  "amount": 1500,
+  "type": "service",
+  "client_id": 1
+ },
+ {
+  "id": 17,
+  "date": "2026-08-18",
+  "amount": 2000,
+  "type": "service",
+  "client_id": 2
+ },
+ {
+  "id": 18,
+  "date": "2026-08-18",
+  "amount": 4500,
+  "type": "service",
+  "client_id": 3
+ }
+]

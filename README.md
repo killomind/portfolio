@@ -108,6 +108,8 @@ portfolio/
 | [Music CRM](projects/05-demos-mvp/music-crm/README.md) | CRM музыкантов для квартирников: карточки с фото, поиск и фильтры, накопитель заметок (PHP + JSON-БД, демо без реальных контактов). Исходники в публичном репо | [demo/music-crm](https://leader-it.com/demo/music-crm/) | в портфолио (ссылки) |
 | [Интерактивное тестирование Tovarum.ru](projects/05-demos-mvp/tovarum-testing/README.md) | Симуляция ручного тестирования веб-сервиса: автопроход сценариев, журнал с вердиктами, фиксация найденных багов (HTML+CSS+JS) | [demo/tovarum-testing.html](https://leader-it.com/demo/tovarum-testing.html) | в портфолио |
 | [Транспортная биржа с геопоиском](projects/05-demos-mvp/transport-exchange/README.md) | Транспортная биржа: карта с геопоиском (радиус и коридор), грузы и транспорт с подбором по кузову/весу/объёму, экономика рейса, отклики, рейтинги, Telegram-бот и админка (PHP + SQLite, Leaflet) | [demo/transport-demo](https://leader-it.com/demo/transport-demo/) | в портфолио |
+| [AI-CRM для сферы услуг](projects/05-demos-mvp/ai-crm/README.md) | Демо AI-first CRM/SaaS: ролевая модель, дашборд с аналитикой, клиенты и календарь записей, AI-панель с управлением на естественном языке, multi-tenant (PHP + JSON-БД) | [demo/ai-crm](https://leader-it.com/demo/ai-crm/) | в портфолио |
+| [Интеграция GetCourse ↔ Platron](projects/05-demos-mvp/platron-getcourse/README.md) | Интерактивное демо платёжной интеграции: приём платежей, вебхуки, статусы заказов, авто-выдача доступа (HTML+CSS+JS) | [demo/platron-getcourse.html](https://leader-it.com/demo/platron-getcourse.html) | в портфолио |
 
 ### 06 · Проекты под НДА (публичное описание)
 
